@@ -52,6 +52,15 @@ func (h *handlerV1) CreateCustomer(c *gin.Context) {
 	c.JSON(http.StatusCreated, response)
 }
 
+// Get finds customer
+// @Summary get customer api
+// @Description this api finds existing customer
+// @Tags product
+// @Accept json
+// @Produce json
+// @Param customer body customer.CustomerId true "Customer"
+// @Success 201 {json} customer.Customer
+// @Router /v1/customer [get]
 func (h *handlerV1) GetCustomer(c *gin.Context) {
 	customer_idStr := c.Param("id")
 	customer_id, err := strconv.ParseInt(customer_idStr, 10, 64)
@@ -69,7 +78,7 @@ func (h *handlerV1) GetCustomer(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
 	defer cancel()
 
-	_, err = h.serviceManager.CustomerService().GetCustomer(ctx, &pbc.CustomerId{
+	customer, err := h.serviceManager.CustomerService().GetCustomer(ctx, &pbc.CustomerId{
 		Id: int32(customer_id),
 	})
 	if err != nil {
@@ -79,6 +88,6 @@ func (h *handlerV1) GetCustomer(c *gin.Context) {
 		h.log.Error("failed to get from customer from customer service", l.Error(err))
 		return
 	}
-		
 
+	c.JSON(http.StatusOK, customer)
 }

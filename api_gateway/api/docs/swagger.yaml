@@ -6,6 +6,11 @@ definitions:
       street:
         type: string
     type: object
+  customer.CustomerId:
+    properties:
+      id:
+        type: integer
+    type: object
   customer.CustomerRequest:
     properties:
       addresses:
@@ -27,6 +32,27 @@ info:
   contact: {}
 paths:
   /v1/customer:
+    get:
+      consumes:
+      - application/json
+      description: this api finds existing customer
+      parameters:
+      - description: Customer
+        in: body
+        name: customer
+        required: true
+        schema:
+          $ref: '#/definitions/customer.CustomerId'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            type: json
+      summary: get customer api
+      tags:
+      - product
     post:
       consumes:
       - application/json
