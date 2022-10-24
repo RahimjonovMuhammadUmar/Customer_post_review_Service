@@ -1,7 +1,7 @@
 package api
 
 import (
-	// _ "exam/api_gateway/api/docs"
+	_ "exam/api_gateway/api/docs"
 	v1 "exam/api_gateway/api/handler/v1"
 	"exam/api_gateway/config"
 	"exam/api_gateway/pkg/logger"
