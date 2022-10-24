@@ -6,9 +6,9 @@ import (
 
 // PostStorage
 type PostStorage interface {
-	CreatePost(*pbp.PostRequest) (*pbp.Post, error)
+	CreatePost(*pbp.PostRequest) (*pbp.PostWithoutReview, error)
 	GetPostWithCustomerInfo(*pbp.Id) (*pbp.PostWithCustomerInfo, error)
-	UpdatePost(*pbp.Post) (*pbp.Post, error)
+	UpdatePost(*pbp.PostWithoutReview) (*pbp.PostWithoutReview, error)
 	DoesPostExist(id int32) (*pbp.Exist, error)
 	DeletePost(id int32) (*pbp.IsDeleted, error)
 	DeletePostByCustomerId(id int32) (*pbp.IsDeleted, []int32, error)

@@ -17,8 +17,8 @@ func NewProductRepo(db *sqlx.DB) *postRepo {
 	return &postRepo{db: db}
 }
 
-func (p *postRepo) CreatePost(req *pbp.PostRequest) (*pbp.Post, error) {
-	newPost := &pbp.Post{}
+func (p *postRepo) CreatePost(req *pbp.PostRequest) (*pbp.PostWithoutReview, error) {
+	newPost := &pbp.PostWithoutReview{}
 	err := p.db.QueryRow(`INSERT INTO posts(
 		name, 
 		description, 
@@ -32,7 +32,7 @@ func (p *postRepo) CreatePost(req *pbp.PostRequest) (*pbp.Post, error) {
 	)
 	if err != nil {
 		fmt.Println("error while inserting into posts", err)
-		return &pbp.Post{}, err
+		return &pbp.PostWithoutReview{}, err
 	}
 	medias := []*pbp.Media{}
 	for _, media := range req.Medias {
@@ -54,7 +54,7 @@ func (p *postRepo) CreatePost(req *pbp.PostRequest) (*pbp.Post, error) {
 		)
 		if err != nil {
 			fmt.Println("error while inserting into medias", err)
-			return &pbp.Post{}, err
+			return &pbp.PostWithoutReview{}, err
 		}
 		medias = append(medias, media_)
 	}
@@ -109,13 +109,22 @@ func (p *postRepo) GetPostWithCustomerInfo(req *pbp.Id) (*pbp.PostWithCustomerIn
 	return post, nil
 }
 
-func (p *postRepo) UpdatePost(req *pbp.Post) (*pbp.Post, error) {
-	_, err := p.db.Exec(`UPDATE posts SET name = $1, description = $2, customer_id = $3 WHERE id = $4`, req.Name, req.Description, req.CustomerId, req.Id)
+func (p *postRepo) UpdatePost(req *pbp.PostWithoutReview) (*pbp.PostWithoutReview, error) {
+	_, err := p.db.Exec(`UPDATE posts SET name = $1, description = $2, customer_id = $3 WHERE id = $4 and customer_id = $5`, req.Name, req.Description, req.CustomerId, req.Id, req.CustomerId)
 	if err != nil {
 		fmt.Println("error while updating posts", err)
-		return &pbp.Post{}, err
+		return &pbp.PostWithoutReview{}, err
 	}
 
+	
+	for _, media := range req.Medias {
+		_, err := p.db.Exec(`UPDATE medias SET name = $1, link = $2, type = $3 WHERE id = $4 and post_id = $5`, media.Name, media.Link, media.Type, media.Id, req.Id)
+		if err != nil {
+			fmt.Println("error while updating medias", err)
+			return &pbp.PostWithoutReview{}, err
+		}
+	}
+	
 	post_medias, err := p.db.Query(`SELECT 
 	id, 
 	name, 
@@ -124,7 +133,7 @@ func (p *postRepo) UpdatePost(req *pbp.Post) (*pbp.Post, error) {
 	FROM medias WHERE post_id = $1`, req.Id)
 	if err != nil {
 		fmt.Println("error while getting from medias", err)
-		return &pbp.Post{}, err
+		return &pbp.PostWithoutReview{}, err
 	}
 	medias := []*pbp.Media{}
 	for post_medias.Next() {
@@ -137,7 +146,7 @@ func (p *postRepo) UpdatePost(req *pbp.Post) (*pbp.Post, error) {
 		)
 		if err != nil {
 			fmt.Println("Error while selecting from medias", err)
-			return &pbp.Post{}, err
+			return &pbp.PostWithoutReview{}, err
 		}
 		medias = append(medias, media)
 	}

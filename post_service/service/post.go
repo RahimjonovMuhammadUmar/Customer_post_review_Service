@@ -30,23 +30,23 @@ func NewPostService(db *sqlx.DB, log l.Logger, client grpcClient.GrpcClientI) *P
 	}
 }
 
-func (p *PostService) CreatePost(ctx context.Context, req *pbp.PostRequest) (*pbp.Post, error) {
-	exists, err := p.client.Customer().CheckIfCustomerExists(ctx, &pbc.CustomerId{
-		Id: req.CustomerId,
-	})
-	if err != nil {
-		p.logger.Error("error -> exists, err := p.client.Customer().CheckIfCustomerExists(ctx, &pbc.CustomerId{", l.Any("error checking customer by id post/service/grpc_client/customer.go", err))
-		return &pbp.Post{}, err
-	}
-	if !exists.Exists {
-		p.logger.Info("There is no such customer")
-		return &pbp.Post{}, nil
-	}
+func (p *PostService) CreatePost(ctx context.Context, req *pbp.PostRequest) (*pbp.PostWithoutReview, error) {
+	// exists, err := p.client.Customer().CheckIfCustomerExists(ctx, &pbc.CustomerId{
+	// 	Id: req.CustomerId,
+	// })
+	// if err != nil {
+	// 	p.logger.Error("error -> exists, err := p.client.Customer().CheckIfCustomerExists(ctx, &pbc.CustomerId{", l.Any("error checking customer by id post/service/grpc_client/customer.go", err))
+	// 	return &pbp.PostWithoutReview{}, err
+	// }
+	// if !exists.Exists {
+	// 	p.logger.Info("There is no such customer")
+	// 	return &pbp.PostWithoutReview{}, nil
+	// }
 
 	newPost, err := p.storage.Post().CreatePost(req)
 	if err != nil {
 		p.logger.Error("error -> newPost, err :=", l.Any("error creating post post/service/grpc_client/customer.go", err))
-		return &pbp.Post{}, err
+		return &pbp.PostWithoutReview{}, err
 	}
 
 	return newPost, nil
@@ -100,13 +100,11 @@ func (p *PostService) GetPostWithCustomerInfo(ctx context.Context, req *pbp.Id) 
 	}
 	return post, nil
 }
-func (p *PostService) UpdatePost(ctx context.Context, req *pbp.Post) (*pbp.Post, error) {
-	updatedPost, err := p.storage.Post().UpdatePost(&pbp.Post{
-		Id: req.Id,
-	})
+func (p *PostService) UpdatePost(ctx context.Context, req *pbp.PostWithoutReview) (*pbp.PostWithoutReview, error) {
+	updatedPost, err := p.storage.Post().UpdatePost(req)
 	if err != nil {
 		p.logger.Error("error -> exists, err := p.client.Customer().IfCustomerExists(ctx, &pbc.CustomerId{", l.Any("error checking customer by id post/service/grpc_client/customer.go", err))
-		return &pbp.Post{}, err
+		return &pbp.PostWithoutReview{}, err
 	}
 	return updatedPost, nil
 }

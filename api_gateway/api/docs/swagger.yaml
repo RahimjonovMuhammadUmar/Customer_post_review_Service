@@ -51,6 +51,144 @@ definitions:
       phone_number:
         type: string
     type: object
+  post.Address:
+    properties:
+      house_number:
+        type: integer
+      id:
+        type: integer
+      street:
+        type: string
+    type: object
+  post.Customer:
+    properties:
+      addresses:
+        items:
+          $ref: '#/definitions/post.Address'
+        type: array
+      bio:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: integer
+      last_name:
+        type: string
+      phone_number:
+        type: string
+    type: object
+  post.Media:
+    properties:
+      id:
+        type: integer
+      link:
+        type: string
+      name:
+        type: string
+      type:
+        type: string
+    type: object
+  post.MediaRequest:
+    properties:
+      link:
+        type: string
+      name:
+        type: string
+      type:
+        type: string
+    type: object
+  post.Post:
+    properties:
+      customer_id:
+        type: integer
+      description:
+        type: string
+      id:
+        type: integer
+      medias:
+        items:
+          $ref: '#/definitions/post.Media'
+        type: array
+      name:
+        type: string
+      reviews:
+        items:
+          $ref: '#/definitions/post.Review'
+        type: array
+    type: object
+  post.PostRequest:
+    properties:
+      customer_id:
+        type: integer
+      description:
+        type: string
+      medias:
+        items:
+          $ref: '#/definitions/post.MediaRequest'
+        type: array
+      name:
+        type: string
+    type: object
+  post.PostWithCustomerInfo:
+    properties:
+      customer:
+        $ref: '#/definitions/post.Customer'
+      customer_id:
+        type: integer
+      description:
+        type: string
+      id:
+        type: integer
+      medias:
+        items:
+          $ref: '#/definitions/post.Media'
+        type: array
+      name:
+        type: string
+      reviews:
+        items:
+          $ref: '#/definitions/post.Review'
+        type: array
+    type: object
+  post.PostWithoutReview:
+    properties:
+      customer_id:
+        type: integer
+      description:
+        type: string
+      id:
+        type: integer
+      medias:
+        items:
+          $ref: '#/definitions/post.Media'
+        type: array
+      name:
+        type: string
+    type: object
+  post.Posts:
+    properties:
+      posts:
+        items:
+          $ref: '#/definitions/post.Post'
+        type: array
+    type: object
+  post.Review:
+    properties:
+      customer_id:
+        type: integer
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      post_id:
+        type: integer
+      review:
+        type: integer
+    type: object
 info:
   contact: {}
 paths:
@@ -132,4 +270,126 @@ paths:
       summary: get customer api
       tags:
       - customer
+  /v1/post:
+    post:
+      consumes:
+      - application/json
+      description: this api creates new post
+      parameters:
+      - description: Post
+        in: body
+        name: customer
+        required: true
+        schema:
+          $ref: '#/definitions/post.PostRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            type: json
+      summary: create post api
+      tags:
+      - post
+    put:
+      consumes:
+      - application/json
+      description: update post api
+      parameters:
+      - description: Post
+        in: body
+        name: post
+        required: true
+        schema:
+          $ref: '#/definitions/post.Post'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/post.PostWithoutReview'
+      summary: Updates post by id
+      tags:
+      - post
+  /v1/post/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Post and it's reviews by Id
+      parameters:
+      - description: post_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Delete post from database
+      tags:
+      - post
+    get:
+      consumes:
+      - application/json
+      description: Get Post infos with id
+      parameters:
+      - description: post_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/post.PostWithCustomerInfo'
+      summary: Get post with customer information
+      tags:
+      - post
+  /v1/post/customers_posts/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get posts of customer
+      parameters:
+      - description: custom_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/post.Posts'
+      summary: Gets post by customers id
+      tags:
+      - post
+  /v1/post/delete_customers_posts/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Post by Customer Id
+      parameters:
+      - description: customer_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Delete customers posts
+      tags:
+      - post
 swagger: "2.0"

@@ -31,38 +31,25 @@ func New(option Option) *gin.Engine {
 	})
 
 	api := router.Group("/v1")
+
+	//customer
 	api.POST("/customer", handlerV1.CreateCustomer)
 	api.GET("/customer/:id", handlerV1.GetCustomer)
 	api.PUT("/customer", handlerV1.UpdateCustomer)
 	api.DELETE("/customer/:id", handlerV1.DeleteCustomer)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	// api.DELETE("/product/:id", handlerV1.DeleteProduct)
-	// api.PUT("/product", handlerV1.UpdateProduct)
-	// api.GET("/product/:id", handlerV1.GetProduct)
-	// api.POST("/type", handlerV1.CreateType)
-
+	
+	//post
+	api.POST("/post", handlerV1.CreatePost)
+	api.GET("/post/:id", handlerV1.GetPostWithCustomerInfo)
+	api.GET("/post/customers_posts/:id", handlerV1.GetPostsOfCustomer)	
+	api.PUT("/post", handlerV1.UpdatePost)
+	api.DELETE("/post/:id", handlerV1.DeletePost)
+	api.DELETE("/post/delete_customers_posts/:id", handlerV1.DeletePostByCustomerId)
+	
+	
+	
+	
+	
 	url := ginSwagger.URL("swagger/doc.json")
 	api.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 

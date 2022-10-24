@@ -3,10 +3,10 @@ syntax = "proto3";
 package post;
 
 service PostService {
-    rpc CreatePost(PostRequest) returns(Post);
+    rpc CreatePost(PostRequest) returns(PostWithoutReview);
     rpc GetPostWithCustomerInfo(Id) returns (PostWithCustomerInfo);
     rpc GetPostsOfCustomer(Id) returns (Posts);
-    rpc UpdatePost(Post) returns (Post);
+    rpc UpdatePost(PostWithoutReview) returns (PostWithoutReview);
     rpc DoesPostExist(Id) returns (Exist);
     rpc DeletePost(Id) returns (IsDeleted);
     rpc DeletePostByCustomerId(Id) returns (IsDeleted);
@@ -35,7 +35,7 @@ message PostRequest {
     string name = 1;
     string description = 2;
     int32 customer_id = 3;
-    repeated Media medias = 4;
+    repeated MediaRequest medias = 4;
 }
 message Post {
     int32 id = 1;
@@ -44,6 +44,13 @@ message Post {
     int32 customer_id = 4;
     repeated Media medias = 5;
     repeated Review reviews = 6;
+}
+message PostWithoutReview {
+    int32 id = 1;
+    string name = 2;
+    string description = 3;
+    int32 customer_id = 4;
+    repeated Media medias = 5;
 }
 message PostWithCustomerInfo {
     int32 id = 1;
@@ -70,6 +77,13 @@ message Media {
     string link = 3;
     string type = 4;
 }
+
+message MediaRequest {
+    string name = 2;
+    string link = 3;
+    string type = 4;
+}
+
 
 message Address {
     int32 id = 1;
