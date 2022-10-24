@@ -52,8 +52,6 @@ func (h *handlerV1) CreatePost(c *gin.Context) {
 	c.JSON(http.StatusCreated, created_post)
 }
 
-// ##################################################################################################
-
 // GetPostWithCustomerInfo
 // @Summary      Get post with customer information
 // @Description  Get Post infos with id

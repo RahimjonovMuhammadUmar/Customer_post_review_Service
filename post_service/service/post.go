@@ -152,7 +152,7 @@ func (p *PostService) DeletePost(ctx context.Context, req *pbp.Id) (*pbp.IsDelet
 			PostDeleted: false,
 		}, nil
 	}
-	_, err = p.client.Review().DeleteReview(ctx, &pbr.ReviewPostId{
+	_, err = p.client.Review().DeletePostsReviews(ctx, &pbr.ReviewPostId{
 		PostId: req.Id,
 	})
 	if err != nil {
@@ -213,7 +213,7 @@ func (p *PostService) GetPostsOfCustomer(ctx context.Context, req *pbp.Id) (*pbp
 		return &pbp.Posts{}, err
 	}
 	for _, post := range posts.Posts {
-		reviews, err := p.client.Review().PostReviews(ctx, &pbr.ReviewPostId{
+		reviews, err := p.client.Review().GetReviews(ctx, &pbr.ReviewPostId{
 			PostId: post.Id,
 		})
 		if err != nil {
@@ -248,7 +248,7 @@ func (p *PostService) DeletePostByCustomerId(ctx context.Context, req *pbp.Id) (
 		}, nil
 	}
 	for _, id := range ids {
-		_, err = p.client.Review().DeleteReview(ctx, &pbr.ReviewPostId{
+		_, err = p.client.Review().DeletePostsReviews(ctx, &pbr.ReviewPostId{
 			PostId: id,
 		})
 		if err != nil {

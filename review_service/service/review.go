@@ -64,8 +64,8 @@ func (s *ReviewService) GetReviews(ctx context.Context, req *pbr.ReviewPostId) (
 	return reviews, nil
 }
 
-func (s *ReviewService) DeleteReview(ctx context.Context, req *pbr.ReviewPostId) (*pbr.Empty, error) {
-	_, err := s.storage.Review().DeleteReview(req)
+func (s *ReviewService) DeletePostsReviews(ctx context.Context, req *pbr.ReviewPostId) (*pbr.Empty, error) {
+	_, err := s.storage.Review().DeletePostsReviews(req)
 	if err != nil {
 		s.logger.Error("error while sending id to delete from ratings", l.Any("", err))
 		return &pbr.Empty{}, err
@@ -73,12 +73,21 @@ func (s *ReviewService) DeleteReview(ctx context.Context, req *pbr.ReviewPostId)
 	return &pbr.Empty{}, nil
 }
 
-func (s *ReviewService) PostReviews(ctx context.Context, req *pbr.ReviewPostId) (*pbr.Reviews, error) {
-	reviews, err := s.storage.Review().PostReviews(req)
+// func (s *ReviewService) PostReviews(ctx context.Context, req *pbr.ReviewPostId) (*pbr.Reviews, error) {
+// 	reviews, err := s.storage.Review().PostReviews(req)
+// 	if err != nil {
+// 		fmt.Println("error while sending to PostReviews", err)
+// 		return &pbr.Reviews{}, err
+// 	}
+
+// 	return reviews, nil
+// }
+
+func (s *ReviewService) DeleteReview(ctx context.Context, req *pbr.ReviewId) (*pbr.Empty, error) {
+	_, err := s.storage.Review().DeleteReview(req)
 	if err != nil {
-		fmt.Println("error while sending to PostReviews", err)
-		return &pbr.Reviews{}, err
+		fmt.Println("error while sending to DeletReview", err)
+		return &pbr.Empty{}, err
 	}
-	
-	return reviews, nil
+	return &pbr.Empty{}, nil
 }

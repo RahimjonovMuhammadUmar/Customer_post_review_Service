@@ -45,19 +45,19 @@ func (r reviewRepo) CreateReview(req *pbr.ReviewRequest) (*pbr.Review, error) {
 
 	return rev, nil
 }
+
 func (r reviewRepo) GetReviews(req *pbr.ReviewPostId) (*pbr.Reviews, error) {
 	reviews_list := &pbr.Reviews{}
-	reviews, err := r.db.Query(`SELECT 
-	id, 
-	name, 
-	description, 
-	rating, 
-	customer_id FROM ratings WHERE post_id = $1`, req.PostId)
+	reviews, err := r.db.Query(`SELECT
+	id,
+	name,
+	description,
+	rating,
+	customer_id FROM ratings WHERE post_id = $1 AND deleted_at IS NULL`, req.PostId)
 	if err != nil {
 		fmt.Println("error while selecting reviews from ratings", err)
 		return &pbr.Reviews{}, err
 	}
-
 	for reviews.Next() {
 		review := &pbr.Review{}
 		err = reviews.Scan(
@@ -73,10 +73,10 @@ func (r reviewRepo) GetReviews(req *pbr.ReviewPostId) (*pbr.Reviews, error) {
 		}
 		reviews_list.Reviews = append(reviews_list.Reviews, review)
 	}
-
 	return reviews_list, nil
 }
-func (r reviewRepo) DeleteReview(req *pbr.ReviewPostId) (*pbr.Empty, error) {
+
+func (r reviewRepo) DeletePostsReviews(req *pbr.ReviewPostId) (*pbr.Empty, error) {
 	_, err := r.db.Exec(`UPDATE ratings SET deleted_at = NOW() WHERE post_id = $1`, req.PostId)
 	if err != nil {
 		fmt.Println("Error while deleting from ratings", err)
@@ -88,12 +88,12 @@ func (r reviewRepo) DeleteReview(req *pbr.ReviewPostId) (*pbr.Empty, error) {
 
 func (r reviewRepo) PostReviews(req *pbr.ReviewPostId) (*pbr.Reviews, error) {
 	reviews := &pbr.Reviews{}
-	reviews_rows, err := r.db.Query(`SELECT id, name, description, customer_id, rating FROM ratings WHERE post_id = $1`, req.PostId)
+	reviews_rows, err := r.db.Query(`SELECT id, name, description, customer_id, rating FROM ratings WHERE post_id = $1 AND deleted_at IS NULL`, req.PostId)
 	if err != nil {
 		fmt.Println("Error while selecting from ratings", err)
 		return &pbr.Reviews{}, err
 	}
-	
+
 	for reviews_rows.Next() {
 		review := &pbr.Review{}
 		err = reviews_rows.Scan(
@@ -110,4 +110,14 @@ func (r reviewRepo) PostReviews(req *pbr.ReviewPostId) (*pbr.Reviews, error) {
 		reviews.Reviews = append(reviews.Reviews, review)
 	}
 	return reviews, nil
+}
+
+func (r reviewRepo) DeleteReview(req *pbr.ReviewId) (*pbr.Empty, error) {
+	_, err := r.db.Exec(`UPDATE ratings SET deleted_at = NOW() WHERE id = $1`, req.Id)
+	if err != nil {
+		fmt.Println("error while deleting rating", err)
+		return &pbr.Empty{}, err
+	}
+
+	return &pbr.Empty{}, nil
 }

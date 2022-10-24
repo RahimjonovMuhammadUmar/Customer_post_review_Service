@@ -149,7 +149,7 @@ const docTemplate = `{
                 "summary": "Updates post by id",
                 "parameters": [
                     {
-                        "description": "Post",
+                        "description": "Update post by id",
                         "name": "post",
                         "in": "body",
                         "required": true,
@@ -216,7 +216,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "custom_id",
+                        "description": "customer_id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -316,6 +316,40 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK"
+                    }
+                }
+            }
+        },
+        "/v1/review": {
+            "post": {
+                "description": "this api creates new review",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Review"
+                ],
+                "summary": "create review api",
+                "parameters": [
+                    {
+                        "description": "Review",
+                        "name": "customer",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/review.ReviewRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "type": "json"
+                        }
                     }
                 }
             }
@@ -602,6 +636,26 @@ const docTemplate = `{
                 },
                 "id": {
                     "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "post_id": {
+                    "type": "integer"
+                },
+                "review": {
+                    "type": "integer"
+                }
+            }
+        },
+        "review.ReviewRequest": {
+            "type": "object",
+            "properties": {
+                "customer_id": {
+                    "type": "integer"
+                },
+                "description": {
+                    "type": "string"
                 },
                 "name": {
                     "type": "string"

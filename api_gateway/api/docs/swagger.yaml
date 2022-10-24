@@ -189,6 +189,19 @@ definitions:
       review:
         type: integer
     type: object
+  review.ReviewRequest:
+    properties:
+      customer_id:
+        type: integer
+      description:
+        type: string
+      name:
+        type: string
+      post_id:
+        type: integer
+      review:
+        type: integer
+    type: object
 info:
   contact: {}
 paths:
@@ -297,7 +310,7 @@ paths:
       - application/json
       description: update post api
       parameters:
-      - description: Post
+      - description: Update post by id
         in: body
         name: post
         required: true
@@ -358,7 +371,7 @@ paths:
       - application/json
       description: Get posts of customer
       parameters:
-      - description: custom_id
+      - description: customer_id
         in: path
         name: id
         required: true
@@ -392,4 +405,26 @@ paths:
       summary: Delete customers posts
       tags:
       - post
+  /v1/review:
+    post:
+      consumes:
+      - application/json
+      description: this api creates new review
+      parameters:
+      - description: Review
+        in: body
+        name: customer
+        required: true
+        schema:
+          $ref: '#/definitions/review.ReviewRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            type: json
+      summary: create review api
+      tags:
+      - Review
 swagger: "2.0"
