@@ -1,7 +1,6 @@
 package postgres
 
 import (
-	"database/sql"
 	pbc "exam/customer_service/genproto/customer"
 	"fmt"
 
@@ -130,9 +129,10 @@ func (c *customerRepo) GetCustomer(id int32) (*pbc.Customer, error) {
 		&customerData.Email,
 		&customerData.PhoneNumber,
 	)
-	if err == sql.ErrNoRows {
-		return &pbc.Customer{}, nil
-	}
+	// if err.Error() == "sql: no rows in result set" {
+	// 	fmt.Println("133")
+	// 	return &pbc.Customer{}, err
+	// }
 	if err != nil {
 		fmt.Println("error while selecting customer by id", err)
 		return &pbc.Customer{}, err
