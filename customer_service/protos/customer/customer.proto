@@ -1,0 +1,80 @@
+syntax = "proto3";
+
+package customer;
+
+service CustomerService {
+    rpc CreateCustomer(CustomerRequest) returns (Customer);    
+    rpc UpdateCustomer(Customer) returns (Customer);
+    rpc CheckIfCustomerExists(CustomerId) returns (Exists);
+    rpc GetCustomer(CustomerId) returns (Customer);
+    rpc DeleteCustomer(CustomerId) returns (CustomerDeleted);
+}
+
+message CustomerDeleted {
+    bool customer_deleted = 1;
+}
+
+
+
+message Exists {
+    bool exists = 1;
+}
+
+
+message CustomerRequest {
+    string first_name = 2;
+    string last_name = 3;
+    string bio = 4;
+    string email = 5;
+    string phone_number = 6;
+    repeated AddressRequest addresses = 7;
+}
+
+message Customer {
+    int32 id = 1;
+    string first_name = 2;
+    string last_name = 3;
+    string bio = 4;
+    string email = 5;
+    string phone_number = 6;
+    repeated Address addresses = 7;
+    repeated Post posts = 8;
+}
+message CustomerId {
+    int32 id = 1;
+}
+
+message Address {
+    int32 id = 1;
+    string street = 2;
+    int32 house_number = 3;
+}
+message Post {
+    int32 id = 1;
+    string name = 2;
+    string description = 3;
+    int32 customer_id = 4;
+    repeated Media medias = 5;
+    repeated Review reviews = 6;
+}
+
+message Media {
+    int32 id = 1;
+    string name = 2;
+    string link = 3;
+    string type = 4;
+}
+message Review {
+    int32 id = 1;
+    string name = 2;
+    int32 review = 3;
+    string description = 4;
+    int32 post_id = 5;
+    int32 customer_id = 6;
+}
+
+message AddressRequest {
+    string street = 1;
+    int32 house_number = 2;
+}
+
