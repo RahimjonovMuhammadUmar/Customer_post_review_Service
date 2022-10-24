@@ -16,12 +16,12 @@ func NewCustomerRepo(db *sqlx.DB) *customerRepo {
 	return &customerRepo{db: db}
 }
 
-func (c *customerRepo) CreateCustomer(req *pbc.CustomerRequest) (*pbc.Customer, error) {
-	inserted := &pbc.Customer{}
+func (c *customerRepo) CreateCustomer(req *pbc.CustomerRequest) (*pbc.CustomerWithoutPost, error) {
+	inserted := &pbc.CustomerWithoutPost{}
 	tx, err := c.db.Begin()
 	if err != nil {
 		fmt.Println("Error while declaring tx", err)
-		return &pbc.Customer{}, err
+		return &pbc.CustomerWithoutPost{}, err
 	}
 	err = tx.QueryRow(`INSERT INTO customers(
 	 first_name,
@@ -45,7 +45,7 @@ func (c *customerRepo) CreateCustomer(req *pbc.CustomerRequest) (*pbc.Customer, 
 	if err != nil {
 		fmt.Println("error while inserting into customers", err)
 		tx.Rollback()
-		return &pbc.Customer{}, err
+		return &pbc.CustomerWithoutPost{}, err
 	}
 	err = tx.Commit()
 	if err != nil {
@@ -69,7 +69,7 @@ func (c *customerRepo) CreateCustomer(req *pbc.CustomerRequest) (*pbc.Customer, 
 		if err != nil {
 			fmt.Println("error while inserting into addresses", err)
 			tx.Rollback()
-			return &pbc.Customer{}, err
+			return &pbc.CustomerWithoutPost{}, err
 		}
 		addresses = append(addresses, address_)
 	}
@@ -83,7 +83,7 @@ func (c *customerRepo) CreateCustomer(req *pbc.CustomerRequest) (*pbc.Customer, 
 	return inserted, nil
 }
 
-func (c *customerRepo) UpdateCustomer(req *pbc.Customer) (*pbc.Customer, error) {
+func (c *customerRepo) UpdateCustomer(req *pbc.CustomerWithoutPost) (*pbc.CustomerWithoutPost, error) {
 	_, err := c.db.Exec(`UPDATE customers SET 
 	first_name = $1,
 	last_name = $2,
@@ -92,7 +92,7 @@ func (c *customerRepo) UpdateCustomer(req *pbc.Customer) (*pbc.Customer, error) 
 	phone_number = $5, updated_at = NOW() WHERE id = $6`, req.FirstName, req.LastName, req.Bio, req.Email, req.PhoneNumber, req.Id)
 	if err != nil {
 		fmt.Println("error while updating customer", err)
-		return &pbc.Customer{}, err
+		return &pbc.CustomerWithoutPost{}, err
 	}
 
 	return req, nil

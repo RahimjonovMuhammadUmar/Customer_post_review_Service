@@ -17,6 +17,38 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/v1/customer": {
+            "put": {
+                "description": "this api updates customer by id in database",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "product"
+                ],
+                "summary": "Update customer api",
+                "parameters": [
+                    {
+                        "description": "Customer",
+                        "name": "customer",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/customer.CustomerWithoutPost"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "json"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "this api creates new customer",
                 "consumes": [
@@ -84,6 +116,20 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "customer.Address": {
+            "type": "object",
+            "properties": {
+                "house_number": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "street": {
+                    "type": "string"
+                }
+            }
+        },
         "customer.AddressRequest": {
             "type": "object",
             "properties": {
@@ -112,6 +158,35 @@ const docTemplate = `{
                 },
                 "first_name": {
                     "type": "string"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "phone_number": {
+                    "type": "string"
+                }
+            }
+        },
+        "customer.CustomerWithoutPost": {
+            "type": "object",
+            "properties": {
+                "addresses": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/customer.Address"
+                    }
+                },
+                "bio": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
                 },
                 "last_name": {
                     "type": "string"

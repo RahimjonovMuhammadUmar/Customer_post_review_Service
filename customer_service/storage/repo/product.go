@@ -6,8 +6,8 @@ import (
 
 // CustomerStorage
 type CustomerStorage interface {
-	CreateCustomer(*pbc.CustomerRequest) (*pbc.Customer, error)
-	UpdateCustomer(*pbc.Customer) (*pbc.Customer, error)
+	CreateCustomer(*pbc.CustomerRequest) (*pbc.CustomerWithoutPost, error)
+	UpdateCustomer(*pbc.CustomerWithoutPost) (*pbc.CustomerWithoutPost, error)
 	CheckIfCustomerExists(id int32) (*pbc.Exists, error)
 	GetCustomer(id int32) (*pbc.Customer, error)
 	DeleteCustomer(id int32) (*pbc.CustomerDeleted, error)

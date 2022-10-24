@@ -19,7 +19,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param customer body customer.CustomerRequest true "Customer"
-// @Success 201 {json} customer.Customer
+// @Success 201 {json} customer.CustomerWithoutPost
 // @Router /v1/customer [post]
 func (h *handlerV1) CreateCustomer(c *gin.Context) {
 	var (
@@ -90,4 +90,45 @@ func (h *handlerV1) GetCustomer(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, customer)
+}
+
+
+// UpdateCustomer Update updates customer
+// @Summary Update customer api
+// @Description this api updates customer by id in database
+// @Tags product
+// @Accept json
+// @Produce json
+// @Param customer body customer.CustomerWithoutPost true "Customer"
+// @Success 200 {json} customer.CustomerWithoutPost
+// @Router /v1/customer [put]
+func (h *handlerV1) UpdateCustomer(c *gin.Context) {
+	var (
+		body        pbc.CustomerWithoutPost
+		jspbMarshal protojson.MarshalOptions
+	)
+	jspbMarshal.UseProtoNames = true
+
+	err := c.ShouldBindJSON(&body)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		h.log.Error("error to bind json UpdateCustomer", l.Error(err))
+		return
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
+	defer cancel()
+
+	updated_product, err := h.serviceManager.CustomerService().UpdateCustomer(ctx, &body)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		h.log.Error("failed to update product inside UpdateProduct", l.Error(err))
+		return
+	}
+
+	c.JSON(http.StatusOK, updated_product)
 }

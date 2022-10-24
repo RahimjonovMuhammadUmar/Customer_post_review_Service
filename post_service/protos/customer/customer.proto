@@ -3,8 +3,8 @@ syntax = "proto3";
 package customer;
 
 service CustomerService {
-    rpc CreateCustomer(CustomerRequest) returns (Customer);    
-    rpc UpdateCustomer(Customer) returns (Customer);
+    rpc CreateCustomer(CustomerRequest) returns (CustomerWithoutPost);    
+    rpc UpdateCustomer(CustomerWithoutPost) returns (CustomerWithoutPost);
     rpc CheckIfCustomerExists(CustomerId) returns (Exists);
     rpc GetCustomer(CustomerId) returns (Customer);
     rpc DeleteCustomer(CustomerId) returns (CustomerDeleted);
@@ -39,6 +39,17 @@ message Customer {
     string phone_number = 6;
     repeated Address addresses = 7;
     repeated Post posts = 8;
+}
+
+
+message CustomerWithoutPost {
+    int32 id = 1;
+    string first_name = 2;
+    string last_name = 3;
+    string bio = 4;
+    string email = 5;
+    string phone_number = 6;
+    repeated Address addresses = 7;
 }
 message CustomerId {
     int32 id = 1;

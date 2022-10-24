@@ -29,19 +29,19 @@ func NewCustomerService(db *sqlx.DB, log l.Logger, client grpcClient.GrpcClientI
 	}
 }
 
-func (c *CustomerService) CreateCustomer(ctx context.Context, req *pbc.CustomerRequest) (*pbc.Customer, error) {
+func (c *CustomerService) CreateCustomer(ctx context.Context, req *pbc.CustomerRequest) (*pbc.CustomerWithoutPost, error) {
 	createdCustomer, err := c.storage.Customer().CreateCustomer(req)
 	if err != nil {
 		c.logger.Error("error -> createdCustomer, err := c.storage.Customer().CreateCustomer(req)", l.Any("error CreatingCustomer grpc_client/customer.go", err))
-		return &pbc.Customer{}, err
+		return &pbc.CustomerWithoutPost{}, err
 	}
 	return createdCustomer, nil
 }
-func (c *CustomerService) UpdateCustomer(ctx context.Context, req *pbc.Customer) (*pbc.Customer, error) {
+func (c *CustomerService) UpdateCustomer(ctx context.Context, req *pbc.CustomerWithoutPost) (*pbc.CustomerWithoutPost, error) {
 	_, err := c.storage.Customer().UpdateCustomer(req)
 	if err != nil {
 		c.logger.Error("error -> _, err := c.storage.Customer().UpdateCustomer(req)", l.Any("error UpdatingCustomer grpc_client/customer.go", err))
-		return &pbc.Customer{}, nil
+		return &pbc.CustomerWithoutPost{}, nil
 	}
 	return req, nil
 }

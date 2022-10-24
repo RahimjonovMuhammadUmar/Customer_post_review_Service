@@ -1,4 +1,13 @@
 definitions:
+  customer.Address:
+    properties:
+      house_number:
+        type: integer
+      id:
+        type: integer
+      street:
+        type: string
+    type: object
   customer.AddressRequest:
     properties:
       house_number:
@@ -18,6 +27,25 @@ definitions:
         type: string
       first_name:
         type: string
+      last_name:
+        type: string
+      phone_number:
+        type: string
+    type: object
+  customer.CustomerWithoutPost:
+    properties:
+      addresses:
+        items:
+          $ref: '#/definitions/customer.Address'
+        type: array
+      bio:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: integer
       last_name:
         type: string
       phone_number:
@@ -46,6 +74,27 @@ paths:
           schema:
             type: json
       summary: create customer api
+      tags:
+      - product
+    put:
+      consumes:
+      - application/json
+      description: this api updates customer by id in database
+      parameters:
+      - description: Customer
+        in: body
+        name: customer
+        required: true
+        schema:
+          $ref: '#/definitions/customer.CustomerWithoutPost'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: json
+      summary: Update customer api
       tags:
       - product
   /v1/customer/{id}:

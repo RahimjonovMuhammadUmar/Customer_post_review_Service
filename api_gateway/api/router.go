@@ -33,6 +33,7 @@ func New(option Option) *gin.Engine {
 	api := router.Group("/v1")
 	api.POST("/customer", handlerV1.CreateCustomer)
 	api.GET("/customer/:id", handlerV1.GetCustomer)
+	api.PUT("/customer", handlerV1.UpdateCustomer)
 
 
 
