@@ -11,8 +11,12 @@ type Config struct {
 	Loglevel          string
 	HTTPPort           string
 	
-	ProductServiceHost  string
-	ProductServicePort  int
+	CustomerServiceHost  string
+	CustomerServicePort  int
+	PostServiceHost  string
+	PostServicePort  int
+	ReviewServiceHost  string
+	ReviewServicePort  int
 	CtxTimeout int
 }
 
@@ -21,8 +25,15 @@ func Load() Config {
 	c := Config{}
 
 	c.Environment = cast.ToString(getOrReturnDefault("ENVIRONMENT", "develop"))
-	c.ProductServiceHost = cast.ToString(getOrReturnDefault("PRODUCT_SERVICE_HOST", "localhost"))
-	c.ProductServicePort = cast.ToInt(getOrReturnDefault("PRODUCT_SERVICE_PORT", 9000))
+	c.CustomerServiceHost = cast.ToString(getOrReturnDefault("CUSTOMER_SERVICE_HOST", "localhost"))
+	c.CustomerServicePort = cast.ToInt(getOrReturnDefault("CUSTOMER_SERVICE_PORT", 9000))
+
+	c.PostServiceHost = cast.ToString(getOrReturnDefault("POST_SERVICE_HOST", "localhost"))
+	c.PostServicePort = cast.ToInt(getOrReturnDefault("POST_SERVICE_PORT", 9090))
+
+	c.ReviewServiceHost = cast.ToString(getOrReturnDefault("REVIEW_SERVICE_HOST", "localhost"))
+	c.ReviewServicePort = cast.ToInt(getOrReturnDefault("REVIEW_SERVICE_PORT", 9900))
+
 
 	c.Loglevel = cast.ToString(getOrReturnDefault("LOG_LEVEL", "debug"))
 
