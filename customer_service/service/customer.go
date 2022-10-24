@@ -58,8 +58,8 @@ func (c *CustomerService) CheckIfCustomerExists(ctx context.Context, req *pbc.Cu
 }
 func (c *CustomerService) GetCustomer(ctx context.Context, req *pbc.CustomerId) (*pbc.Customer, error) {
 	customerData, err := c.storage.Customer().GetCustomer(req.Id)
-	if err != sql.ErrNoRows {
-		c.logger.Info("No such customer")
+	if err == sql.ErrNoRows {
+		c.logger.Info("No such customer", l.Any("no such customer", err))
 		return &pbc.Customer{}, nil
 	}
 	

@@ -60,7 +60,7 @@ func (h *handlerV1) CreateCustomer(c *gin.Context) {
 // @Produce json
 // @Param id path int true "id"
 // @Success 201 {json} customer.Customer
-// @Router /v1/customer/{id}  [get]
+// @Router /v1/customer/{id} [get]
 func (h *handlerV1) GetCustomer(c *gin.Context) {
 	customer_idStr := c.Param("id")
 	customer_id, err := strconv.ParseInt(customer_idStr, 10, 64)
