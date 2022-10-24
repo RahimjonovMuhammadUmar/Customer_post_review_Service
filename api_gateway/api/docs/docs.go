@@ -26,7 +26,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "product"
+                    "customer"
                 ],
                 "summary": "Update customer api",
                 "parameters": [
@@ -58,7 +58,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "product"
+                    "customer"
                 ],
                 "summary": "create customer api",
                 "parameters": [
@@ -92,7 +92,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "product"
+                    "customer"
                 ],
                 "summary": "get customer api",
                 "parameters": [
@@ -112,6 +112,26 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "delete": {
+                "description": "this api deletes customer from database",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "customer"
+                ],
+                "summary": "Delete customer api",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
             }
         }
     },

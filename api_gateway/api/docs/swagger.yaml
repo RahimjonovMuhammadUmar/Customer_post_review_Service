@@ -75,7 +75,7 @@ paths:
             type: json
       summary: create customer api
       tags:
-      - product
+      - customer
     put:
       consumes:
       - application/json
@@ -96,8 +96,22 @@ paths:
             type: json
       summary: Update customer api
       tags:
-      - product
+      - customer
   /v1/customer/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: this api deletes customer from database
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses: {}
+      summary: Delete customer api
+      tags:
+      - customer
     get:
       consumes:
       - application/json
@@ -117,5 +131,5 @@ paths:
             type: json
       summary: get customer api
       tags:
-      - product
+      - customer
 swagger: "2.0"

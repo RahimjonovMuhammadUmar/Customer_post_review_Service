@@ -94,6 +94,13 @@ func (c *customerRepo) UpdateCustomer(req *pbc.CustomerWithoutPost) (*pbc.Custom
 		fmt.Println("error while updating customer", err)
 		return &pbc.CustomerWithoutPost{}, err
 	}
+	for _, address := range req.Addresses {
+		_, err = c.db.Exec(`UPDATE addresses SET street = $1, house_number = $2 WHERE id = $3`, address.Street, address.HouseNumber, address.Id)
+		if err != nil {
+			fmt.Println("Error while updating customers", err)
+			return &pbc.CustomerWithoutPost{}, err
+		}
+	}
 
 	return req, nil
 }

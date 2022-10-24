@@ -15,7 +15,7 @@ import (
 // Create creates customer
 // @Summary create customer api
 // @Description this api creates new customer
-// @Tags product
+// @Tags customer
 // @Accept json
 // @Produce json
 // @Param customer body customer.CustomerRequest true "Customer"
@@ -55,7 +55,7 @@ func (h *handlerV1) CreateCustomer(c *gin.Context) {
 // Get finds customer
 // @Summary get customer api
 // @Description this api finds existing customer
-// @Tags product
+// @Tags customer
 // @Accept json
 // @Produce json
 // @Param id path int true "id"
@@ -92,11 +92,10 @@ func (h *handlerV1) GetCustomer(c *gin.Context) {
 	c.JSON(http.StatusOK, customer)
 }
 
-
 // UpdateCustomer Update updates customer
 // @Summary Update customer api
 // @Description this api updates customer by id in database
-// @Tags product
+// @Tags customer
 // @Accept json
 // @Produce json
 // @Param customer body customer.CustomerWithoutPost true "Customer"
@@ -131,4 +130,43 @@ func (h *handlerV1) UpdateCustomer(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, updated_product)
+}
+
+// DeleteCustomer deletes customer
+// @Summary Delete customer api
+// @Description this api deletes customer from database
+// @Tags customer
+// @Accept json
+// @Product json
+// @Param id path int true "id"
+// @Succes 200 {json} customer.CustomerDeleted
+// @Router /v1/customer/{id} [delete]
+func (h *handlerV1) DeleteCustomer(c *gin.Context) {
+	customer_idStr := c.Param("id")
+	customer_id, err := strconv.ParseInt(customer_idStr, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		h.log.Error("failed to convert id to int64 DeleteCustomer", l.Error(err))
+		return
+	}
+	var jspbMarshal protojson.MarshalOptions
+	jspbMarshal.UseProtoNames = true
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
+	defer cancel()
+
+	is_deleted, err := h.serviceManager.CustomerService().DeleteCustomer(ctx, &pbc.CustomerId{
+		Id: int32(customer_id),
+	})
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		h.log.Error("failed to send id to deleteCustomer", l.Error(err))
+		return
+	}
+
+	c.JSON(http.StatusOK, is_deleted)
 }
