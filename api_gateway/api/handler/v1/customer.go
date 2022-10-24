@@ -79,6 +79,6 @@ func (h *handlerV1) GetCustomer(c *gin.Context) {
 		h.log.Error("failed to get from customer from customer service", l.Error(err))
 		return
 	}
-	
+		
 
 }
