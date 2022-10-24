@@ -5,14 +5,12 @@ import (
 	pbc "exam/api_gateway/genproto/customer"
 	l "exam/api_gateway/pkg/logger"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"google.golang.org/protobuf/encoding/protojson"
 )
-
-
-
 
 // Create creates customer
 // @Summary create customer api
@@ -52,5 +50,35 @@ func (h *handlerV1) CreateCustomer(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusCreated, response)
+}
+
+func (h *handlerV1) GetCustomer(c *gin.Context) {
+	customer_idStr := c.Param("id")
+	customer_id, err := strconv.ParseInt(customer_idStr, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		h.log.Error("failed to convert id to int64", l.Error(err))
+		return
+	}
+	var jspbMarshal protojson.MarshalOptions
+
+	jspbMarshal.UseProtoNames = true
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
+	defer cancel()
+
+	_, err = h.serviceManager.CustomerService().GetCustomer(ctx, &pbc.CustomerId{
+		Id: int32(customer_id),
+	})
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		h.log.Error("failed to get from customer from customer service", l.Error(err))
+		return
+	}
+	
 
 }
