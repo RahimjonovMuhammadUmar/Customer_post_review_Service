@@ -1,0 +1,51 @@
+definitions:
+  customer.AddressRequest:
+    properties:
+      house_number:
+        type: integer
+      street:
+        type: string
+    type: object
+  customer.CustomerRequest:
+    properties:
+      addresses:
+        items:
+          $ref: '#/definitions/customer.AddressRequest'
+        type: array
+      bio:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      phone_number:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /v1/customer:
+    post:
+      consumes:
+      - application/json
+      description: this api creates new customer
+      parameters:
+      - description: Customer
+        in: body
+        name: customer
+        required: true
+        schema:
+          $ref: '#/definitions/customer.CustomerRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            type: json
+      summary: create customer api
+      tags:
+      - product
+swagger: "2.0"
