@@ -17,38 +17,6 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/v1/customer": {
-            "get": {
-                "description": "this api finds existing customer",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "product"
-                ],
-                "summary": "get customer api",
-                "parameters": [
-                    {
-                        "description": "Customer",
-                        "name": "customer",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/customer.CustomerId"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "type": "json"
-                        }
-                    }
-                }
-            },
             "post": {
                 "description": "this api creates new customer",
                 "consumes": [
@@ -81,6 +49,38 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/v1/customer/{id}": {
+            "get": {
+                "description": "this api finds existing customer",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "product"
+                ],
+                "summary": "get customer api",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "type": "json"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -92,14 +92,6 @@ const docTemplate = `{
                 },
                 "street": {
                     "type": "string"
-                }
-            }
-        },
-        "customer.CustomerId": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
                 }
             }
         },
