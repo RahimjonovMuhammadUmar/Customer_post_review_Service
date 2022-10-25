@@ -132,10 +132,10 @@ func (p *PostService) DoesPostExist(ctx context.Context, req *pbp.Id) (*pbp.Exis
 		p.logger.Error("Error exists, err = p.storage.Post().DoesPostExist(req.Id)")
 		return nil, err
 	}
-
 	if !exists.Exists {
 		p.logger.Info("such post does not exist")
-		return &pbp.Exist{}, nil
+		return &pbp.Exist{}, status.Error(codes.NotFound, "There is no such post")
+
 	}
 
 	return &pbp.Exist{
@@ -210,6 +210,19 @@ func (p *PostService) GetAllPostsWithCustomer(ctx context.Context, req *pbp.Empt
 }
 
 func (p *PostService) GetPostsOfCustomer(ctx context.Context, req *pbp.Id) (*pbp.Posts, error) {
+	exists, err := p.client.Customer().CheckIfCustomerExists(ctx, &pbc.CustomerId{
+		Id: req.Id,
+	})
+	if err != nil {
+		p.logger.Error("error -> exists, err := p.client.Customer().CheckIfCustomerExists(ctx, &pbc.CustomerId{", l.Any("error checking customer by id post/service/grpc_client/customer.go", err))
+		return &pbp.Posts{}, err
+	}
+	if !exists.Exists {
+		p.logger.Info("There is no such customer")
+
+		return &pbp.Posts{}, status.Error(codes.NotFound, "There is no such customer")
+	}
+
 	posts, err := p.storage.Post().GetPostsOfCustomer(req)
 	if err != nil {
 		p.logger.Error("error while sending to db GetPostsOfCustomer", l.Any("", err))
@@ -238,6 +251,18 @@ func (p *PostService) GetPostsOfCustomer(ctx context.Context, req *pbp.Id) (*pbp
 }
 
 func (p *PostService) DeletePostByCustomerId(ctx context.Context, req *pbp.Id) (*pbp.IsDeleted, error) {
+	exists, err := p.client.Customer().CheckIfCustomerExists(ctx, &pbc.CustomerId{
+		Id: req.Id,
+	})
+	if err != nil {
+		p.logger.Error("error -> exists, err := p.client.Customer().CheckIfCustomerExists(ctx, &pbc.CustomerId{", l.Any("error checking customer by id post/service/grpc_client/customer.go", err))
+		return &pbp.IsDeleted{}, err
+	}
+	if !exists.Exists {
+		p.logger.Info("There is no such customer")
+		return &pbp.IsDeleted{}, status.Error(codes.NotFound, "There is no such customer")
+	}
+
 	deleted, ids, err := p.storage.Post().DeletePostByCustomerId(req.Id)
 	if err != nil {
 		p.logger.Error("error while deleting posts with customer_id grpc_client/post.go", l.Any("", err))

@@ -11,6 +11,8 @@ import (
 	"exam/customer_service/storage"
 
 	"github.com/jmoiron/sqlx"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 // CustomerService ...
@@ -60,7 +62,8 @@ func (c *CustomerService) GetCustomer(ctx context.Context, req *pbc.CustomerId) 
 	customerData, err := c.storage.Customer().GetCustomer(req.Id)
 	if err == sql.ErrNoRows {
 		c.logger.Info("No such customer")
-		return &pbc.Customer{}, nil
+		return &pbc.Customer{}, status.Error(codes.NotFound, "There is no such customer")
+
 	}
 	if err != nil {
 		c.logger.Error("error -> customerData, err := c.storage.Customer().GetCustomer(req.Id)", l.Any("error getting customer by id grpc_client/customer.go", err))
