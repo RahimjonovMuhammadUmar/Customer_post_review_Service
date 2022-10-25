@@ -9,10 +9,15 @@ service ReviewService {
     // rpc PostReviews(ReviewPostId) returns (Reviews);
     rpc DeleteReview(ReviewId) returns (Empty);
     rpc GetReview(ReviewId) returns (Review);
+    rpc DeleteReviewByCustomerId(CustomerId) returns (Empty);
 }
 
 
 message Empty {
+}
+
+message CustomerId {
+    int32 CustomerId = 1;
 }
 
 message Reviews {

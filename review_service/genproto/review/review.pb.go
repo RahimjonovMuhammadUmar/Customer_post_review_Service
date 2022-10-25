@@ -65,6 +65,53 @@ func (m *Empty) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Empty proto.InternalMessageInfo
 
+type CustomerId struct {
+	CustomerId           int32    `protobuf:"varint,1,opt,name=CustomerId,proto3" json:"CustomerId"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *CustomerId) Reset()         { *m = CustomerId{} }
+func (m *CustomerId) String() string { return proto.CompactTextString(m) }
+func (*CustomerId) ProtoMessage()    {}
+func (*CustomerId) Descriptor() ([]byte, []int) {
+	return fileDescriptor_63b26697b52db059, []int{1}
+}
+func (m *CustomerId) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CustomerId) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_CustomerId.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *CustomerId) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CustomerId.Merge(m, src)
+}
+func (m *CustomerId) XXX_Size() int {
+	return m.Size()
+}
+func (m *CustomerId) XXX_DiscardUnknown() {
+	xxx_messageInfo_CustomerId.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CustomerId proto.InternalMessageInfo
+
+func (m *CustomerId) GetCustomerId() int32 {
+	if m != nil {
+		return m.CustomerId
+	}
+	return 0
+}
+
 type Reviews struct {
 	Reviews              []*Review `protobuf:"bytes,1,rep,name=reviews,proto3" json:"reviews"`
 	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
@@ -76,7 +123,7 @@ func (m *Reviews) Reset()         { *m = Reviews{} }
 func (m *Reviews) String() string { return proto.CompactTextString(m) }
 func (*Reviews) ProtoMessage()    {}
 func (*Reviews) Descriptor() ([]byte, []int) {
-	return fileDescriptor_63b26697b52db059, []int{1}
+	return fileDescriptor_63b26697b52db059, []int{2}
 }
 func (m *Reviews) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -123,7 +170,7 @@ func (m *ReviewId) Reset()         { *m = ReviewId{} }
 func (m *ReviewId) String() string { return proto.CompactTextString(m) }
 func (*ReviewId) ProtoMessage()    {}
 func (*ReviewId) Descriptor() ([]byte, []int) {
-	return fileDescriptor_63b26697b52db059, []int{2}
+	return fileDescriptor_63b26697b52db059, []int{3}
 }
 func (m *ReviewId) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -175,7 +222,7 @@ func (m *Review) Reset()         { *m = Review{} }
 func (m *Review) String() string { return proto.CompactTextString(m) }
 func (*Review) ProtoMessage()    {}
 func (*Review) Descriptor() ([]byte, []int) {
-	return fileDescriptor_63b26697b52db059, []int{3}
+	return fileDescriptor_63b26697b52db059, []int{4}
 }
 func (m *Review) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -257,7 +304,7 @@ func (m *ReviewPostId) Reset()         { *m = ReviewPostId{} }
 func (m *ReviewPostId) String() string { return proto.CompactTextString(m) }
 func (*ReviewPostId) ProtoMessage()    {}
 func (*ReviewPostId) Descriptor() ([]byte, []int) {
-	return fileDescriptor_63b26697b52db059, []int{4}
+	return fileDescriptor_63b26697b52db059, []int{5}
 }
 func (m *ReviewPostId) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -308,7 +355,7 @@ func (m *ReviewRequest) Reset()         { *m = ReviewRequest{} }
 func (m *ReviewRequest) String() string { return proto.CompactTextString(m) }
 func (*ReviewRequest) ProtoMessage()    {}
 func (*ReviewRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_63b26697b52db059, []int{5}
+	return fileDescriptor_63b26697b52db059, []int{6}
 }
 func (m *ReviewRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -374,6 +421,7 @@ func (m *ReviewRequest) GetCustomerId() int32 {
 
 func init() {
 	proto.RegisterType((*Empty)(nil), "review.Empty")
+	proto.RegisterType((*CustomerId)(nil), "review.CustomerId")
 	proto.RegisterType((*Reviews)(nil), "review.Reviews")
 	proto.RegisterType((*ReviewId)(nil), "review.ReviewId")
 	proto.RegisterType((*Review)(nil), "review.Review")
@@ -384,30 +432,32 @@ func init() {
 func init() { proto.RegisterFile("review/review.proto", fileDescriptor_63b26697b52db059) }
 
 var fileDescriptor_63b26697b52db059 = []byte{
-	// 362 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x92, 0xcd, 0x4e, 0xc2, 0x40,
-	0x10, 0xc7, 0xdd, 0x42, 0x5b, 0x19, 0x3e, 0x24, 0xe3, 0x57, 0xc3, 0xa1, 0x36, 0xbd, 0xd8, 0x8b,
-	0x90, 0x40, 0x3c, 0x78, 0xf5, 0x23, 0x86, 0x9b, 0xa9, 0x0f, 0x60, 0x90, 0xce, 0x61, 0x13, 0xa1,
-	0xb5, 0xbb, 0x60, 0x7c, 0x11, 0xf5, 0xe8, 0xe3, 0x78, 0xf4, 0x11, 0x0c, 0xbe, 0x88, 0x61, 0xb7,
-	0x25, 0x50, 0x49, 0x4f, 0x30, 0xff, 0xff, 0xfc, 0xb7, 0xf3, 0xdb, 0x1d, 0xd8, 0x4f, 0x69, 0xce,
-	0xe9, 0xa5, 0xa7, 0x7f, 0xba, 0x49, 0x1a, 0xcb, 0x18, 0x2d, 0x5d, 0xf9, 0x36, 0x98, 0x37, 0x93,
-	0x44, 0xbe, 0xfa, 0x03, 0xb0, 0x43, 0x25, 0x09, 0x0c, 0xc0, 0xd6, 0xae, 0x70, 0x98, 0x57, 0x09,
-	0xea, 0xfd, 0x56, 0x37, 0xcb, 0xea, 0x8e, 0x30, 0xb7, 0xfd, 0x0e, 0xec, 0x6a, 0x69, 0x18, 0x61,
-	0x0b, 0x0c, 0x1e, 0x39, 0xcc, 0x63, 0x81, 0x19, 0x1a, 0x3c, 0xf2, 0x3f, 0x19, 0x58, 0xda, 0x2c,
-	0x5a, 0x88, 0x50, 0x9d, 0x8e, 0x26, 0xe4, 0x18, 0x1e, 0x0b, 0x6a, 0xa1, 0xfa, 0x8f, 0x47, 0x90,
-	0x8d, 0xe4, 0x54, 0x54, 0x5f, 0x56, 0xa1, 0x07, 0xf5, 0x88, 0xc4, 0x38, 0xe5, 0x89, 0xe4, 0xf1,
-	0xd4, 0xa9, 0xaa, 0xc8, 0xba, 0x84, 0xc7, 0x60, 0x27, 0xb1, 0x90, 0x0f, 0x3c, 0x72, 0x4c, 0x1d,
-	0x5d, 0x96, 0xc3, 0x08, 0x4f, 0xa0, 0x3e, 0x9e, 0x09, 0x19, 0x4f, 0x28, 0x5d, 0x9a, 0x96, 0x32,
-	0x21, 0x97, 0x86, 0x91, 0x7f, 0x0a, 0x0d, 0x3d, 0xe1, 0x9d, 0x0e, 0xac, 0x9d, 0xc4, 0xd6, 0x4f,
-	0xf2, 0xdf, 0x19, 0x34, 0x33, 0x76, 0x7a, 0x9e, 0x91, 0x90, 0x2b, 0x04, 0xb6, 0x15, 0xc1, 0x28,
-	0x43, 0xa8, 0x94, 0x22, 0x54, 0xcb, 0x10, 0xcc, 0x22, 0x42, 0xff, 0xcd, 0xc8, 0x27, 0xbb, 0xa7,
-	0x74, 0xce, 0xc7, 0x84, 0xe7, 0xd0, 0xb8, 0x4a, 0x69, 0x24, 0x29, 0xbb, 0xfc, 0xc3, 0xc2, 0xe3,
-	0x69, 0x80, 0x4e, 0xe1, 0x4d, 0x71, 0x00, 0x70, 0x4b, 0x32, 0x5f, 0x81, 0x83, 0x4d, 0x57, 0xdf,
-	0x4f, 0x67, 0x6f, 0x53, 0x15, 0x78, 0x01, 0x78, 0x4d, 0x4f, 0x24, 0x69, 0xd9, 0x20, 0xca, 0xc3,
-	0xcd, 0x5c, 0x55, 0xfb, 0x86, 0x3d, 0x68, 0xe8, 0x68, 0xf6, 0xfd, 0xf6, 0x66, 0xe8, 0x7f, 0xe0,
-	0x0c, 0x6a, 0xab, 0x01, 0xb7, 0x74, 0x17, 0x78, 0x2e, 0xdb, 0x5f, 0x0b, 0x97, 0x7d, 0x2f, 0x5c,
-	0xf6, 0xb3, 0x70, 0xd9, 0xc7, 0xaf, 0xbb, 0xf3, 0x68, 0xa9, 0xcd, 0x1f, 0xfc, 0x05, 0x00, 0x00,
-	0xff, 0xff, 0xf6, 0xa7, 0x0d, 0x55, 0x10, 0x03, 0x00, 0x00,
+	// 394 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x93, 0xcd, 0x4e, 0xe2, 0x50,
+	0x14, 0xc7, 0xe7, 0x16, 0xda, 0x0e, 0x87, 0x8f, 0x21, 0x67, 0x66, 0xb4, 0x61, 0x51, 0x9b, 0x6e,
+	0xec, 0x42, 0x21, 0x81, 0xb8, 0x70, 0xe1, 0x06, 0x34, 0x86, 0x9d, 0xa9, 0x0f, 0x60, 0xb0, 0x3d,
+	0x8b, 0x26, 0x42, 0x6b, 0xef, 0x05, 0xc3, 0x93, 0xe8, 0xd2, 0xc7, 0x71, 0xe9, 0xc6, 0xbd, 0xc1,
+	0x17, 0x31, 0xf4, 0xb6, 0x50, 0x2a, 0xe9, 0xaa, 0x3d, 0x1f, 0xff, 0xff, 0x3d, 0xbf, 0xfb, 0x01,
+	0x7f, 0x63, 0x5a, 0x04, 0xf4, 0xd4, 0x93, 0x9f, 0x6e, 0x14, 0x87, 0x22, 0x44, 0x4d, 0x46, 0xb6,
+	0x0e, 0xea, 0xd5, 0x34, 0x12, 0x4b, 0xfb, 0x04, 0x60, 0x34, 0xe7, 0x22, 0x9c, 0x52, 0x3c, 0xf6,
+	0xd1, 0xcc, 0x47, 0x06, 0xb3, 0x98, 0xa3, 0xba, 0xb9, 0x8c, 0x3d, 0x00, 0xdd, 0x4d, 0x0c, 0x38,
+	0x3a, 0xa0, 0x4b, 0x2f, 0x6e, 0x30, 0xab, 0xe2, 0xd4, 0xfb, 0xad, 0x6e, 0xba, 0x92, 0xec, 0x70,
+	0xb3, 0xb2, 0xdd, 0x81, 0xdf, 0x32, 0x35, 0xf6, 0xb1, 0x05, 0x4a, 0x90, 0x19, 0x2b, 0x81, 0x6f,
+	0xbf, 0x32, 0xd0, 0x64, 0xb1, 0x58, 0x42, 0x84, 0xea, 0x6c, 0x32, 0x25, 0x43, 0xb1, 0x98, 0x53,
+	0x73, 0x93, 0x7f, 0x3c, 0x80, 0x14, 0xc0, 0xa8, 0x24, 0x7d, 0x69, 0x84, 0x16, 0xd4, 0x7d, 0xe2,
+	0x5e, 0x1c, 0x44, 0x22, 0x08, 0x67, 0x46, 0x35, 0x91, 0xe4, 0x53, 0x78, 0x08, 0x7a, 0x14, 0x72,
+	0x71, 0x17, 0xf8, 0x86, 0x2a, 0xa5, 0xeb, 0x70, 0xec, 0xe3, 0x11, 0xd4, 0xbd, 0x14, 0x70, 0x5d,
+	0xd4, 0x24, 0xb3, 0xb7, 0x65, 0x3e, 0x86, 0x86, 0x9c, 0xf0, 0x46, 0x0a, 0x72, 0x4e, 0x2c, 0xef,
+	0x64, 0x3f, 0x33, 0x68, 0xa6, 0xec, 0xf4, 0x38, 0x27, 0x2e, 0x36, 0x08, 0x6c, 0x2f, 0x82, 0x52,
+	0x86, 0x50, 0x29, 0x45, 0xa8, 0x96, 0x21, 0xa8, 0x45, 0x84, 0xfe, 0x87, 0x92, 0x4d, 0x76, 0x4b,
+	0xf1, 0x22, 0xf0, 0x08, 0xcf, 0xa0, 0x31, 0x8a, 0x69, 0x22, 0x28, 0xdd, 0xfc, 0xff, 0x85, 0xc3,
+	0x93, 0x00, 0x9d, 0xc2, 0x99, 0xe2, 0x00, 0xe0, 0x9a, 0x44, 0x76, 0x05, 0xfe, 0xed, 0x56, 0xe5,
+	0xfe, 0x74, 0xfe, 0xec, 0x66, 0x39, 0x9e, 0x03, 0x5e, 0xd2, 0x03, 0x09, 0x5a, 0x37, 0xf0, 0x72,
+	0x71, 0x33, 0xcb, 0x26, 0xb7, 0x13, 0x7b, 0xd0, 0x90, 0xd2, 0x74, 0xfd, 0xf6, 0xae, 0xe8, 0xa7,
+	0xe0, 0x14, 0x6a, 0x9b, 0x01, 0xf7, 0x74, 0x17, 0x79, 0x2e, 0xc0, 0xc8, 0xfb, 0x0f, 0x97, 0xb9,
+	0xb7, 0x80, 0x59, 0xef, 0x36, 0x57, 0x58, 0x6d, 0xd8, 0x7e, 0x5b, 0x99, 0xec, 0x7d, 0x65, 0xb2,
+	0xcf, 0x95, 0xc9, 0x5e, 0xbe, 0xcc, 0x5f, 0xf7, 0x5a, 0xf2, 0xcc, 0x06, 0xdf, 0x01, 0x00, 0x00,
+	0xff, 0xff, 0xed, 0xe0, 0xac, 0xe4, 0x7d, 0x03, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -428,6 +478,7 @@ type ReviewServiceClient interface {
 	// rpc PostReviews(ReviewPostId) returns (Reviews);
 	DeleteReview(ctx context.Context, in *ReviewId, opts ...grpc.CallOption) (*Empty, error)
 	GetReview(ctx context.Context, in *ReviewId, opts ...grpc.CallOption) (*Review, error)
+	DeleteReviewByCustomerId(ctx context.Context, in *CustomerId, opts ...grpc.CallOption) (*Empty, error)
 }
 
 type reviewServiceClient struct {
@@ -483,6 +534,15 @@ func (c *reviewServiceClient) GetReview(ctx context.Context, in *ReviewId, opts 
 	return out, nil
 }
 
+func (c *reviewServiceClient) DeleteReviewByCustomerId(ctx context.Context, in *CustomerId, opts ...grpc.CallOption) (*Empty, error) {
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, "/review.ReviewService/DeleteReviewByCustomerId", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ReviewServiceServer is the server API for ReviewService service.
 type ReviewServiceServer interface {
 	CreateReview(context.Context, *ReviewRequest) (*Review, error)
@@ -491,6 +551,7 @@ type ReviewServiceServer interface {
 	// rpc PostReviews(ReviewPostId) returns (Reviews);
 	DeleteReview(context.Context, *ReviewId) (*Empty, error)
 	GetReview(context.Context, *ReviewId) (*Review, error)
+	DeleteReviewByCustomerId(context.Context, *CustomerId) (*Empty, error)
 }
 
 // UnimplementedReviewServiceServer can be embedded to have forward compatible implementations.
@@ -511,6 +572,9 @@ func (*UnimplementedReviewServiceServer) DeleteReview(ctx context.Context, req *
 }
 func (*UnimplementedReviewServiceServer) GetReview(ctx context.Context, req *ReviewId) (*Review, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetReview not implemented")
+}
+func (*UnimplementedReviewServiceServer) DeleteReviewByCustomerId(ctx context.Context, req *CustomerId) (*Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteReviewByCustomerId not implemented")
 }
 
 func RegisterReviewServiceServer(s *grpc.Server, srv ReviewServiceServer) {
@@ -607,6 +671,24 @@ func _ReviewService_GetReview_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ReviewService_DeleteReviewByCustomerId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CustomerId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ReviewServiceServer).DeleteReviewByCustomerId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/review.ReviewService/DeleteReviewByCustomerId",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ReviewServiceServer).DeleteReviewByCustomerId(ctx, req.(*CustomerId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _ReviewService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "review.ReviewService",
 	HandlerType: (*ReviewServiceServer)(nil),
@@ -630,6 +712,10 @@ var _ReviewService_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetReview",
 			Handler:    _ReviewService_GetReview_Handler,
+		},
+		{
+			MethodName: "DeleteReviewByCustomerId",
+			Handler:    _ReviewService_DeleteReviewByCustomerId_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -659,6 +745,38 @@ func (m *Empty) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	if m.XXX_unrecognized != nil {
 		i -= len(m.XXX_unrecognized)
 		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *CustomerId) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CustomerId) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CustomerId) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if m.CustomerId != 0 {
+		i = encodeVarintReview(dAtA, i, uint64(m.CustomerId))
+		i--
+		dAtA[i] = 0x8
 	}
 	return len(dAtA) - i, nil
 }
@@ -908,6 +1026,21 @@ func (m *Empty) Size() (n int) {
 	return n
 }
 
+func (m *CustomerId) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.CustomerId != 0 {
+		n += 1 + sovReview(uint64(m.CustomerId))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
 func (m *Reviews) Size() (n int) {
 	if m == nil {
 		return 0
@@ -1052,6 +1185,76 @@ func (m *Empty) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: Empty: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipReview(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthReview
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *CustomerId) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowReview
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CustomerId: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CustomerId: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CustomerId", wireType)
+			}
+			m.CustomerId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowReview
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.CustomerId |= int32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipReview(dAtA[iNdEx:])

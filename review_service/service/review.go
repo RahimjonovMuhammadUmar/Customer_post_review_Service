@@ -111,3 +111,13 @@ func (s *ReviewService) GetReview(ctx context.Context, req *pbr.ReviewId) (*pbr.
 	return review, nil
 
 }
+
+func (s *ReviewService) DeleteReviewByCustomerId(ctx context.Context, req *pbr.CustomerId) (*pbr.Empty, error) {
+	_, err := s.storage.Review().DeleteReviewByCustomerId(req)
+	if err != nil {
+		fmt.Println("Error while sending cust_id to db to delete ratings", err)
+		return &pbr.Empty{}, err
+	}
+
+	return &pbr.Empty{}, nil
+}

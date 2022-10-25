@@ -126,3 +126,40 @@ func (h *handlerV1) GetReview(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, review)
 }
+// @Summary delete review by cust api
+// @Description this api deletes review by customer
+// @Tags review
+// @Accept json
+// @Produce json
+// @Param customer body customer.CustomerRequest true "Customer"
+// @Success 201 {json} customer.CustomerWithoutPost
+// @Router /v1/customer [post]
+func (h *handlerV1) DeleteCustomerRates(c *gin.Context) {
+	customer_idStr := c.Param("id")
+	customer_id, err := strconv.ParseInt(customer_idStr, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		h.log.Error("failed to convert id to int64 GetReview", l.Error(err))
+		return
+	}
+	var jspbMarshal protojson.MarshalOptions
+	jspbMarshal.UseProtoNames = true
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
+	defer cancel()
+
+	_, err = h.serviceManager.ReviewService().DeleteReviewByCustomerId(ctx, &pbr.CustomerId{
+		CustomerId: int32(customer_id),
+	})
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		h.log.Error("failed to send id to GetCustomer", l.Error(err))
+		return
+	}
+	c.JSON(http.StatusOK, "Deleted")
+
+}

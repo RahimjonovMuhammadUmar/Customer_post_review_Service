@@ -12,4 +12,5 @@ type ReviewStorage interface {
 	// PostReviews(*pbr.ReviewPostId) (*pbr.Reviews, error)
 	DeleteReview(*pbr.ReviewId) (*pbr.Empty, error)
 	GetReview(*pbr.ReviewId) (*pbr.Review, error)
+	DeleteReviewByCustomerId(*pbr.CustomerId)(*pbr.Empty, error)
 }

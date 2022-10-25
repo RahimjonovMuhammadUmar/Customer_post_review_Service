@@ -139,3 +139,13 @@ func (r reviewRepo) GetReview(req *pbr.ReviewId) (*pbr.Review, error) {
 	}
 	return review, nil
 }
+
+func (r reviewRepo) DeleteReviewByCustomerId(req *pbr.CustomerId) (*pbr.Empty, error) {
+	_, err := r.db.Exec(`UPDATE ratings SET deleted_at = NOW() WHERE customer_id = $1`, req.CustomerId)
+	if err != nil {
+		fmt.Println("error while deleting from ratings", err)
+		return &pbr.Empty{}, err
+	} 
+		
+	return &pbr.Empty{}, nil
+}
