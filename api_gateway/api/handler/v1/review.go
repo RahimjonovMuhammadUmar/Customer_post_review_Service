@@ -131,9 +131,9 @@ func (h *handlerV1) GetReview(c *gin.Context) {
 // @Tags review
 // @Accept json
 // @Produce json
-// @Param customer body customer.CustomerRequest true "Customer"
-// @Success 201 {json} customer.CustomerWithoutPost
-// @Router /v1/customer [post]
+// @Param id path int true "id"
+// @Success 200 {json} reivew.Empty
+// @Router /v1/review_by_custID/{id} [delete]
 func (h *handlerV1) DeleteCustomerRates(c *gin.Context) {
 	customer_idStr := c.Param("id")
 	customer_id, err := strconv.ParseInt(customer_idStr, 10, 64)
@@ -150,7 +150,7 @@ func (h *handlerV1) DeleteCustomerRates(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
 	defer cancel()
 
-	_, err = h.serviceManager.ReviewService().DeleteReviewByCustomerId(ctx, &pbr.CustomerId{
+	emp, err := h.serviceManager.ReviewService().DeleteReviewByCustomerId(ctx, &pbr.CustomerId{
 		CustomerId: int32(customer_id),
 	})
 	if err != nil {
@@ -160,6 +160,6 @@ func (h *handlerV1) DeleteCustomerRates(c *gin.Context) {
 		h.log.Error("failed to send id to GetCustomer", l.Error(err))
 		return
 	}
-	c.JSON(http.StatusOK, "Deleted")
+	c.JSON(http.StatusOK, emp)
 
 }

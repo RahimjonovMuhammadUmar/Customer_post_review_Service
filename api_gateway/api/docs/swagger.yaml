@@ -456,4 +456,25 @@ paths:
       summary: Get review api
       tags:
       - review
+  /v1/review_by_custID:
+    delete:
+      consumes:
+      - application/json
+      description: this api deletes review by customer
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: json
+      summary: delete review by cust api
+      tags:
+      - review
 swagger: "2.0"
