@@ -1,6 +1,7 @@
 CREATE TABLE "posts"(
     "id" SERIAL PRIMARY KEY,
     "name" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
     "created_at" TIMESTAMP(0) WITH TIME zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     "updated_at" TIMESTAMP(0) WITH TIME zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     "deleted_at" TIMESTAMP(0) WITH TIME zone NULL,
