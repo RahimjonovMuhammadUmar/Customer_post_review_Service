@@ -57,7 +57,11 @@ func (s *ReviewService) CreateReview(ctx context.Context, req *pbr.ReviewRequest
 
 func (s *ReviewService) GetReviews(ctx context.Context, req *pbr.ReviewPostId) (*pbr.Reviews, error) {
 	reviews, err := s.storage.Review().GetReviews(req)
-	if err != nil && err != sql.ErrNoRows {
+	if err == sql.ErrNoRows {
+		s.logger.Info("No such customer")
+		return &pbr.Reviews{}, nil
+	}
+	if err != nil {
 		s.logger.Error("error while sending request to db level GetReviews", l.Any("error while searching for post reviews", err))
 		return &pbr.Reviews{}, err
 	}
@@ -94,6 +98,11 @@ func (s *ReviewService) DeleteReview(ctx context.Context, req *pbr.ReviewId) (*p
 
 func (s *ReviewService) GetReview(ctx context.Context, req *pbr.ReviewId) (*pbr.Review, error) {
 	review, err := s.storage.Review().GetReview(req)
+	if err == sql.ErrNoRows {
+		s.logger.Info("No such customer")
+		return &pbr.Review{}, nil
+	}
+
 	if err != nil {
 		fmt.Println("error service/review.go 98", err)
 		return &pbr.Review{}, err
