@@ -1,0 +1,3 @@
+[submodule "post_service/protos"]
+	path = post_service/protos
+	url = git@github.com:RahimjonovMuhammadUmar/protos.git
