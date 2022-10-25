@@ -17,7 +17,7 @@ import (
 func main() {
 	cfg := config.Load()
 
-	log := logger.New(cfg.Loglevel, "product_service")
+	log := logger.New(cfg.Loglevel, "customer_service")
 	defer logger.Cleanup(log)
 
 	log.Info("main: sqlxConfig",
