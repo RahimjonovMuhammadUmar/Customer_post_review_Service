@@ -1,2 +1,2 @@
-DROP TABLE IF EXISTS addressses
+DROP TABLE IF EXISTS addresses
 DROP TABLE IF EXISTS customers

@@ -10,11 +10,11 @@ CREATE TABLE "customers"(
     "phone_number" TEXT NOT NULL
 );
 
-CREATE TABLE "addressses"(
+CREATE TABLE "addresses"(
     "id" SERIAL PRIMARY KEY,
     "house_number" INTEGER NOT NULL,
     "street" TEXT NOT NULL,
     "customer_id" INTEGER NOT NULL
 );
 ALTER TABLE
-    "addressses" ADD CONSTRAINT "addressses_customer_id_foreign" FOREIGN KEY("customer_id") REFERENCES "customers"("id");
+    "addresses" ADD CONSTRAINT "addressses_customer_id_foreign" FOREIGN KEY("customer_id") REFERENCES "customers"("id");
