@@ -5,8 +5,10 @@ package review;
 service ReviewService {
     rpc CreateReview(ReviewRequest) returns (Review);
     rpc GetReviews(ReviewPostId) returns (Reviews);
-    rpc DeleteReview(ReviewPostId) returns (Empty);
-    rpc PostReviews(ReviewPostId) returns (Reviews);
+    rpc DeletePostsReviews(ReviewPostId) returns (Empty);
+    // rpc PostReviews(ReviewPostId) returns (Reviews);
+    rpc DeleteReview(ReviewId) returns (Empty);
+    rpc GetReview(ReviewId) returns (Review);
 }
 
 
@@ -15,6 +17,9 @@ message Empty {
 
 message Reviews {
     repeated Review reviews = 1;
+}
+message ReviewId {
+    int32 id = 1;
 }
 
 message Review {

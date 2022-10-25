@@ -330,13 +330,13 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Review"
+                    "review"
                 ],
                 "summary": "create review api",
                 "parameters": [
                     {
                         "description": "Review",
-                        "name": "customer",
+                        "name": "review",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -352,6 +352,48 @@ const docTemplate = `{
                         }
                     }
                 }
+            }
+        },
+        "/v1/review/{id}": {
+            "get": {
+                "description": "this api gets review from database",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "review"
+                ],
+                "summary": "Get review api",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            },
+            "delete": {
+                "description": "this api deletes review from database",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "review"
+                ],
+                "summary": "Delete review api",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
             }
         }
     },

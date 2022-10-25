@@ -91,3 +91,14 @@ func (s *ReviewService) DeleteReview(ctx context.Context, req *pbr.ReviewId) (*p
 	}
 	return &pbr.Empty{}, nil
 }
+
+func (s *ReviewService) GetReview(ctx context.Context, req *pbr.ReviewId) (*pbr.Review, error) {
+	review, err := s.storage.Review().GetReview(req)
+	if err != nil {
+		fmt.Println("error service/review.go 98", err)
+		return &pbr.Review{}, err
+	}
+
+	return review, nil
+
+}

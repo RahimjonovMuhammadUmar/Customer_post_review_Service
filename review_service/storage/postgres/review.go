@@ -121,3 +121,21 @@ func (r reviewRepo) DeleteReview(req *pbr.ReviewId) (*pbr.Empty, error) {
 
 	return &pbr.Empty{}, nil
 }
+func (r reviewRepo) GetReview(req *pbr.ReviewId) (*pbr.Review, error) {
+	review := &pbr.Review{}
+	err := r.db.QueryRow(`SELECT 
+	id, 
+	name, 
+	description, 
+	rating FROM ratings WHERE id = $1 AND deleted_at IS NULL`, req.Id).Scan(
+		&review.Id,
+		&review.Name,
+		&review.Description,
+		&review.Review,
+	)	
+	if err != nil {
+		fmt.Println("Error while selecting from ratings by id", err)
+		return &pbr.Review{}, err
+	}
+	return review, nil
+}

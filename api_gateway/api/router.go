@@ -48,6 +48,8 @@ func New(option Option) *gin.Engine {
 	
 	// review
 	api.POST("/review", handlerV1.CreateReview)
+	api.DELETE("/review/:id", handlerV1.DeleteReview)
+	api.GET("/review/:id", handlerV1.GetReview)
 	
 	url := ginSwagger.URL("swagger/doc.json")
 	api.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))

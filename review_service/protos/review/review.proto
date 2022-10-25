@@ -8,6 +8,7 @@ service ReviewService {
     rpc DeletePostsReviews(ReviewPostId) returns (Empty);
     // rpc PostReviews(ReviewPostId) returns (Reviews);
     rpc DeleteReview(ReviewId) returns (Empty);
+    rpc GetReview(ReviewId) returns (Review);
 }
 
 

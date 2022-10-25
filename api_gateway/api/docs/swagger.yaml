@@ -413,7 +413,7 @@ paths:
       parameters:
       - description: Review
         in: body
-        name: customer
+        name: review
         required: true
         schema:
           $ref: '#/definitions/review.ReviewRequest'
@@ -426,5 +426,34 @@ paths:
             type: json
       summary: create review api
       tags:
-      - Review
+      - review
+  /v1/review/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: this api deletes review from database
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses: {}
+      summary: Delete review api
+      tags:
+      - review
+    get:
+      consumes:
+      - application/json
+      description: this api gets review from database
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses: {}
+      summary: Get review api
+      tags:
+      - review
 swagger: "2.0"
