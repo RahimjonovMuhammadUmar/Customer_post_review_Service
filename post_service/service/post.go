@@ -12,6 +12,8 @@ import (
 	"fmt"
 
 	"github.com/jmoiron/sqlx"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 // PostService ...
@@ -31,17 +33,18 @@ func NewPostService(db *sqlx.DB, log l.Logger, client grpcClient.GrpcClientI) *P
 }
 
 func (p *PostService) CreatePost(ctx context.Context, req *pbp.PostRequest) (*pbp.PostWithoutReview, error) {
-	// exists, err := p.client.Customer().CheckIfCustomerExists(ctx, &pbc.CustomerId{
-	// 	Id: req.CustomerId,
-	// })
-	// if err != nil {
-	// 	p.logger.Error("error -> exists, err := p.client.Customer().CheckIfCustomerExists(ctx, &pbc.CustomerId{", l.Any("error checking customer by id post/service/grpc_client/customer.go", err))
-	// 	return &pbp.PostWithoutReview{}, err
-	// }
-	// if !exists.Exists {
-	// 	p.logger.Info("There is no such customer")
-	// 	return &pbp.PostWithoutReview{}, nil
-	// }
+	exists, err := p.client.Customer().CheckIfCustomerExists(ctx, &pbc.CustomerId{
+		Id: req.CustomerId,
+	})
+	if err != nil {
+		p.logger.Error("error -> exists, err := p.client.Customer().CheckIfCustomerExists(ctx, &pbc.CustomerId{", l.Any("error checking customer by id post/service/grpc_client/customer.go", err))
+		return &pbp.PostWithoutReview{}, err
+	}
+	if !exists.Exists {
+		p.logger.Info("There is no such customer")
+
+		return &pbp.PostWithoutReview{}, status.Error(codes.NotFound, "There is no such customer")
+	}
 
 	newPost, err := p.storage.Post().CreatePost(req)
 	if err != nil {

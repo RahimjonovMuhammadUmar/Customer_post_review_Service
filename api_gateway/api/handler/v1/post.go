@@ -138,7 +138,7 @@ func (h *handlerV1) GetPostsOfCustomer(c *gin.Context) {
 // @Tags         post
 // @Accept       json
 // @Produce      json
-// @Param        post body post.Post true "Update post by id"
+// @Param        post body post.PostWithoutReview true "Update post by id"
 // @Success      200  {object}  post.PostWithoutReview
 // @Router       /v1/post [put]
 func (h *handlerV1) UpdatePost(c *gin.Context) {

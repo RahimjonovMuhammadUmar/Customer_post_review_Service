@@ -315,7 +315,7 @@ paths:
         name: post
         required: true
         schema:
-          $ref: '#/definitions/post.Post'
+          $ref: '#/definitions/post.PostWithoutReview'
       produces:
       - application/json
       responses:
@@ -456,7 +456,7 @@ paths:
       summary: Get review api
       tags:
       - review
-  /v1/review_by_custID:
+  /v1/review_by_custID/{id}:
     delete:
       consumes:
       - application/json

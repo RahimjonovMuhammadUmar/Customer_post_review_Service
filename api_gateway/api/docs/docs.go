@@ -154,7 +154,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/post.Post"
+                            "$ref": "#/definitions/post.PostWithoutReview"
                         }
                     }
                 ],
@@ -396,7 +396,7 @@ const docTemplate = `{
                 "responses": {}
             }
         },
-        "/v1/review_by_custID": {
+        "/v1/review_by_custID/{id}": {
             "delete": {
                 "description": "this api deletes review by customer",
                 "consumes": [
