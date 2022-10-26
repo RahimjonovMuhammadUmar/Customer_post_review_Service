@@ -356,7 +356,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/v1/register/{code}": {
+        "/v1/register/{code}/{email}": {
             "get": {
                 "consumes": [
                     "application/json"
@@ -583,11 +583,13 @@ const docTemplate = `{
                 }
             }
         },
-        "models.Error": {
+        "models.AddressRequest": {
             "type": "object",
             "properties": {
-                "error": {
-                    "description": "` + "`" + `json:\"error\"` + "`" + `",
+                "house_number": {
+                    "type": "integer"
+                },
+                "street": {
                     "type": "string"
                 }
             }
@@ -595,6 +597,16 @@ const docTemplate = `{
         "models.CustomerRegister": {
             "type": "object",
             "properties": {
+                "addresses": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.AddressRequest"
+                    }
+                },
+                "bio": {
+                    "description": "` + "`" + `json:\"username\"` + "`" + `",
+                    "type": "string"
+                },
                 "email": {
                     "description": "` + "`" + `json:\"email\"` + "`" + `",
                     "type": "string"
@@ -610,9 +622,14 @@ const docTemplate = `{
                 "password": {
                     "description": "` + "`" + `json:\"password\"` + "`" + `",
                     "type": "string"
-                },
-                "username": {
-                    "description": "` + "`" + `json:\"username\"` + "`" + `",
+                }
+            }
+        },
+        "models.Error": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "description": "` + "`" + `json:\"error\"` + "`" + `",
                     "type": "string"
                 }
             }

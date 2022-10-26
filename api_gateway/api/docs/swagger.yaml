@@ -51,14 +51,22 @@ definitions:
       phone_number:
         type: string
     type: object
-  models.Error:
+  models.AddressRequest:
     properties:
-      error:
-        description: '`json:"error"`'
+      house_number:
+        type: integer
+      street:
         type: string
     type: object
   models.CustomerRegister:
     properties:
+      addresses:
+        items:
+          $ref: '#/definitions/models.AddressRequest'
+        type: array
+      bio:
+        description: '`json:"username"`'
+        type: string
       email:
         description: '`json:"email"`'
         type: string
@@ -71,8 +79,11 @@ definitions:
       password:
         description: '`json:"password"`'
         type: string
-      username:
-        description: '`json:"username"`'
+    type: object
+  models.Error:
+    properties:
+      error:
+        description: '`json:"error"`'
         type: string
     type: object
   post.Address:
@@ -452,7 +463,7 @@ paths:
       summary: Register for authentication
       tags:
       - Auth
-  /v1/register/{code}:
+  /v1/register/{code}/{email}:
     get:
       consumes:
       - application/json
