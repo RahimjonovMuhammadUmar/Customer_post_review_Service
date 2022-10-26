@@ -1,8 +1,10 @@
 package utils
 
 import (
+	"math/rand"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type QueryParams struct {
@@ -54,4 +56,24 @@ func ParseQueryParams(queryParams map[string][]string) (*QueryParams, []string) 
 	}
 
 	return &params, errStr
+}
+
+func RandomNum(num ...int) int {
+	var leng int
+	if len(num) == 0 {
+		leng = 7
+	} else {
+		leng = num[0]
+	}
+	src := rand.NewSource(time.Now().UnixNano())
+	rnd := rand.New(src)
+	code := 0
+	for i := 0; i <= leng; i++ {
+		r := rnd.Intn(10)
+
+		code *= 10
+		code += r
+
+	}
+	return code
 }

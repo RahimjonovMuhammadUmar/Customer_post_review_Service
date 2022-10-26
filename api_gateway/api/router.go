@@ -54,6 +54,10 @@ func New(option Option) *gin.Engine {
 	url := ginSwagger.URL("swagger/doc.json")
 	api.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 
+
+	// register
+	api.POST("/register", handlerV1.RegisterCustomer)
+
 	return router
 
 }

@@ -16,6 +16,42 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/register": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Register for authentication",
+                "parameters": [
+                    {
+                        "description": "user data",
+                        "name": "userData",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.UserRegister"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Message sended to your email succesfully"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/customer": {
             "put": {
                 "description": "this api updates customer by id in database",
@@ -506,6 +542,40 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "phone_number": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Error": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "description": "` + "`" + `json:\"error\"` + "`" + `",
+                    "type": "string"
+                }
+            }
+        },
+        "models.UserRegister": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "description": "` + "`" + `json:\"email\"` + "`" + `",
+                    "type": "string"
+                },
+                "firstName": {
+                    "description": "` + "`" + `json:\"first_name\"` + "`" + `",
+                    "type": "string"
+                },
+                "lastName": {
+                    "description": "` + "`" + `json:\"last_name\"` + "`" + `",
+                    "type": "string"
+                },
+                "password": {
+                    "description": "` + "`" + `json:\"password\"` + "`" + `",
+                    "type": "string"
+                },
+                "username": {
+                    "description": "` + "`" + `json:\"username\"` + "`" + `",
                     "type": "string"
                 }
             }

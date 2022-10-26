@@ -51,6 +51,30 @@ definitions:
       phone_number:
         type: string
     type: object
+  models.Error:
+    properties:
+      error:
+        description: '`json:"error"`'
+        type: string
+    type: object
+  models.UserRegister:
+    properties:
+      email:
+        description: '`json:"email"`'
+        type: string
+      firstName:
+        description: '`json:"first_name"`'
+        type: string
+      lastName:
+        description: '`json:"last_name"`'
+        type: string
+      password:
+        description: '`json:"password"`'
+        type: string
+      username:
+        description: '`json:"username"`'
+        type: string
+    type: object
   post.Address:
     properties:
       house_number:
@@ -205,6 +229,29 @@ definitions:
 info:
   contact: {}
 paths:
+  /register:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: user data
+        in: body
+        name: userData
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserRegister'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Message sended to your email succesfully
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: Register for authentication
+      tags:
+      - Auth
   /v1/customer:
     post:
       consumes:
