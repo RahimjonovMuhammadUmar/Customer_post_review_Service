@@ -57,7 +57,7 @@ definitions:
         description: '`json:"error"`'
         type: string
     type: object
-  models.UserRegister:
+  models.CustomerRegister:
     properties:
       email:
         description: '`json:"email"`'
@@ -229,29 +229,6 @@ definitions:
 info:
   contact: {}
 paths:
-  /register:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: user data
-        in: body
-        name: userData
-        required: true
-        schema:
-          $ref: '#/definitions/models.UserRegister'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Message sended to your email succesfully
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/models.Error'
-      summary: Register for authentication
-      tags:
-      - Auth
   /v1/customer:
     post:
       consumes:
@@ -452,6 +429,53 @@ paths:
       summary: Delete customers posts
       tags:
       - post
+  /v1/register:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: user data
+        in: body
+        name: userData
+        required: true
+        schema:
+          $ref: '#/definitions/models.CustomerRegister'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Message sended to your email succesfully
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: Register for authentication
+      tags:
+      - Auth
+  /v1/register/{code}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: code
+        in: path
+        name: code
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: json
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: Verify for authentication
+      tags:
+      - Auth
   /v1/review:
     post:
       consumes:

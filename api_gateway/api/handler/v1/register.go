@@ -6,6 +6,7 @@ import (
 	"exam/api_gateway/api/handler/models"
 	pbc "exam/api_gateway/genproto/customer"
 	"fmt"
+	"strconv"
 
 	l "exam/api_gateway/pkg/logger"
 	"exam/api_gateway/pkg/utils"
@@ -14,22 +15,23 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/cast"
 	"golang.org/x/crypto/bcrypt"
 	"google.golang.org/protobuf/encoding/protojson"
 )
 
-// Register godoc
+// Register customer
 // @Summary Register for authentication
 // @Tags Auth
 // @Accept json
 // @Produce json
-// @Param userData body models.UserRegister true "user data"
+// @Param userData body models.CustomerRegister true "user data"
 // @Success 200 "Message sended to your email succesfully"
 // @Failure 400 {object} models.Error
-// @Router /register [post]
+// @Router /v1/register [post]
 func (h *handlerV1) RegisterCustomer(c *gin.Context) {
 	var (
-		newUser     models.UserRegister
+		newUser     models.CustomerRegister
 		jspbMarshal protojson.MarshalOptions
 	)
 	jspbMarshal.UseProtoNames = true
@@ -71,34 +73,32 @@ func (h *handlerV1) RegisterCustomer(c *gin.Context) {
 		return
 	}
 
-	exist, err = h.serviceManager.CustomerService().CheckField(ctx, &pbc.FieldCheck{
-		Field:           "username",
-		EmailOrUsername: newUser.Username,
-	})
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
-		h.log.Error("error while checking if username exists", l.Error(err))
-		return
-	}
-
-	if exist.Exists {
-		c.JSON(http.StatusBadRequest, "Registration failed, account with such username already exists")
-		return
-	}
 	hashPass, err := bcrypt.GenerateFromPassword([]byte(newUser.Password), 10)
 
 	if err != nil {
 		h.log.Error("error while hashing password", l.Error(err))
+		fmt.Println("error is here ->", err)
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "something went wrong",
 		})
 		return
 	}
 	newUser.Password = string(hashPass)
-
-	jsNewUser, err := json.Marshal(newUser)
+	code := utils.RandomNum(6)
+	customerData := models.CustomerDataToSave{
+		FirstName: newUser.FirstName,
+		LastName:  newUser.LastName,
+		Bio:       newUser.Bio,
+		Password:  newUser.Password,
+		Email:     newUser.Email,
+		Addresses: newUser.Addresses,
+		Code:      code,
+	}
+	_, err = h.InMemoryStorage.Get(fmt.Sprint(code))
+	if err == nil {
+		code = utils.RandomNum()
+	}
+	jsNewUser, err := json.Marshal(customerData)
 	if err != nil {
 		h.log.Error("error while marshaling new user, inorder to insert it to redis", l.Error(err))
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -106,16 +106,7 @@ func (h *handlerV1) RegisterCustomer(c *gin.Context) {
 		})
 		return
 	}
-
-	code := utils.RandomNum()
-
-	_, err = h.InMemoryStorage.Get(fmt.Sprint(code))
-	if err == nil {
-		code = utils.RandomNum()
-	}
-
-	if err = h.InMemoryStorage.SetWithTTl(fmt.Sprint(code), string(jsNewUser), 86000); err != nil {
-		fmt.Println(err)
+	if err = h.InMemoryStorage.SetWithTTl(fmt.Sprint(customerData.Email), string(jsNewUser), 86000); err != nil {
 		h.log.Error("error while inserting new user into redis")
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "something went wrong, please try again",
@@ -124,12 +115,11 @@ func (h *handlerV1) RegisterCustomer(c *gin.Context) {
 	}
 
 	newUser.Email = email
-
 	_, cancel = context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
 	defer cancel()
-	res, err := EmailVerification("Verigication", fmt.Sprint(code), email)
+	res, err := EmailVerification("Verification code", fmt.Sprint(code), email)
 	if err != nil {
-
+		fmt.Println("error is here ->", err)
 		h.log.Error("error while sending verification code to new user", l.Error(err))
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "something went wrong, please try again",
@@ -140,7 +130,6 @@ func (h *handlerV1) RegisterCustomer(c *gin.Context) {
 	c.JSON(http.StatusOK, res)
 
 }
-
 func EmailVerification(subject, code, email string) (string, error) {
 
 	// Sender data.
@@ -149,7 +138,7 @@ func EmailVerification(subject, code, email string) (string, error) {
 
 	// Receiver email address.
 	to := []string{
-		"rahimzanovmuhammadumar@gmail.com",
+		email,
 	}
 
 	// smtp server configuration.
@@ -169,4 +158,79 @@ func EmailVerification(subject, code, email string) (string, error) {
 		return "Error with sending message", err
 	}
 	return "Message sended to your email succesfully", nil
+}
+
+// Verify for customer
+// @Summary Verify for authentication
+// @Tags Auth
+// @Accept json
+// @Produce json
+// @Param code path int true "code"
+// @Success 200 {json} models.CustomerRegister
+// @Failure 400 {object} models.Error
+// @Router /v1/register/{code}/{email} [get]
+func (h *handlerV1) VerifyRegistration(c *gin.Context) {
+	input_code := c.Param("code")
+	code, err := strconv.ParseInt(input_code, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		h.log.Error("failed to convert id to int64 Verify", l.Error(err))
+		return
+	}
+	customer_email := c.Param("email")
+	storedData, err := h.InMemoryStorage.Get(fmt.Sprint(customer_email))
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": err.Error(),
+		})
+		h.log.Error("failed to send code to redis", l.Error(err))
+		return
+	}
+	data := cast.ToString(storedData)
+	userInfo := models.CustomerDataToSave{}
+
+	err = json.Unmarshal([]byte(data), &userInfo)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": err.Error(),
+		})
+		h.log.Error("failed to send code to redis", l.Error(err))
+		return
+	}
+	if !(userInfo.Code == int(code)) {
+		c.JSON(http.StatusConflict, gin.H{
+			"Incorrect": "Code does not match",
+		})
+		h.log.Info("Incorrect input for code")
+		return
+	}
+
+	customerRequest := &pbc.CustomerRequest{
+		FirstName:   userInfo.FirstName,
+		LastName:    userInfo.LastName,
+		Bio:         userInfo.Bio,
+		Email:       userInfo.Email,
+		PhoneNumber: userInfo.Password,
+	}
+	for _, address := range userInfo.Addresses {
+		customerRequest.Addresses = append(customerRequest.Addresses, &pbc.AddressRequest{
+			HouseNumber: address.House_number,
+			Street:      address.Street,
+		})
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
+	defer cancel()
+
+	response, err := h.serviceManager.CustomerService().CreateCustomer(ctx, customerRequest)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		h.log.Error("error while declaring reponse api/hanlder/v1/customer.go", l.Error(err))
+		return
+	}
+	c.JSON(http.StatusCreated, response)
 }

@@ -16,42 +16,6 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/register": {
-            "post": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Auth"
-                ],
-                "summary": "Register for authentication",
-                "parameters": [
-                    {
-                        "description": "user data",
-                        "name": "userData",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.UserRegister"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Message sended to your email succesfully"
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    }
-                }
-            }
-        },
         "/v1/customer": {
             "put": {
                 "description": "this api updates customer by id in database",
@@ -356,6 +320,79 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/register": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Register for authentication",
+                "parameters": [
+                    {
+                        "description": "user data",
+                        "name": "userData",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.CustomerRegister"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Message sended to your email succesfully"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/register/{code}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Verify for authentication",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "code",
+                        "name": "code",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "json"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/review": {
             "post": {
                 "description": "this api creates new review",
@@ -555,7 +592,7 @@ const docTemplate = `{
                 }
             }
         },
-        "models.UserRegister": {
+        "models.CustomerRegister": {
             "type": "object",
             "properties": {
                 "email": {
