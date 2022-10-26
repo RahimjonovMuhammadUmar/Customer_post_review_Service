@@ -189,3 +189,19 @@ func (c *customerRepo) DeleteCustomer(id int32) (*pbc.CustomerDeleted, error) {
 		CustomerDeleted: false,
 	}, nil
 }
+
+func (c *customerRepo) CheckField(field, value string) (*pbc.Exists, error) {
+	var query = fmt.Sprintf("SELECT 1 FROM customers WHERE %s = $1", field)
+	var check int
+	err := c.db.QueryRow(query, value).Scan(&check)
+	if check == 0 {
+		return &pbc.Exists{
+			Exists: false}, nil
+	} else if err != nil {
+		fmt.Println("error while checking field from customers", err)
+		return &pbc.Exists{}, err
+	}
+
+	return &pbc.Exists{
+		Exists: true}, nil
+}

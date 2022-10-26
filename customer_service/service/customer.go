@@ -127,3 +127,18 @@ func (c *CustomerService) DeleteCustomer(ctx context.Context, req *pbc.CustomerI
 
 	return deleted, nil
 }
+func (c *CustomerService) CheckField(ctx context.Context, req *pbc.FieldCheck) (*pbc.Exists, error) {
+	exist, err := c.storage.Customer().CheckField(req.Field, req.EmailOrUsername)
+	if err != nil {
+		c.logger.Error("error while sending field to db to check", l.Any("", err))
+		return &pbc.Exists{}, err
+	}
+	if !exist.Exists {
+		return &pbc.Exists{
+			Exists: false,
+		}, nil
+	}
+	return &pbc.Exists{
+		Exists: true,
+	}, nil
+}

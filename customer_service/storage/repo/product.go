@@ -11,4 +11,5 @@ type CustomerStorage interface {
 	CheckIfCustomerExists(id int32) (*pbc.Exists, error)
 	GetCustomer(id int32) (*pbc.Customer, error)
 	DeleteCustomer(id int32) (*pbc.CustomerDeleted, error)
+	CheckField(field, value string) (*pbc.Exists, error)
 }
