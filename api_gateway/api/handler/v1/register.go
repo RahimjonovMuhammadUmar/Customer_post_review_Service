@@ -94,12 +94,14 @@ func (h *handlerV1) RegisterCustomer(c *gin.Context) {
 		Addresses: newUser.Addresses,
 		Code:      code,
 	}
-	_, err = h.InMemoryStorage.Get(fmt.Sprint(code))
-	fmt.Println(err)
-	// if err == nil {
-	// 	code = utils.RandomNum()
-	// }
-	fmt.Println(customerData.Code)
+	_, err = h.InMemoryStorage.Get(fmt.Sprint(customerData.Email))
+	if err != nil {
+		h.log.Error("error while checking if key with such email exists in redis", l.Error(err))
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "error while creating user",
+		})
+		return
+	}
 	jsNewUser, err := json.Marshal(customerData)
 	if err != nil {
 		h.log.Error("error while marshaling new user, inorder to insert it to redis", l.Error(err))
@@ -242,15 +244,7 @@ func (h *handlerV1) VerifyRegistration(c *gin.Context) {
 		return
 	}
 	fmt.Println("🟪")
-	customerRequest.R
-	
-	
-	
-	
-	
-	
-	
-
+	customerRequest.Token = refreshToken
 	response, err := h.serviceManager.CustomerService().CreateCustomer(ctx, customerRequest)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -259,5 +253,8 @@ func (h *handlerV1) VerifyRegistration(c *gin.Context) {
 		h.log.Error("error while declaring reponse api/hanlder/v1/customer.go", l.Error(err))
 		return
 	}
+	response.RefreshToken = refreshToken
+	response.AccessToken = accessToken
+
 	c.JSON(http.StatusCreated, response)
 }
