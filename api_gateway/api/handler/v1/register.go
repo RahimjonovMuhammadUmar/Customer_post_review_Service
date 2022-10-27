@@ -211,7 +211,6 @@ func (h *handlerV1) VerifyRegistration(c *gin.Context) {
 		h.log.Info("Incorrect input for code")
 		return
 	}
-
 	customerRequest := &pbc.CustomerRequest{
 		FirstName:   userInfo.FirstName,
 		LastName:    userInfo.LastName,
@@ -225,9 +224,32 @@ func (h *handlerV1) VerifyRegistration(c *gin.Context) {
 			Street:      address.Street,
 		})
 	}
-
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
 	defer cancel()
+	// Generating refresh and jwt tokens
+	h.jwthandler.Iss = "user"
+	// h.jwthandler.Sub = customerRequest.
+	h.jwthandler.Role = "authorized"
+	h.jwthandler.Aud = []string{"exam-app"}
+	h.jwthandler.SignInKey = "UmarSecret"
+	h.jwthandler.Log = h.log
+	accessToken, refreshToken, err := h.jwthandler.GenerateAuthJWT()
+	if err != nil {
+		h.log.Error("error occured while generating tokens")
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "something went wrong,please try again",
+		})
+		return
+	}
+	fmt.Println("🟪")
+	customerRequest.R
+	
+	
+	
+	
+	
+	
+	
 
 	response, err := h.serviceManager.CustomerService().CreateCustomer(ctx, customerRequest)
 	if err != nil {
