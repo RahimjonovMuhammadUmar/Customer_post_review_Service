@@ -95,9 +95,11 @@ func (h *handlerV1) RegisterCustomer(c *gin.Context) {
 		Code:      code,
 	}
 	_, err = h.InMemoryStorage.Get(fmt.Sprint(code))
-	if err == nil {
-		code = utils.RandomNum()
-	}
+	fmt.Println(err)
+	// if err == nil {
+	// 	code = utils.RandomNum()
+	// }
+	fmt.Println(customerData.Code)
 	jsNewUser, err := json.Marshal(customerData)
 	if err != nil {
 		h.log.Error("error while marshaling new user, inorder to insert it to redis", l.Error(err))
@@ -106,6 +108,7 @@ func (h *handlerV1) RegisterCustomer(c *gin.Context) {
 		})
 		return
 	}
+
 	if err = h.InMemoryStorage.SetWithTTl(fmt.Sprint(customerData.Email), string(jsNewUser), 86000); err != nil {
 		h.log.Error("error while inserting new user into redis")
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -117,7 +120,7 @@ func (h *handlerV1) RegisterCustomer(c *gin.Context) {
 	newUser.Email = email
 	_, cancel = context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
 	defer cancel()
-	res, err := EmailVerification("Verification code", fmt.Sprint(code), email)
+	res, err := EmailVerification("Verification code", fmt.Sprint(customerData.Code), email)
 	if err != nil {
 		fmt.Println("error is here ->", err)
 		h.log.Error("error while sending verification code to new user", l.Error(err))
@@ -166,6 +169,7 @@ func EmailVerification(subject, code, email string) (string, error) {
 // @Accept json
 // @Produce json
 // @Param code path int true "code"
+// @Param email path string true "email"
 // @Success 200 {json} models.CustomerRegister
 // @Failure 400 {object} models.Error
 // @Router /v1/register/{code}/{email} [get]
@@ -199,6 +203,7 @@ func (h *handlerV1) VerifyRegistration(c *gin.Context) {
 		h.log.Error("failed to send code to redis", l.Error(err))
 		return
 	}
+	fmt.Println(userInfo.Code, code)
 	if !(userInfo.Code == int(code)) {
 		c.JSON(http.StatusConflict, gin.H{
 			"Incorrect": "Code does not match",

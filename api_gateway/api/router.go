@@ -58,7 +58,7 @@ func New(option Option) *gin.Engine {
 
 	// register
 	api.POST("/register", handlerV1.RegisterCustomer)
-	api.GET("/register/:code", handlerV1.VerifyRegistration)
+	api.GET("/register/:code/:email", handlerV1.VerifyRegistration)
 
 	url := ginSwagger.URL("swagger/doc.json")
 	api.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))

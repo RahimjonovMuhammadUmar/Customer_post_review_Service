@@ -473,6 +473,11 @@ paths:
         name: code
         required: true
         type: integer
+      - description: email
+        in: path
+        name: email
+        required: true
+        type: string
       produces:
       - application/json
       responses:
