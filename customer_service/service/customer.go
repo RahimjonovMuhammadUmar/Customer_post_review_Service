@@ -142,3 +142,7 @@ func (c *CustomerService) CheckField(ctx context.Context, req *pbc.FieldCheck) (
 		Exists: true,
 	}, nil
 }
+
+func (c *CustomerService) SearchCustomer(ctx context.Context, req *pbc.CustomerName) (*pbc.PossibleCustomers, error) {
+	posts, err := c.storage.Customer().SearchCustomer(req.)
+}
