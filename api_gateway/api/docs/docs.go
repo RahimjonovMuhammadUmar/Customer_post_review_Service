@@ -558,12 +558,18 @@ const docTemplate = `{
                 },
                 "phone_number": {
                     "type": "string"
+                },
+                "token": {
+                    "type": "string"
                 }
             }
         },
         "customer.CustomerWithoutPost": {
             "type": "object",
             "properties": {
+                "access_token": {
+                    "type": "string"
+                },
                 "addresses": {
                     "type": "array",
                     "items": {
@@ -586,6 +592,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "phone_number": {
+                    "type": "string"
+                },
+                "refresh_token": {
                     "type": "string"
                 }
             }

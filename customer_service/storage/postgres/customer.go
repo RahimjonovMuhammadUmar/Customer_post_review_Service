@@ -23,24 +23,28 @@ func (c *customerRepo) CreateCustomer(req *pbc.CustomerRequest) (*pbc.CustomerWi
 		fmt.Println("Error while declaring tx", err)
 		return &pbc.CustomerWithoutPost{}, err
 	}
+	fmt.Println(req.Token)
 	err = tx.QueryRow(`INSERT INTO customers(
 	 first_name,
 	 last_name,
 	 bio,
 	 email,
-	 phone_number) VALUES($1, $2, $3, $4, $5) RETURNING 
+	 phone_number,
+	 refresh_token) VALUES($1, $2, $3, $4, $5, $6) RETURNING 
 	 id, 
 	 first_name, 
 	 last_name, 
 	 bio, 
 	 email, 
-	 phone_number`, req.FirstName, req.LastName, req.Bio, req.Email, req.PhoneNumber).Scan(
+	 phone_number,
+	 refresh_token`, req.FirstName, req.LastName, req.Bio, req.Email, req.PhoneNumber, req.Token).Scan(
 		&inserted.Id,
 		&inserted.FirstName,
 		&inserted.LastName,
 		&inserted.Bio,
 		&inserted.Email,
 		&inserted.PhoneNumber,
+		&inserted.RefreshToken,
 	)
 	if err != nil {
 		fmt.Println("error while inserting into customers", err)
@@ -128,7 +132,8 @@ func (c *customerRepo) GetCustomer(id int32) (*pbc.Customer, error) {
 	last_name, 
 	bio, 
 	email, 
-	phone_number FROM customers WHERE id = $1 and deleted_at IS NULL`, id).Scan(
+	phone_number,
+	refresh_token FROM customers WHERE id = $1 and deleted_at IS NULL`, id).Scan(
 		&customerData.Id,
 		&customerData.FirstName,
 		&customerData.LastName,

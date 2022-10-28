@@ -110,7 +110,7 @@ func (h *handlerV1) RegisterCustomer(c *gin.Context) {
 		})
 		return
 	}
-
+	fmt.Println(code)
 	if err = h.InMemoryStorage.SetWithTTl(fmt.Sprint(customerData.Email), string(jsNewUser), 86000); err != nil {
 		h.log.Error("error while inserting new user into redis")
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -121,18 +121,19 @@ func (h *handlerV1) RegisterCustomer(c *gin.Context) {
 
 	newUser.Email = email
 	_, cancel = context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
+	fmt.Println(customerData.Code)
 	defer cancel()
-	res, err := EmailVerification("Verification code", fmt.Sprint(customerData.Code), email)
-	if err != nil {
-		fmt.Println("error is here ->", err)
-		h.log.Error("error while sending verification code to new user", l.Error(err))
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "something went wrong, please try again",
-		})
-		return
-	}
+	// res, err := EmailVerification("Verification code", fmt.Sprint(customerData.Code), email)
+	// if err != nil {
+	// 	fmt.Println("error is here ->", err)
+	// 	h.log.Error("error while sending verification code to new user", l.Error(err))
+	// 	c.JSON(http.StatusInternalServerError, gin.H{
+	// 		"error": "something went wrong, please try again",
+	// 	})
+	// 	return
+	// }
 
-	c.JSON(http.StatusOK, res)
+	c.JSON(http.StatusOK, "Done")
 
 }
 func EmailVerification(subject, code, email string) (string, error) {
@@ -226,25 +227,27 @@ func (h *handlerV1) VerifyRegistration(c *gin.Context) {
 			Street:      address.Street,
 		})
 	}
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
-	defer cancel()
 	// Generating refresh and jwt tokens
 	h.jwthandler.Iss = "user"
-	// h.jwthandler.Sub = customerRequest.
+	h.jwthandler.Sub = customerRequest.Bio
 	h.jwthandler.Role = "authorized"
 	h.jwthandler.Aud = []string{"exam-app"}
 	h.jwthandler.SignInKey = "UmarSecret"
 	h.jwthandler.Log = h.log
 	accessToken, refreshToken, err := h.jwthandler.GenerateAuthJWT()
+	fmt.Println("access ->", accessToken,"<- access", "refresh ->", refreshToken, "<- refresh", err)
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
+	defer cancel()
 	if err != nil {
-		h.log.Error("error occured while generating tokens")
+		h.log.Error("error occured while generating tokens", l.Error(err))
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "something went wrong,please try again",
 		})
 		return
 	}
-	fmt.Println("🟪")
 	customerRequest.Token = refreshToken
+	fmt.Println(customerRequest.Token)
 	response, err := h.serviceManager.CustomerService().CreateCustomer(ctx, customerRequest)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{

@@ -31,9 +31,13 @@ definitions:
         type: string
       phone_number:
         type: string
+      token:
+        type: string
     type: object
   customer.CustomerWithoutPost:
     properties:
+      access_token:
+        type: string
       addresses:
         items:
           $ref: '#/definitions/customer.Address'
@@ -49,6 +53,8 @@ definitions:
       last_name:
         type: string
       phone_number:
+        type: string
+      refresh_token:
         type: string
     type: object
   models.AddressRequest:
