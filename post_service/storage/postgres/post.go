@@ -315,3 +315,31 @@ func (p *postRepo) DeletePostByCustomerId(req int32) (*pbp.IsDeleted, []int32, e
 		PostDeleted: true,
 	}, ids, nil
 }
+
+func (p *postRepo) GetPostsByPage(page, limit int32) (*pbp.PostsByPage, error) {
+	offset := (page - 1) * limit
+	rows, err := p.db.Query(`SELECT 
+	id, 
+	name, 
+	description FROM posts LIMIT $1 OFFSET $2`, limit, offset)
+	if err != nil {
+		fmt.Println("Error while getting from products by page limit", err)
+		return &pbp.PostsByPage{}, err
+	}
+	defer rows.Close()
+	posts := &pbp.PostsByPage{}
+	for rows.Next() {
+		post := &pbp.PostByPage{}
+		err = rows.Scan(
+			&post.Id,
+			&post.Name,
+			&post.Description,
+		)
+		if err != nil {
+			fmt.Println("error while scanning to post when getting by page", err)
+			return &pbp.PostsByPage{}, err
+		}
+		posts.Posts = append(posts.Posts, post)
+	}
+	return posts, nil
+}

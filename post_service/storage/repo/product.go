@@ -14,4 +14,5 @@ type PostStorage interface {
 	DeletePostByCustomerId(id int32) (*pbp.IsDeleted, []int32, error)
 	GetAllPostsWithCustomer(*pbp.Empty) (*pbp.AllPosts, error)
 	GetPostsOfCustomer(*pbp.Id) (*pbp.Posts, error)
+	GetPostsByPage(page, limit int32) (*pbp.PostsByPage, error)
 }

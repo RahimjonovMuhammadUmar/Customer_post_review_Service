@@ -290,3 +290,12 @@ func (p *PostService) DeletePostByCustomerId(ctx context.Context, req *pbp.Id) (
 		PostDeleted: true,
 	}, nil
 }
+
+func (p *PostService) GetPostsByPage(ctx context.Context, req *pbp.LimitPage) (*pbp.PostsByPage, error) {
+	posts, err := p.storage.Post().GetPostsByPage(req.Page, req.Limit)
+	if err != nil {
+		p.logger.Error("error while getting posts by page and limit", l.Error(err))
+		return &pbp.PostsByPage{}, err
+	}
+	return posts, nil
+}
