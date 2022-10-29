@@ -211,9 +211,8 @@ func (c *customerRepo) CheckField(field, value string) (*pbc.Exists, error) {
 		Exists: true}, nil
 }
 func (c *customerRepo) SearchCustomer(field, value string, limit, page int32) (*pbc.PossibleCustomers, error) {
-	query := fmt.Sprintf("SELECT id, first_name, last_name FROM customers WHERE %s ILIKE $2 LIMIT $1 OFFSET ", field)
-
-	rows, err := c.db.Query(query, value, limit, ((page - 1) * 10))
+	query := fmt.Sprintf("SELECT id, first_name, last_name FROM customers WHERE %s ~ '%s' LIMIT $1 OFFSET $2", field, value)
+	rows, err := c.db.Query(query, limit, ((page - 1) * 10))
 	if err != nil {
 		fmt.Println("error while searching by customer", err)
 		return &pbc.PossibleCustomers{}, err

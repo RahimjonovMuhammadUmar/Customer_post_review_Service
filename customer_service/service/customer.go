@@ -143,6 +143,12 @@ func (c *CustomerService) CheckField(ctx context.Context, req *pbc.FieldCheck) (
 	}, nil
 }
 
-func (c *CustomerService) SearchCustomer(ctx context.Context, req *pbc.CustomerName) (*pbc.PossibleCustomers, error) {
-	posts, err := c.storage.Customer().SearchCustomer(req.)
+func (c *CustomerService) SearchCustomer(ctx context.Context, req *pbc.InfoForSearch) (*pbc.PossibleCustomers, error) {
+	posts, err := c.storage.Customer().SearchCustomer(req.Field, req.Value, req.Limit, req.Page)
+	if err != nil {
+		c.logger.Error("error while sending to db to seacrh", l.Error(err))
+		return &pbc.PossibleCustomers{}, err
+	}
+
+	return posts, nil
 }
