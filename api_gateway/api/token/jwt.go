@@ -41,14 +41,13 @@ func (jwtHandler *JWTHandler) GenerateAuthJWT() (access, refresh string, err err
 	accessToken = jwt.New(jwt.SigningMethodHS256)
 	refreshToken = jwt.New(jwt.SigningMethodHS256)
 
-	claims = accessToken.Header
+	claims = accessToken.Claims.(jwt.MapClaims)
 	claims["iss"] = jwtHandler.Iss
 	claims["sub"] = jwtHandler.Sub
 	claims["exp"] = time.Now().Add(time.Hour * 500).Unix()
 	claims["iat"] = time.Now().Unix()
 	claims["role"] = jwtHandler.Role
 	claims["aud"] = jwtHandler.Aud
-	fmt.Println(jwtHandler.SignInKey)
 	access, err = accessToken.SignedString([]byte("UmarSecret"))
 	if err != nil {
 		jwtHandler.Log.Error("error access, err = accessToken.SignedString([]byte(UmarSecret)", logger.Error(err))
@@ -72,6 +71,7 @@ func (jwtHandler *JWTHandler) ExtractClaims() (jwt.MapClaims, error) {
 	if err != nil {
 		return nil, err
 	}
+	fmt.Println(jwtHandler, token, jwtHandler.SignInKey)
 
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !(ok && token.Valid) {

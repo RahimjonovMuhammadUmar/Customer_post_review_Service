@@ -235,7 +235,6 @@ func (h *handlerV1) VerifyRegistration(c *gin.Context) {
 	h.jwthandler.SignInKey = "UmarSecret"
 	h.jwthandler.Log = h.log
 	accessToken, refreshToken, err := h.jwthandler.GenerateAuthJWT()
-	fmt.Println("access ->", accessToken,"<- access", "refresh ->", refreshToken, "<- refresh", err)
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
 	defer cancel()
@@ -247,7 +246,6 @@ func (h *handlerV1) VerifyRegistration(c *gin.Context) {
 		return
 	}
 	customerRequest.Token = refreshToken
-	fmt.Println(customerRequest.Token)
 	response, err := h.serviceManager.CustomerService().CreateCustomer(ctx, customerRequest)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
