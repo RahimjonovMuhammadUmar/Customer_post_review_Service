@@ -68,7 +68,7 @@ func (h *handlerV1) GetCustomer(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
-		h.log.Error("failed to convert id to int64", l.Error(err))
+		h.log.Error("failed to convert id to int64 GetCustomer", l.Error(err))
 		return
 	}
 	var jspbMarshal protojson.MarshalOptions
@@ -169,4 +169,58 @@ func (h *handlerV1) DeleteCustomer(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, is_deleted)
+}
+
+// // Search searches alike customers
+// @Summary search customer api
+// @Description this api searches customer
+// @Tags customer
+// @Accept json
+// @Produce json
+// @Param field  query string true "Field"
+// @Param value  query string true "Value"
+// @Param limit  query int 	  true "Limit"
+// @Param page   query int 	  true "Page"
+// @Success 200 {json} customer.PossibleCustomers
+// @Failure 400
+// @Failure 500
+// @Router /v1/customer/search [get]
+func (h *handlerV1) SearchCustomer(c *gin.Context) {
+	params := c.Request.URL.Query()
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
+	defer cancel()
+
+	limit, err := strconv.Atoi(params["limit"][0])
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		h.log.Error("error converting limit to int", l.Error(err))
+		return
+	}
+
+	page, err := strconv.Atoi(params["page"][0])
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		h.log.Error("error converting page to int", l.Error(err))
+		return
+	}
+
+	possible_customers, err := h.serviceManager.CustomerService().SearchCustomer(ctx, &pbc.InfoForSearch{
+		Field: params["field"][0],
+		Value: params["value"][0],
+		Limit: int32(limit),
+		Page:  int32(page),
+	})
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		h.log.Error("error while sending to search service to customerService", l.Error(err))
+		return
+	}
+
+	c.JSON(http.StatusOK, possible_customers)
 }

@@ -23,7 +23,6 @@ func (c *customerRepo) CreateCustomer(req *pbc.CustomerRequest) (*pbc.CustomerWi
 		fmt.Println("Error while declaring tx", err)
 		return &pbc.CustomerWithoutPost{}, err
 	}
-	fmt.Println(req.Token)
 	err = tx.QueryRow(`INSERT INTO customers(
 	 first_name,
 	 last_name,

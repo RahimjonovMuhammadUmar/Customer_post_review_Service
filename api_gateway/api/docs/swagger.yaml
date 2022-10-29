@@ -324,6 +324,46 @@ paths:
       summary: get customer api
       tags:
       - customer
+  /v1/customer/search:
+    get:
+      consumes:
+      - application/json
+      description: this api searches customer
+      parameters:
+      - description: Field
+        in: query
+        name: field
+        required: true
+        type: string
+      - description: Value
+        in: query
+        name: value
+        required: true
+        type: string
+      - description: Limit
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: Page
+        in: query
+        name: page
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: json
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+      summary: search customer api
+      tags:
+      - customer
   /v1/post:
     post:
       consumes:
