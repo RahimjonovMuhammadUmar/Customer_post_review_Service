@@ -210,7 +210,7 @@ func (c *customerRepo) CheckField(field, value string) (*pbc.Exists, error) {
 		Exists: true}, nil
 }
 func (c *customerRepo) SearchCustomer(field, value, orderBy, ascOrDesc string, limit, page int32) (*pbc.PossibleCustomers, error) {
-	query := fmt.Sprintf("SELECT id, first_name, last_name FROM customers WHERE %s ~ '%s'", field, value)
+	query := fmt.Sprintf("SELECT id, first_name, last_name, bio, email, phone_number FROM customers WHERE %s ~ '%s'", field, value)
 	if orderBy != "" {
 		query += " ORDER BY " + orderBy
 	}
@@ -231,6 +231,9 @@ func (c *customerRepo) SearchCustomer(field, value, orderBy, ascOrDesc string, l
 			&customerData.Id,
 			&customerData.FirstName,
 			&customerData.LastName,
+			&customerData.Bio,
+			&customerData.Email,
+			&customerData.PhoneNumber,
 		)
 		if err != nil {
 			fmt.Println("error while scanning alike data", err)
