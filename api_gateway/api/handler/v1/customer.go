@@ -6,6 +6,7 @@ import (
 	l "exam/api_gateway/pkg/logger"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -177,18 +178,18 @@ func (h *handlerV1) DeleteCustomer(c *gin.Context) {
 // @Tags customer
 // @Accept json
 // @Produce json
-// @Param limit  query int 	  true "Limit"
-// @Param page   query int 	  true "Page"
-// @Param orderBy query  string true "Order:DescOrAsc" example "last_name:desc"
-// @Param fieldValue  query string true "Field:Value" example "first_name:asl"
+// @Param limit  query int true "Limit"
+// @Param page   query int true "Page"
+// @Param orderBy query  string true "Order:DescOrAsc" example = "last_name:desc"
+// @Param fieldValue  query string true "Field:Value" example = "first_name:asl"
 // @Success 200 {json} customer.PossibleCustomers
 // @Failure 400
 // @Failure 500
 // @Router /v1/customer/search [get]
 func (h *handlerV1) SearchCustomer(c *gin.Context) {
 	params := c.Request.URL.Query()
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
-	defer cancel()
+	fieldWithValues := strings.Split(params["fieldValue"][0], ":")
+	orderType := strings.Split(params["orderBy"][0], ":")
 
 	limit, err := strconv.Atoi(params["limit"][0])
 	if err != nil {
@@ -207,12 +208,16 @@ func (h *handlerV1) SearchCustomer(c *gin.Context) {
 		h.log.Error("error converting page to int", l.Error(err))
 		return
 	}
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
+	defer cancel()
 
 	possible_customers, err := h.serviceManager.CustomerService().SearchCustomer(ctx, &pbc.InfoForSearch{
-		Field: params["field"][0],
-		Value: params["value"][0],
+		Field: fieldWithValues[0],
+		Value: fieldWithValues[1],
 		Limit: int32(limit),
 		Page:  int32(page),
+		OrderBy: orderType[0],
+		AscOrDesc: orderType[1],
 	})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
