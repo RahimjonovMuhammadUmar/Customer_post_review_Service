@@ -330,16 +330,6 @@ paths:
       - application/json
       description: this api searches customer
       parameters:
-      - description: Field
-        in: query
-        name: field
-        required: true
-        type: string
-      - description: Value
-        in: query
-        name: value
-        required: true
-        type: string
       - description: Limit
         in: query
         name: limit
@@ -350,6 +340,16 @@ paths:
         name: page
         required: true
         type: integer
+      - description: Order:DescOrAsc
+        in: query
+        name: orderBy
+        required: true
+        type: string
+      - description: Field:Value
+        in: query
+        name: fieldValue
+        required: true
+        type: string
       produces:
       - application/json
       responses:

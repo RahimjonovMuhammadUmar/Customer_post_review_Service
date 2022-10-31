@@ -177,10 +177,10 @@ func (h *handlerV1) DeleteCustomer(c *gin.Context) {
 // @Tags customer
 // @Accept json
 // @Produce json
-// @Param field  query string true "Field"
-// @Param value  query string true "Value"
 // @Param limit  query int 	  true "Limit"
 // @Param page   query int 	  true "Page"
+// @Param orderBy query  string true "Order:DescOrAsc" example "last_name:desc"
+// @Param fieldValue  query string true "Field:Value" example "first_name:asl"
 // @Success 200 {json} customer.PossibleCustomers
 // @Failure 400
 // @Failure 500

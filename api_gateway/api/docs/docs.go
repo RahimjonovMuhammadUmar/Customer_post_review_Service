@@ -97,20 +97,6 @@ const docTemplate = `{
                 "summary": "search customer api",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "Field",
-                        "name": "field",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Value",
-                        "name": "value",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
                         "type": "integer",
                         "description": "Limit",
                         "name": "limit",
@@ -121,6 +107,20 @@ const docTemplate = `{
                         "type": "integer",
                         "description": "Page",
                         "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Order:DescOrAsc",
+                        "name": "orderBy",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Field:Value",
+                        "name": "fieldValue",
                         "in": "query",
                         "required": true
                     }
