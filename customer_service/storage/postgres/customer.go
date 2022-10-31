@@ -214,11 +214,10 @@ func (c *customerRepo) SearchCustomer(field, value, orderBy, ascOrDesc string, l
 	if orderBy != "" {
 		query += " ORDER BY " + orderBy
 	}
-	if ascOrDesc == "DESC" || ascOrDesc == "desc" {
-		query += ascOrDesc
-	} 
-	fmt.Println(query + "LIMIT $1 OFFSET $2")
-	rows, err := c.db.Query(query + "LIMIT $1 OFFSET $2", limit, ((page - 1) * 10))
+	if ascOrDesc != ""{
+		query = query + " " + ascOrDesc
+	}
+	rows, err := c.db.Query(query+" LIMIT $1 OFFSET $2", limit, ((page - 1) * 10))
 	if err != nil {
 		fmt.Println("error while searching by customer", err)
 		return &pbc.PossibleCustomers{}, err

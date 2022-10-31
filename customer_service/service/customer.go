@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	pbc "exam/customer_service/genproto/customer"
-	"fmt"
 
 	pbp "exam/customer_service/genproto/post"
 	l "exam/customer_service/pkg/logger"
@@ -150,7 +149,6 @@ func (c *CustomerService) SearchCustomer(ctx context.Context, req *pbc.InfoForSe
 		c.logger.Error("error while sending to db to seacrh", l.Error(err))
 		return &pbc.PossibleCustomers{}, err
 	}
-	fmt.Println(err)
 
 	return posts, nil
 }
