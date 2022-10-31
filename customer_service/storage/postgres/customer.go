@@ -209,8 +209,14 @@ func (c *customerRepo) CheckField(field, value string) (*pbc.Exists, error) {
 	return &pbc.Exists{
 		Exists: true}, nil
 }
-func (c *customerRepo) SearchCustomer(field, value string, limit, page int32) (*pbc.PossibleCustomers, error) {
+func (c *customerRepo) SearchCustomer(field, value, orderBy, ascOrDesc string, limit, page int32) (*pbc.PossibleCustomers, error) {
 	query := fmt.Sprintf("SELECT id, first_name, last_name FROM customers WHERE %s ~ '%s' LIMIT $1 OFFSET $2", field, value)
+	if orderBy != "" {
+		query += " ORDER BY " + orderBy
+	}
+	if ascOrDesc == "DESC" || ascOrDesc == "desc" {
+		query += ascOrDesc
+	}
 	rows, err := c.db.Query(query, limit, ((page - 1) * 10))
 	if err != nil {
 		fmt.Println("error while searching by customer", err)
