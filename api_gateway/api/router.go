@@ -3,11 +3,14 @@ package api
 import (
 	_ "exam/api_gateway/api/docs"
 	v1 "exam/api_gateway/api/handler/v1"
+	"exam/api_gateway/api/middleware"
+	"exam/api_gateway/api/token"
 	"exam/api_gateway/config"
 	"exam/api_gateway/pkg/logger"
 	"exam/api_gateway/services"
 	"exam/api_gateway/storage/repo"
 
+	"github.com/casbin/casbin/v2"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -18,6 +21,7 @@ type Option struct {
 	Logger         logger.Logger
 	ServiceManager services.IServiceManager
 	Redis          repo.InMemoryStorageI
+	CasbinEnforcer        *casbin.Enforcer
 }
 
 // New ...
@@ -34,6 +38,11 @@ func New(option Option) *gin.Engine {
 		InMemoryStorage: option.Redis,
 	})
 
+	jwtHandler := token.JWTHandler{
+		SignInKey: option.Conf.SignInKey,
+		Log:       option.Logger,
+	}
+	router.Use(middleware.NewAuth(option.CasbinEnforcer, jwtHandler, config.Load()))
 	api := router.Group("/v1")
 
 	//customer

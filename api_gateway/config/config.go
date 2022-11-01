@@ -24,6 +24,7 @@ type Config struct {
 	PostgresPassword    string
 	PostgresDB          string
 	AuthConfigPath      string
+	SignInKey           string
 }
 
 // Load loads environmen vars and inflates Config
@@ -51,6 +52,7 @@ func Load() Config {
 	c.HTTPPort = cast.ToString(getOrReturnDefault("HTTP_PORT", ":8800"))
 	c.CtxTimeout = cast.ToInt(getOrReturnDefault("CTX_TIMEOUT", 7))
 	c.AuthConfigPath = cast.ToString(getOrReturnDefault("AUTH_PATH", "./config/auth.conf"))
+	c.SignInKey = cast.ToString(getOrReturnDefault("SIGNIN_KEY", "UmarSecret"))
 	return c
 }
 

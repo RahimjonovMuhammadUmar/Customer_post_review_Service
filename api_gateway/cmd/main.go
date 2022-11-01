@@ -8,6 +8,8 @@ import (
 	r "exam/api_gateway/storage/redis"
 	"fmt"
 
+	defaultrolemanager "github.com/casbin/casbin/v2/rbac/default-role-manager"
+	"github.com/casbin/casbin/v2/util"
 	gormadapter "github.com/casbin/gorm-adapter/v2"
 
 	"github.com/casbin/casbin/v2"
@@ -47,6 +49,8 @@ func main() {
 	if err != nil {
 		log.Error("serviceManager, err := services.NewServiceManager(&cfg)", logger.Error(err))
 	}
+	casbinEnforcer.GetRoleManager().(*defaultrolemanager.RoleManager).AddMatchingFunc("keyMatch", util.KeyMatch)
+	casbinEnforcer.GetRoleManager().(*defaultrolemanager.RoleManager).AddMatchingFunc("keyMatch3", util.KeyMatch3)
 
 	pool := &redis.Pool{
 		MaxIdle: 10,
@@ -60,6 +64,7 @@ func main() {
 		Conf:           cfg,
 		ServiceManager: serviceManager,
 		Redis:          r.NewRedisRepo(pool),
+		CasbinEnforcer: casbinEnforcer,
 	})
 
 	if err := server.Run(cfg.HTTPPort); err != nil {
