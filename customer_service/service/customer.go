@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	pbc "exam/customer_service/genproto/customer"
+	"fmt"
 
 	pbp "exam/customer_service/genproto/post"
 	l "exam/customer_service/pkg/logger"
@@ -151,4 +152,14 @@ func (c *CustomerService) SearchCustomer(ctx context.Context, req *pbc.InfoForSe
 	}
 
 	return posts, nil
+}
+
+func (c *CustomerService) GetCustomerForLogin(ctx context.Context, req *pbc.Email) (*pbc.CustomerWithoutPost, error) {
+	res, err := c.storage.Customer().GetCustomerForLogin(req.Email)
+	if err != nil {
+		fmt.Println("error while sending to db to get by login", err)
+		return &pbc.CustomerWithoutPost{}, err
+	}
+
+	return res, nil
 }

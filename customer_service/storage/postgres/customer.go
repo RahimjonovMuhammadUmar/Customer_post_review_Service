@@ -1,6 +1,7 @@
 package postgres
 
 import (
+	"database/sql"
 	pbc "exam/customer_service/genproto/customer"
 	"fmt"
 
@@ -214,7 +215,7 @@ func (c *customerRepo) SearchCustomer(field, value, orderBy, ascOrDesc string, l
 	if orderBy != "" {
 		query += " ORDER BY " + orderBy
 	}
-	if ascOrDesc != ""{
+	if ascOrDesc != "" {
 		query = query + " " + ascOrDesc
 	}
 	rows, err := c.db.Query(query+" LIMIT $1 OFFSET $2", limit, ((page - 1) * 10))
@@ -244,4 +245,29 @@ func (c *customerRepo) SearchCustomer(field, value, orderBy, ascOrDesc string, l
 	}
 
 	return alike_customers, nil
+}
+
+func (c *customerRepo) GetCustomerForLogin(email string) (*pbc.CustomerWithoutPost, error) {
+	res := &pbc.CustomerWithoutPost{}
+	err := c.db.QueryRow(`SELECT 
+		id,
+		first_name,
+		last_name,
+		bio,
+		email,
+		phone_number,
+		refresh_token FROM customers WHERE email=$1 and deleted_at is null`, email).Scan(
+		&res.Id,
+		&res.FirstName,
+		&res.LastName,
+		&res.Bio,
+		&res.Email,
+		&res.PhoneNumber,
+		&res.RefreshToken,
+	)
+	if err == sql.ErrNoRows {
+		return &pbc.CustomerWithoutPost{}, nil
+	}
+	// res.Addresses, err = r.GetAddress(&pb.Id{Id: res.Id})
+	return res, err
 }
