@@ -246,7 +246,14 @@ definitions:
         type: integer
     type: object
 info:
-  contact: {}
+  contact:
+    email: rahimzanovmuhammadumar@gmail.com
+    name: Muhammad Umar
+    url: https://t.me/muhammad_ummar
+  description: This is exam server api server
+  termsOfService: 2 term exam
+  title: exam api
+  version: "1.0"
 paths:
   /v1/customer:
     post:
@@ -323,6 +330,8 @@ paths:
           description: Created
           schema:
             type: json
+      security:
+      - BearerAuth: []
       summary: get customer api
       tags:
       - customer
@@ -650,4 +659,9 @@ paths:
       summary: delete review by cust api
       tags:
       - review
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

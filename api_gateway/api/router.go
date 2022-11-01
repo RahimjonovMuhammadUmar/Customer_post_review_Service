@@ -24,7 +24,20 @@ type Option struct {
 	CasbinEnforcer        *casbin.Enforcer
 }
 
+
 // New ...
+// @title           exam api
+// @version         1.0
+// @description     This is exam server api server
+// @termsOfService  2 term exam
+
+// @contact.name   Muhammad Umar
+// @contact.url    https://t.me/muhammad_ummar
+// @contact.email  rahimzanovmuhammadumar@gmail.com
+
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
 func New(option Option) *gin.Engine {
 	router := gin.New()
 

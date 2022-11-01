@@ -1,7 +1,15 @@
 {
     "swagger": "2.0",
     "info": {
-        "contact": {}
+        "description": "This is exam server api server",
+        "title": "exam api",
+        "termsOfService": "2 term exam",
+        "contact": {
+            "name": "Muhammad Umar",
+            "url": "https://t.me/muhammad_ummar",
+            "email": "rahimzanovmuhammadumar@gmail.com"
+        },
+        "version": "1.0"
     },
     "paths": {
         "/v1/customer": {
@@ -131,6 +139,11 @@
         },
         "/v1/customer/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "this api finds existing customer",
                 "consumes": [
                     "application/json"
@@ -988,6 +1001,13 @@
                     "type": "integer"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }

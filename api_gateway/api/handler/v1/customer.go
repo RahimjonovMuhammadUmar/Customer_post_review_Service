@@ -57,6 +57,7 @@ func (h *handlerV1) CreateCustomer(c *gin.Context) {
 // @Summary get customer api
 // @Description this api finds existing customer
 // @Tags customer
+// @Security        BearerAuth
 // @Accept json
 // @Produce json
 // @Param id path int true "id"
@@ -251,6 +252,5 @@ func (h *handlerV1) SearchCustomer(c *gin.Context) {
 // 		h.log.Error("Inputted wrong password", l.Error(err))
 // 		return
 // 	}
-
 
 // }

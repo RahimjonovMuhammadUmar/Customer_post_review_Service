@@ -10,7 +10,12 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "contact": {},
+        "termsOfService": "2 term exam",
+        "contact": {
+            "name": "Muhammad Umar",
+            "url": "https://t.me/muhammad_ummar",
+            "email": "rahimzanovmuhammadumar@gmail.com"
+        },
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
@@ -143,6 +148,11 @@ const docTemplate = `{
         },
         "/v1/customer/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "this api finds existing customer",
                 "consumes": [
                     "application/json"
@@ -1001,17 +1011,24 @@ const docTemplate = `{
                 }
             }
         }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
     }
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "",
+	Version:          "1.0",
 	Host:             "",
 	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "",
-	Description:      "",
+	Title:            "exam api",
+	Description:      "This is exam server api server",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 }
