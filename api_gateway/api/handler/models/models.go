@@ -42,3 +42,11 @@ type AddressResponse struct {
 	Street       string
 	House_number int32
 }
+type ResponseError struct {
+	Error interface{} `json:"error"`
+}
+
+type ServerError struct {
+	Status string `json:"status"`
+	Message string `json:"message"`
+}
