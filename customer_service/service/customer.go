@@ -163,3 +163,13 @@ func (c *CustomerService) GetCustomerForLogin(ctx context.Context, req *pbc.Emai
 
 	return res, nil
 }
+
+func (c *CustomerService) IsAdmin(ctx context.Context, req *pbc.Admin) (*pbc.Admin, error) {
+	admin, err := c.storage.Customer().IsAdmin(req.Username)
+	if err != nil {
+		fmt.Println("error while getting admin", err)
+		return &pbc.Admin{}, err
+	}
+	
+	return admin, nil
+}

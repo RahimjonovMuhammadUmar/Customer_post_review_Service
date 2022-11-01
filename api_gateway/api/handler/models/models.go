@@ -47,11 +47,17 @@ type ResponseError struct {
 }
 
 type ServerError struct {
-	Status string `json:"status"`
+	Status  string `json:"status"`
 	Message string `json:"message"`
 }
 type Error struct {
 	Code        int
 	Error       error
 	Description string
+}
+
+type AdminResponse struct {
+	Username     string
+	Password     string
+	AccessToken  string
 }

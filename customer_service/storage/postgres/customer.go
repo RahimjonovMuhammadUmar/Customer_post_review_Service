@@ -271,3 +271,18 @@ func (c *customerRepo) GetCustomerForLogin(email string) (*pbc.CustomerWithoutPo
 	// res.Addresses, err = r.GetAddress(&pb.Id{Id: res.Id})
 	return res, err
 }
+
+func (c *customerRepo) IsAdmin(username string) (*pbc.Admin, error) {
+	res := &pbc.Admin{}
+	err := c.db.QueryRow(`SELECT password FROM admins WHERE username = $1`, username).Scan(
+		&res.Password,
+	)
+	if err == sql.ErrNoRows {
+		return &pbc.Admin{}, nil
+	} else if err != nil {
+		fmt.Println("error while checking if admin exist", err)
+		return &pbc.Admin{}, err
+	}
+	
+	return res, err
+}
