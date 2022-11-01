@@ -212,11 +212,11 @@ func (h *handlerV1) SearchCustomer(c *gin.Context) {
 	defer cancel()
 
 	possible_customers, err := h.serviceManager.CustomerService().SearchCustomer(ctx, &pbc.InfoForSearch{
-		Field: fieldWithValues[0],
-		Value: fieldWithValues[1],
-		Limit: int32(limit),
-		Page:  int32(page),
-		OrderBy: orderType[0],
+		Field:     fieldWithValues[0],
+		Value:     fieldWithValues[1],
+		Limit:     int32(limit),
+		Page:      int32(page),
+		OrderBy:   orderType[0],
 		AscOrDesc: orderType[1],
 	})
 	if err != nil {
@@ -229,3 +229,28 @@ func (h *handlerV1) SearchCustomer(c *gin.Context) {
 
 	c.JSON(http.StatusOK, possible_customers)
 }
+
+// func (h *handlerV1) Login(c *gin.Context) {
+// 	email := c.Param("email")
+// 	customerData, err := h.serviceManager.CustomerService().GetCustomerForLogin(context.Background(), &pbc.Email{
+// 		Email: email,
+// 	})
+// 	if err != nil {
+// 		c.JSON(http.StatusBadRequest, gin.H{
+// 			"error": err.Error(),
+// 		})
+// 		h.log.Error("error sending email to get data", l.Error(err))
+// 		return
+// 	}
+
+// 	password := c.Param("password")
+// 	if password != customerData.PhoneNumber {
+// 		c.JSON(http.StatusConflict, gin.H{
+// 			"Incorrect password": "Wrong password",
+// 		})
+// 		h.log.Error("Inputted wrong password", l.Error(err))
+// 		return
+// 	}
+
+
+// }
