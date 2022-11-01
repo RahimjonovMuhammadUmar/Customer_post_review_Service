@@ -18,16 +18,16 @@ import (
 // Login customer
 // @Summary      Login customer
 // @Description  Logins customer
-// @Tags         Customer
+// @Tags         Auth
 // @Accept       json
 // @Produce      json
 // @Param        email  path string true "email"
 // @Param        password   path string true "password"
-// @Success         200                   {object}  customer.LoginRes
+// @Success         200                   {object}  customer.CustomerWithoutPost
 // @Failure         500                   {object}  models.Error
 // @Failure         400                   {object}  models.Error
 // @Failure         404                   {object}  models.Error
-// @Router      /login/{email}/{password} [get]
+// @Router      /v1/login/{email}/{password} [get]
 func (h *handlerV1) Login(c *gin.Context) {
 	var jspbMarshal protojson.MarshalOptions
 	jspbMarshal.UseProtoNames = true

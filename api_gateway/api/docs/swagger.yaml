@@ -88,9 +88,11 @@ definitions:
     type: object
   models.Error:
     properties:
-      error:
-        description: '`json:"error"`'
+      code:
+        type: integer
+      description:
         type: string
+      error: {}
     type: object
   post.Address:
     properties:
@@ -364,6 +366,44 @@ paths:
       summary: search customer api
       tags:
       - customer
+  /v1/login/{email}/{password}:
+    get:
+      consumes:
+      - application/json
+      description: Logins customer
+      parameters:
+      - description: email
+        in: path
+        name: email
+        required: true
+        type: string
+      - description: password
+        in: path
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/customer.CustomerWithoutPost'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: Login customer
+      tags:
+      - Auth
   /v1/post:
     post:
       consumes:

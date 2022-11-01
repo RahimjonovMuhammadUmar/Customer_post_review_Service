@@ -181,6 +181,63 @@
                 "responses": {}
             }
         },
+        "/v1/login/{email}/{password}": {
+            "get": {
+                "description": "Logins customer",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login customer",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "email",
+                        "name": "email",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "password",
+                        "name": "password",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/customer.CustomerWithoutPost"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/post": {
             "put": {
                 "description": "update post api",
@@ -691,10 +748,13 @@
         "models.Error": {
             "type": "object",
             "properties": {
-                "error": {
-                    "description": "`json:\"error\"`",
+                "code": {
+                    "type": "integer"
+                },
+                "description": {
                     "type": "string"
-                }
+                },
+                "error": {}
             }
         },
         "post.Address": {
