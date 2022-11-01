@@ -9,9 +9,9 @@ type CustomerRegister struct {
 	Addresses []AddressRequest
 }
 
-type Error struct {
-	Error string //`json:"error"`
-}
+// type Error struct {
+// 	Error string //`json:"error"`
+// }
 
 type CustomerDataToSave struct {
 	FirstName string //`json:"first_name"`
@@ -49,4 +49,9 @@ type ResponseError struct {
 type ServerError struct {
 	Status string `json:"status"`
 	Message string `json:"message"`
+}
+type Error struct {
+	Code        int
+	Error       error
+	Description string
 }
