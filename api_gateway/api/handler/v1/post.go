@@ -16,6 +16,7 @@ import (
 // @Summary create post api
 // @Description this api creates new post
 // @Tags post
+// @Security BearerAuth
 // @Accept json
 // @Produce json
 // @Param customer body post.PostRequest true "Post"

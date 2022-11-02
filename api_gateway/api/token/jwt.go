@@ -69,9 +69,10 @@ func (jwtHandler *JWTHandler) ExtractClaims() (jwt.MapClaims, error) {
 		return []byte("UmarSecret"), nil
 	})
 	if err != nil {
+		fmt.Println("error while parsing SignInKey token.go 72")
 		return nil, err
 	}
-	
+
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !(ok && token.Valid) {
 		jwtHandler.Log.Error("invalid jwt token")

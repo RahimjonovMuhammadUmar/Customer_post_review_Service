@@ -377,6 +377,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "this api creates new post",
                 "consumes": [
                     "application/json"
