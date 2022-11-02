@@ -138,6 +138,7 @@ func (h *handlerV1) GetPostsOfCustomer(c *gin.Context) {
 // @Summary      Updates post by id
 // @Description  update post api
 // @Tags         post
+// @Security BearerAuth
 // @Accept       json
 // @Produce      json
 // @Param        post body post.PostWithoutReview true "Update post by id"

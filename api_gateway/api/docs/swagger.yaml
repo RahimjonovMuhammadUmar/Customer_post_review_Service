@@ -346,6 +346,8 @@ paths:
           description: OK
           schema:
             type: json
+      security:
+      - BearerAuth: []
       summary: Update customer api
       tags:
       - customer
@@ -508,6 +510,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/post.PostWithoutReview'
+      security:
+      - BearerAuth: []
       summary: Updates post by id
       tags:
       - post

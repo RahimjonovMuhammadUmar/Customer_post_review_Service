@@ -86,6 +86,11 @@ const docTemplate = `{
         },
         "/v1/customer": {
             "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "this api updates customer by id in database",
                 "consumes": [
                     "application/json"
@@ -335,6 +340,11 @@ const docTemplate = `{
         },
         "/v1/post": {
             "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "update post api",
                 "consumes": [
                     "application/json"

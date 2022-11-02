@@ -98,6 +98,7 @@ func (h *handlerV1) GetCustomer(c *gin.Context) {
 // @Summary Update customer api
 // @Description this api updates customer by id in database
 // @Tags customer
+// @Security BearerAuth
 // @Accept json
 // @Produce json
 // @Param customer body customer.CustomerWithoutPost true "Customer"
