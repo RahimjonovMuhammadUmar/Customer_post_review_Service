@@ -4,15 +4,13 @@ import (
 	"context"
 	pbp "exam/api_gateway/genproto/post"
 	l "exam/api_gateway/pkg/logger"
-	"fmt"
 	"net/http"
 	"strconv"
 	"time"
 
-	"github.com/TwiN/go-color"
-
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/cast"
 	"google.golang.org/protobuf/encoding/protojson"
 )
 
@@ -84,7 +82,7 @@ func (h *handlerV1) GetPostWithCustomerInfo(c *gin.Context) {
 	defer cancel()
 
 	response, err := h.serviceManager.PostService().GetPostWithCustomerInfo(
-		ctx, &pbp.Id{
+		ctx, &pbp.Ids{
 			Id: int32(id),
 		})
 	if err != nil {
@@ -164,12 +162,11 @@ func (h *handlerV1) UpdatePost(c *gin.Context) {
 		return
 	}
 	claims, _ := h.GetSub(c)
-	fmt.Println(claims["sub"])
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
 	defer cancel()
 
-	post, err := h.serviceManager.PostService().GetPostWithCustomerInfo(ctx, &pbp.Id{
+	post, err := h.serviceManager.PostService().GetPostInfoOnly(ctx, &pbp.Id{
 		Id: body.Id,
 	})
 	if err != nil {
@@ -179,8 +176,9 @@ func (h *handlerV1) UpdatePost(c *gin.Context) {
 		h.log.Error("error getting post by id to compare ids of customer for updating", l.Error(err))
 		return
 	}
-	if post.CustomerId != claims["sub"] {
-		c.JSON(http.StatusForbidden, color.Red+"You are not the owner of this post, you will be banned if you continue trying to edit posts that does not belong to you"+color.Reset)
+	idFromToken := cast.ToInt32(claims["sub"])
+	if post.CustomerId != idFromToken {
+		c.JSON(http.StatusForbidden, "You are not the owner of this post!!")
 		return
 	}
 

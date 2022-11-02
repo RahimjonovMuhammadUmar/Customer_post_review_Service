@@ -346,7 +346,6 @@ func (p *postRepo) GetPostsByPage(page, limit int32) (*pbp.PostsByPage, error) {
 func (p *postRepo) GetPostInfoOnly(id int32) (*pbp.PostInfoOnly, error) {
 	postInfo := &pbp.PostInfoOnly{}
 	err := p.db.QueryRow(`SELECT 
-	id, 
 	name, 
 	description, 
 	customer_id FROM posts WHERE id = $1 AND deleted_at IS NULL`, id).Scan(

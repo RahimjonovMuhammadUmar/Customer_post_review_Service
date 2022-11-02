@@ -3,7 +3,6 @@ module exam
 go 1.19
 
 require (
-	github.com/TwiN/go-color v1.2.0
 	github.com/casbin/gorm-adapter/v2 v2.1.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-gonic/gin v1.8.1
