@@ -54,16 +54,15 @@ func (p *PostService) CreatePost(ctx context.Context, req *pbp.PostRequest) (*pb
 
 	return newPost, nil
 }
-func (p *PostService) GetPostWithCustomerInfo(ctx context.Context, req *pbp.Id) (*pbp.PostWithCustomerInfo, error) {
-	fmt.Println("58 post.go service")
+func (p *PostService) GetPostWithCustomerInfo(ctx context.Context, req *pbp.Ids) (*pbp.PostWithCustomerInfo, error) {
 	customer, err := p.client.Customer().GetCustomer(ctx, &pbc.CustomerId{
-		Id: req.Id,
+		Id: req.CustomerId,
 	})
 	if err != nil {
 		p.logger.Error("error -> customer, err := p.client.Customer().IfCustomerExists(ctx, &pbc.CustomerId{", l.Any("", err))
 		return &pbp.PostWithCustomerInfo{}, err
 	}
-	post, err := p.storage.Post().GetPostWithCustomerInfo(req)
+	post, err := p.storage.Post().GetPostWithCustomerInfo(req.Id)
 	if err != nil && err != sql.ErrNoRows {
 		p.logger.Error("error -> post, err := p.storage.Post().GetPost(req)", l.Any("error getting post by id post/service/post.go", err))
 		return &pbp.PostWithCustomerInfo{}, err
@@ -299,4 +298,13 @@ func (p *PostService) GetPostsByPage(ctx context.Context, req *pbp.LimitPage) (*
 		return &pbp.PostsByPage{}, err
 	}
 	return posts, nil
+}
+
+func (p *PostService) GetPostInfoOnly(ctx context.Context, req *pbp.Id) (*pbp.PostInfoOnly, error){
+	postInfo, err := p.storage.Post().GetPostInfoOnly(req.Id)
+	if err != nil {
+		fmt.Println("Error while sending id to get only post", err)
+		return &pbp.PostInfoOnly{}, err
+	}
+	return postInfo, nil
 }

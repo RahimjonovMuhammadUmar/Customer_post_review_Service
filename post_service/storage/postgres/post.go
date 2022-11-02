@@ -62,13 +62,13 @@ func (p *postRepo) CreatePost(req *pbp.PostRequest) (*pbp.PostWithoutReview, err
 	return newPost, nil
 }
 
-func (p *postRepo) GetPostWithCustomerInfo(req *pbp.Id) (*pbp.PostWithCustomerInfo, error) {
+func (p *postRepo) GetPostWithCustomerInfo(post_id int32) (*pbp.PostWithCustomerInfo, error) {
 	post := &pbp.PostWithCustomerInfo{}
 	err := p.db.QueryRow(`SELECT 
 	id, 
 	name, 
 	description, 
-	customer_id FROM posts WHERE id = $1 AND deleted_at IS NULL`, req.Id).Scan(
+	customer_id FROM posts WHERE id = $1 AND deleted_at IS NULL`, post_id).Scan(
 		&post.Id,
 		&post.Name,
 		&post.Description,
@@ -341,4 +341,23 @@ func (p *postRepo) GetPostsByPage(page, limit int32) (*pbp.PostsByPage, error) {
 		posts.Posts = append(posts.Posts, post)
 	}
 	return posts, nil
+}
+
+func (p *postRepo) GetPostInfoOnly(id int32) (*pbp.PostInfoOnly, error) {
+	postInfo := &pbp.PostInfoOnly{}
+	err := p.db.QueryRow(`SELECT 
+	id, 
+	name, 
+	description, 
+	customer_id FROM posts WHERE id = $1 AND deleted_at IS NULL`, id).Scan(
+		&postInfo.Name,
+		&postInfo.Description,
+		&postInfo.CustomerId,
+	)
+	if err != nil {
+		fmt.Println("error while selecting only post info", err)
+		return &pbp.PostInfoOnly{}, err
+	}
+	postInfo.Id = id
+	return postInfo, nil
 }
