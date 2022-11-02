@@ -55,6 +55,7 @@ func (p *PostService) CreatePost(ctx context.Context, req *pbp.PostRequest) (*pb
 	return newPost, nil
 }
 func (p *PostService) GetPostWithCustomerInfo(ctx context.Context, req *pbp.Id) (*pbp.PostWithCustomerInfo, error) {
+	fmt.Println("58 post.go service")
 	customer, err := p.client.Customer().GetCustomer(ctx, &pbc.CustomerId{
 		Id: req.Id,
 	})

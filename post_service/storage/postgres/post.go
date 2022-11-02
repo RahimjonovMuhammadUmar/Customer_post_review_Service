@@ -68,7 +68,7 @@ func (p *postRepo) GetPostWithCustomerInfo(req *pbp.Id) (*pbp.PostWithCustomerIn
 	id, 
 	name, 
 	description, 
-	customer_id FROM posts WHERE id = $1`, req.Id).Scan(
+	customer_id FROM posts WHERE id = $1 AND deleted_at IS NULL`, req.Id).Scan(
 		&post.Id,
 		&post.Name,
 		&post.Description,
@@ -116,7 +116,6 @@ func (p *postRepo) UpdatePost(req *pbp.PostWithoutReview) (*pbp.PostWithoutRevie
 		return &pbp.PostWithoutReview{}, err
 	}
 
-	
 	for _, media := range req.Medias {
 		_, err := p.db.Exec(`UPDATE medias SET name = $1, link = $2, type = $3 WHERE id = $4 and post_id = $5`, media.Name, media.Link, media.Type, media.Id, req.Id)
 		if err != nil {
@@ -124,7 +123,7 @@ func (p *postRepo) UpdatePost(req *pbp.PostWithoutReview) (*pbp.PostWithoutRevie
 			return &pbp.PostWithoutReview{}, err
 		}
 	}
-	
+
 	post_medias, err := p.db.Query(`SELECT 
 	id, 
 	name, 

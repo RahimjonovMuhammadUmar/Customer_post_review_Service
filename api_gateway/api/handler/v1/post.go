@@ -4,10 +4,14 @@ import (
 	"context"
 	pbp "exam/api_gateway/genproto/post"
 	l "exam/api_gateway/pkg/logger"
+	"fmt"
 	"net/http"
 	"strconv"
 	"time"
 
+	"github.com/TwiN/go-color"
+
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"google.golang.org/protobuf/encoding/protojson"
 )
@@ -159,8 +163,26 @@ func (h *handlerV1) UpdatePost(c *gin.Context) {
 		h.log.Error("failed parse string to int", l.Error(err))
 		return
 	}
+	claims, _ := h.GetSub(c)
+	fmt.Println(claims["sub"])
+
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
 	defer cancel()
+
+	post, err := h.serviceManager.PostService().GetPostWithCustomerInfo(ctx, &pbp.Id{
+		Id: body.Id,
+	})
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		h.log.Error("error getting post by id to compare ids of customer for updating", l.Error(err))
+		return
+	}
+	if post.CustomerId != claims["sub"] {
+		c.JSON(http.StatusForbidden, color.Red+"You are not the owner of this post, you will be banned if you continue trying to edit posts that does not belong to you"+color.Reset)
+		return
+	}
 
 	response, err := h.serviceManager.PostService().UpdatePost(ctx, &body)
 	if err != nil {
@@ -170,6 +192,7 @@ func (h *handlerV1) UpdatePost(c *gin.Context) {
 		h.log.Error("failed to update customer")
 		return
 	}
+
 	c.JSON(http.StatusOK, response)
 
 }
@@ -215,7 +238,7 @@ func (h *handlerV1) DeletePost(c *gin.Context) {
 }
 
 // DeletePostByCustomerId
-// @Summary      Delete customers posts 
+// @Summary      Delete customers posts
 // @Description  Delete Post by Customer Id
 // @Tags         post
 // @Security BearerAuth
@@ -252,4 +275,19 @@ func (h *handlerV1) DeletePostByCustomerId(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, response)
+}
+
+func (h *handlerV1) GetSub(c *gin.Context) (jwt.MapClaims, error) {
+	authorization := c.GetHeader("Authorization")
+	if c.Request.Header.Get("Authorization") == "" {
+		c.JSON(http.StatusUnauthorized, "not authorized")
+		h.log.Error("not authorized")
+	}
+	h.jwthandler.Token = authorization
+	claims, err := h.jwthandler.ExtractClaims()
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, "267 post.go")
+		h.log.Error("268 post.go")
+	}
+	return claims, nil
 }
