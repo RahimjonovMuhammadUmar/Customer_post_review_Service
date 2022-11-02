@@ -140,6 +140,7 @@ func (c *customerRepo) GetCustomer(id int32) (*pbc.Customer, error) {
 		&customerData.Bio,
 		&customerData.Email,
 		&customerData.PhoneNumber,
+		&customerData.RefreshToken,
 	)
 	// if err.Error() == "sql: no rows in result set" {
 	// 	fmt.Println("133")

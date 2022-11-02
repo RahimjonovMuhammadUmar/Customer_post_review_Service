@@ -71,8 +71,7 @@ func (jwtHandler *JWTHandler) ExtractClaims() (jwt.MapClaims, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(jwtHandler, token, jwtHandler.SignInKey)
-
+	
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !(ok && token.Valid) {
 		jwtHandler.Log.Error("invalid jwt token")

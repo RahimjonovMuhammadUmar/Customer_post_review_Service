@@ -21,6 +21,69 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/v1/admin/login/{username}/{password}": {
+            "get": {
+                "description": "Logins admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Login admin",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "username",
+                        "name": "username",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "password",
+                        "name": "password",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.AdminResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/customer": {
             "put": {
                 "description": "this api updates customer by id in database",
@@ -89,6 +152,11 @@ const docTemplate = `{
         },
         "/v1/customer/search": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "this api searches customer",
                 "consumes": [
                     "application/json"
@@ -183,6 +251,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "this api deletes customer from database",
                 "consumes": [
                     "application/json"
@@ -328,6 +401,11 @@ const docTemplate = `{
         },
         "/v1/post/customers_posts/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Get posts of customer",
                 "consumes": [
                     "application/json"
@@ -360,6 +438,11 @@ const docTemplate = `{
         },
         "/v1/post/delete_customers_posts/{id}": {
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Delete Post by Customer Id",
                 "consumes": [
                     "application/json"
@@ -389,6 +472,11 @@ const docTemplate = `{
         },
         "/v1/post/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Get Post infos with id",
                 "consumes": [
                     "application/json"
@@ -419,6 +507,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Delete Post and it's reviews by Id",
                 "consumes": [
                     "application/json"
@@ -562,6 +655,11 @@ const docTemplate = `{
         },
         "/v1/review/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "this api gets review from database",
                 "consumes": [
                     "application/json"
@@ -582,6 +680,11 @@ const docTemplate = `{
                 "responses": {}
             },
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "this api deletes review from database",
                 "consumes": [
                     "application/json"
@@ -604,6 +707,11 @@ const docTemplate = `{
         },
         "/v1/review_by_custID/{id}": {
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "this api deletes review by customer",
                 "consumes": [
                     "application/json"
@@ -732,6 +840,20 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "street": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.AdminResponse": {
+            "type": "object",
+            "properties": {
+                "accessToken": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "username": {
                     "type": "string"
                 }
             }

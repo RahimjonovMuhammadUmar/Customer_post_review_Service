@@ -55,6 +55,7 @@ func (h *handlerV1) CreateReview(c *gin.Context) {
 // @Summary Delete review api
 // @Description this api deletes review from database
 // @Tags review
+// @Security BearerAuth
 // @Accept json
 // @Product json
 // @Param id path int true "id"
@@ -93,6 +94,7 @@ func (h *handlerV1) DeleteReview(c *gin.Context) {
 // @Summary Get review api
 // @Description this api gets review from database
 // @Tags review
+// @Security BearerAuth
 // @Accept json
 // @Product json
 // @Param id path int true "id"
@@ -129,6 +131,7 @@ func (h *handlerV1) GetReview(c *gin.Context) {
 // @Summary delete review by cust api
 // @Description this api deletes review by customer
 // @Tags review
+// @Security BearerAuth
 // @Accept json
 // @Produce json
 // @Param id path int true "id"

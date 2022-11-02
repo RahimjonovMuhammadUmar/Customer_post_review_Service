@@ -57,7 +57,7 @@ func (h *handlerV1) CreateCustomer(c *gin.Context) {
 // @Summary get customer api
 // @Description this api finds existing customer
 // @Tags customer
-// @Security        BearerAuth
+// @Security BearerAuth
 // @Accept json
 // @Produce json
 // @Param id path int true "id"
@@ -138,6 +138,7 @@ func (h *handlerV1) UpdateCustomer(c *gin.Context) {
 // @Summary Delete customer api
 // @Description this api deletes customer from database
 // @Tags customer
+// @Security        BearerAuth
 // @Accept json
 // @Product json
 // @Param id path int true "id"
@@ -178,6 +179,7 @@ func (h *handlerV1) DeleteCustomer(c *gin.Context) {
 // @Description this api searches customer
 // @Tags customer
 // @Accept json
+// @Security BearerAuth
 // @Produce json
 // @Param limit  query int true "Limit"
 // @Param page   query int true "Page"

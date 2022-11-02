@@ -64,6 +64,15 @@ definitions:
       street:
         type: string
     type: object
+  models.AdminResponse:
+    properties:
+      accessToken:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
   models.CustomerRegister:
     properties:
       addresses:
@@ -255,6 +264,48 @@ info:
   title: exam api
   version: "1.0"
 paths:
+  /v1/admin/login/{username}/{password}:
+    get:
+      consumes:
+      - application/json
+      description: Logins admin
+      parameters:
+      - description: username
+        in: path
+        name: username
+        required: true
+        type: string
+      - description: password
+        in: path
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.AdminResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Error'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: Login admin
+      tags:
+      - Admin
   /v1/customer:
     post:
       consumes:
@@ -310,6 +361,8 @@ paths:
         required: true
         type: integer
       responses: {}
+      security:
+      - BearerAuth: []
       summary: Delete customer api
       tags:
       - customer
@@ -372,6 +425,8 @@ paths:
           description: Bad Request
         "500":
           description: Internal Server Error
+      security:
+      - BearerAuth: []
       summary: search customer api
       tags:
       - customer
@@ -472,6 +527,8 @@ paths:
       responses:
         "200":
           description: OK
+      security:
+      - BearerAuth: []
       summary: Delete post from database
       tags:
       - post
@@ -492,6 +549,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/post.PostWithCustomerInfo'
+      security:
+      - BearerAuth: []
       summary: Get post with customer information
       tags:
       - post
@@ -513,6 +572,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/post.Posts'
+      security:
+      - BearerAuth: []
       summary: Gets post by customers id
       tags:
       - post
@@ -532,6 +593,8 @@ paths:
       responses:
         "200":
           description: OK
+      security:
+      - BearerAuth: []
       summary: Delete customers posts
       tags:
       - post
@@ -621,6 +684,8 @@ paths:
         required: true
         type: integer
       responses: {}
+      security:
+      - BearerAuth: []
       summary: Delete review api
       tags:
       - review
@@ -635,6 +700,8 @@ paths:
         required: true
         type: integer
       responses: {}
+      security:
+      - BearerAuth: []
       summary: Get review api
       tags:
       - review
@@ -656,6 +723,8 @@ paths:
           description: OK
           schema:
             type: json
+      security:
+      - BearerAuth: []
       summary: delete review by cust api
       tags:
       - review

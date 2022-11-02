@@ -56,6 +56,7 @@ func (h *handlerV1) CreatePost(c *gin.Context) {
 // @Summary      Get post with customer information
 // @Description  Get Post infos with id
 // @Tags         post
+// @Security BearerAuth
 // @Accept       json
 // @Produce      json
 // @Param        id path int true "post_id"
@@ -96,6 +97,7 @@ func (h *handlerV1) GetPostWithCustomerInfo(c *gin.Context) {
 // @Summary      Gets post by customers id
 // @Description  Get posts of customer
 // @Tags         post
+// @Security BearerAuth
 // @Accept       json
 // @Produce      json
 // @Param        id path int true  "customer_id"
@@ -174,6 +176,7 @@ func (h *handlerV1) UpdatePost(c *gin.Context) {
 // @Summary      Delete post from database
 // @Description  Delete Post and it's reviews by Id
 // @Tags         post
+// @Security BearerAuth
 // @Accept       json
 // @Produce      json
 // @Param        id path int true "post_id"
@@ -213,6 +216,7 @@ func (h *handlerV1) DeletePost(c *gin.Context) {
 // @Summary      Delete customers posts 
 // @Description  Delete Post by Customer Id
 // @Tags         post
+// @Security BearerAuth
 // @Accept       json
 // @Produce      json
 // @Param        id path int true "customer_id"

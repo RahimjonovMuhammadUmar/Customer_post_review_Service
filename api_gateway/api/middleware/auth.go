@@ -5,12 +5,13 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/casbin/casbin/v2"
-	jwtg "github.com/dgrijalva/jwt-go"
-	"github.com/gin-gonic/gin"
 	"exam/api_gateway/api/handler/models"
 	token "exam/api_gateway/api/token"
 	"exam/api_gateway/config"
+
+	"github.com/casbin/casbin/v2"
+	jwtg "github.com/dgrijalva/jwt-go"
+	"github.com/gin-gonic/gin"
 )
 
 type JwtRoleAuth struct {
@@ -64,9 +65,10 @@ func (a *JwtRoleAuth) GetRole(r *http.Request) (string, error) {
 	if err != nil {
 		return "", err
 	}
-
 	if claims["role"].(string) == "authorized" {
 		role = "authorized"
+	} else if claims["role"].(string) == "admin" {
+		role = "admin"
 	} else {
 		role = "unknown"
 	}
@@ -79,12 +81,8 @@ func (a *JwtRoleAuth) CheckPermission(r *http.Request) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	fmt.Println(user)
 	method := r.Method
 	path := r.URL.Path
-	fmt.Println(r.Method)
-	fmt.Println(r.URL.Path)
-
 	allowed, err := a.enforcer.Enforce(user, path, method)
 	if err != nil {
 		panic(err)
@@ -94,7 +92,7 @@ func (a *JwtRoleAuth) CheckPermission(r *http.Request) (bool, error) {
 }
 
 // RequirePermission aborts request with 403 status
-func (a *JwtRoleAuth) 	RequirePermission(c *gin.Context) {
+func (a *JwtRoleAuth) RequirePermission(c *gin.Context) {
 	c.AbortWithStatus(403)
 }
 

@@ -77,7 +77,7 @@ func (h *handlerV1) RegisterCustomer(c *gin.Context) {
 
 	if err != nil {
 		h.log.Error("error while hashing password", l.Error(err))
-		fmt.Println("error is here ->", err)
+		fmt.Println("error -> register.go 80 ", err)
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "something went wrong",
 		})

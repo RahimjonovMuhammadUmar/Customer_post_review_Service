@@ -8,9 +8,22 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"golang.org/x/crypto/bcrypt"
 )
 
+// Login admin
+// @Summary      Login admin
+// @Description  Logins admin
+// @Tags         Admin
+// @Accept       json
+// @Produce      json
+// @Param        username  path string true "username"
+// @Param        password   path string true "password"
+// @Success         200                   {object}  models.AdminResponse
+// @Failure         500                   {object}  models.Error
+// @Failure         400                   {object}  models.Error
+// @Failure         404                   {object}  models.Error
+// @Failure         409                   {object}  models.Error
+// @Router      /v1/admin/login/{username}/{password} [get]
 func (h *handlerV1) AdminLogin(c *gin.Context) {
 	username := c.Param("username")
 	admin, err := h.serviceManager.CustomerService().IsAdmin(context.Background(), &pbc.Admin{
@@ -24,16 +37,19 @@ func (h *handlerV1) AdminLogin(c *gin.Context) {
 		return
 	}
 	password := c.Param("password")
-	err = bcrypt.CompareHashAndPassword([]byte(password), []byte(admin.Password))
-	if err != nil {
+	if password != admin.Password {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
+			"error": "Incorrect password",
 		})
 		h.log.Error("error wrong password", l.Error(err))
 		return
+
 	}
+	// a, _ := bcrypt.GenerateFromPassword([]byte(password), 10)
+	// fmt.Println(string(password))
+	// err = bcrypt.CompareHashAndPassword([]byte(password), []byte(admin.Password))
 	responseAdmin := models.AdminResponse{
-		Username: admin.Username,
+		Username: username,
 		Password: "",
 	}
 	// Generating refresh and jwt tokens
