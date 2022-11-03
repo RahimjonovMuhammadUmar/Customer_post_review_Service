@@ -286,3 +286,18 @@ func (c *customerRepo) IsAdmin(username string) (*pbc.Admin, error) {
 	
 	return res, err
 }
+
+func (c *customerRepo) IsModerator(username string) (*pbc.Admin, error) {
+	res := &pbc.Admin{}
+	err := c.db.QueryRow(`SELECT password FROM moderators WHERE username = $1`, username).Scan(
+		&res.Password,
+	)
+	if err == sql.ErrNoRows {
+		return &pbc.Admin{}, nil
+	} else if err != nil {
+		fmt.Println("error while checking if moderator exist", err)
+		return &pbc.Admin{}, err
+	}
+	
+	return res, err
+}

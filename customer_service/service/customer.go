@@ -173,3 +173,13 @@ func (c *CustomerService) IsAdmin(ctx context.Context, req *pbc.Admin) (*pbc.Adm
 	
 	return admin, nil
 }
+
+func (c *CustomerService) IsModerator(ctx context.Context, req *pbc.Admin) (*pbc.Admin, error) {
+	admin, err := c.storage.Customer().IsModerator(req.Username)
+	if err != nil {
+		fmt.Println("error while getting moderator", err)
+		return &pbc.Admin{}, err
+	}
+	
+	return admin, nil
+}
