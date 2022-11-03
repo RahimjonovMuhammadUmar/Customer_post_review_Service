@@ -283,7 +283,7 @@ func (c *customerRepo) IsAdmin(username string) (*pbc.Admin, error) {
 		fmt.Println("error while checking if admin exist", err)
 		return &pbc.Admin{}, err
 	}
-	
+
 	return res, err
 }
 
@@ -298,6 +298,6 @@ func (c *customerRepo) IsModerator(username string) (*pbc.Admin, error) {
 		fmt.Println("error while checking if moderator exist", err)
 		return &pbc.Admin{}, err
 	}
-	
+
 	return res, err
 }

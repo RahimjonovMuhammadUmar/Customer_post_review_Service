@@ -13,12 +13,12 @@ import (
 // Login moderator
 // @Summary      Login moderator
 // @Description  Logins moderator
-// @Tags         Moderato
+// @Tags         Moderator
 // @Accept       json
 // @Produce      json
 // @Param        username  path string true "username"
 // @Param        password   path string true "password"
-// @Success         200                   {object}  models.adminResponse
+// @Success         200                   {object}  models.AdminResponse
 // @Failure         500                   {object}  models.Error
 // @Failure         400                   {object}  models.Error
 // @Failure         404                   {object}  models.Error
