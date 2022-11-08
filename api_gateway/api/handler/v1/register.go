@@ -257,5 +257,5 @@ func (h *handlerV1) VerifyRegistration(c *gin.Context) {
 	response.RefreshToken = refreshToken
 	response.AccessToken = accessToken
 
-	c.JSON(http.StatusCreated, response)
+	c.JSON(http.StatusOK, response)
 }

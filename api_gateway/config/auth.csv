@@ -1,0 +1,4 @@
+p, unauthorized, /v1/register, POST
+p, unauthorized, /v1/swagger/*, GET
+p, authorized,  /v1/post, POST
+p, unauthorized, /v1/register/{code}/{email}, GET

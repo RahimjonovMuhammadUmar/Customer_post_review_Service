@@ -6,11 +6,11 @@ import (
 	"exam/api_gateway/pkg/logger"
 	"exam/api_gateway/services"
 	r "exam/api_gateway/storage/redis"
-	"fmt"
 
 	defaultrolemanager "github.com/casbin/casbin/v2/rbac/default-role-manager"
 	"github.com/casbin/casbin/v2/util"
-	gormadapter "github.com/casbin/gorm-adapter/v2"
+
+	// gormadapter "github.com/casbin/gorm-adapter/v2"
 
 	"github.com/casbin/casbin/v2"
 	"github.com/gomodule/redigo/redis"
@@ -21,19 +21,19 @@ func main() {
 	cfg := config.Load()
 	log := logger.New(cfg.Loglevel, "api_gateway")
 
-	psqlString := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
-		cfg.PostgresHost,
-		cfg.PostgresPort,
-		cfg.PostgresUser,
-		cfg.PostgresPassword,
-		cfg.PostgresDB,
-	)
-	enf, err := gormadapter.NewAdapter("postgres", psqlString, true)
-	if err != nil {
-		log.Error("gorm adapter error", logger.Error(err))
-		return
-	}
-	casbinEnforcer, err = casbin.NewEnforcer(cfg.AuthConfigPath, enf)
+	// psqlString := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
+	// 	cfg.PostgresHost,
+	// 	cfg.PostgresPort,
+	// 	cfg.PostgresUser,
+	// 	cfg.PostgresPassword,
+	// 	cfg.PostgresDB,
+	// )
+	// enf, err := gormadapter.NewAdapter("postgres", psqlString, true)
+	// if err != nil {
+	// 	log.Error("gorm adapter error", logger.Error(err))
+	// 	return
+	// }
+	casbinEnforcer, err := casbin.NewEnforcer(cfg.AuthConfigPath, cfg.CsvFilePath)
 	if err != nil {
 		log.Error("casbin enforcer error", logger.Error(err))
 		return

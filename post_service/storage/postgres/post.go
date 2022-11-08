@@ -110,7 +110,10 @@ func (p *postRepo) GetPostWithCustomerInfo(post_id int32) (*pbp.PostWithCustomer
 }
 
 func (p *postRepo) UpdatePost(req *pbp.PostWithoutReview) (*pbp.PostWithoutReview, error) {
-	_, err := p.db.Exec(`UPDATE posts SET name = $1, description = $2, customer_id = $3 WHERE id = $4 and customer_id = $5`, req.Name, req.Description, req.CustomerId, req.Id, req.CustomerId)
+	_, err := p.db.Exec(`UPDATE posts SET
+	name = $1, 
+	description = $2 
+	WHERE id = $3 and customer_id = $4`, req.Name, req.Description, req.Id, req.CustomerId)
 	if err != nil {
 		fmt.Println("error while updating posts", err)
 		return &pbp.PostWithoutReview{}, err
@@ -241,7 +244,7 @@ func (p *postRepo) GetAllPostsWithCustomer(*pbp.Empty) (*pbp.AllPosts, error) {
 
 func (p *postRepo) GetPostsOfCustomer(req *pbp.Id) (*pbp.Posts, error) {
 	PostsOfCustomer := &pbp.Posts{}
-	posts, err := p.db.Query(`SELECT id, name, description FROM posts WHERE customer_id = $1`, req.Id)
+	posts, err := p.db.Query(`SELECT id, name, description FROM posts WHERE customer_id = $1 AND deleted_at IS NULL`, req.Id)
 	if err != nil {
 		fmt.Println("error while selecting from posts with customer_id", err)
 		return &pbp.Posts{}, err
@@ -260,7 +263,7 @@ func (p *postRepo) GetPostsOfCustomer(req *pbp.Id) (*pbp.Posts, error) {
 		PostsOfCustomer.Posts = append(PostsOfCustomer.Posts, post)
 	}
 	for _, post := range PostsOfCustomer.Posts {
-		medias, err := p.db.Query(`SELECT id, name, link, type FROM medias WHERE post_id = $1`, post.Id)
+		medias, err := p.db.Query(`SELECT id, name, link, type FROM medias WHERE post_id = $1 AND deleted_at IS NULL`, post.Id)
 		if err != nil {
 			fmt.Println("error while selecting from medias by post id", err)
 			return &pbp.Posts{}, err

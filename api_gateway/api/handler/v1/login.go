@@ -55,7 +55,7 @@ func (h *handlerV1) Login(c *gin.Context) {
 			Description: "Error comparing passwords",
 		})
 		h.log.Error("Error while comparing hashed passwords", logger.Any("login", err))
-		return	
+		return
 	}
 	h.jwthandler.Iss = "user"
 	h.jwthandler.Sub = strconv.Itoa(int(res.Id))
@@ -66,7 +66,7 @@ func (h *handlerV1) Login(c *gin.Context) {
 	AccesToken, RefreshToken, err := h.jwthandler.GenerateAuthJWT()
 	accessToken := AccesToken
 	refreshToken := RefreshToken
-
+	
 	if err != nil {
 		h.log.Error("error occured while generating tokens")
 		c.JSON(http.StatusInternalServerError, gin.H{
