@@ -1,14 +1,14 @@
 package main
 
 import (
-	"net"
 	"exam/customer_service/config"
 	pbc "exam/customer_service/genproto/customer"
 	"exam/customer_service/pkg/db"
 	"exam/customer_service/pkg/logger"
 	"exam/customer_service/service"
+	"net"
 
-	 "exam/customer_service/service/grpc_client"
+	grpcClient "exam/customer_service/service/grpc_client"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -24,7 +24,6 @@ func main() {
 		logger.String("host", cfg.PostgresHost),
 		logger.Int("port", cfg.PostgresPort),
 		logger.String("database", cfg.PostgresDatabase))
-
 	connDB, err := db.ConnectToDB(cfg)
 	if err != nil {
 		log.Fatal("error while connDB, err := db.ConnectToDB(cfg)", logger.Error(err))
@@ -36,7 +35,7 @@ func main() {
 	}
 
 	customerService := service.NewCustomerService(connDB, log, grpcClient)
-	lis, err := net.Listen("tcp", cfg.RPCPort)
+	lis, err := net.Listen("172.17.0.3", cfg.RPCPort)
 	if err != nil {
 		log.Fatal("error while listening", logger.Error(err))
 	}

@@ -55,7 +55,7 @@ func main() {
 	pool := &redis.Pool{
 		MaxIdle: 10,
 		Dial: func() (redis.Conn, error) {
-			return redis.Dial("tcp", "localhost:6379")
+			return redis.Dial("tcp", "172.17.0.5:6379")
 		},
 	}
 

@@ -52,15 +52,15 @@ func (c *customerRepo) CreateCustomer(req *pbc.CustomerRequest) (*pbc.CustomerWi
 		tx.Rollback()
 		return &pbc.CustomerWithoutPost{}, err
 	}
-	err = tx.Commit()
-	if err != nil {
-		fmt.Println("Error while commiting", err)
-		tx.Rollback()
-	}
+	// err = tx.Commit()
+	// if err != nil {
+	// 	fmt.Println("Error while commiting", err)
+	// 	tx.Rollback()
+	// }
 	addresses := []*pbc.Address{}
 	for _, address := range req.Addresses {
 		address_ := &pbc.Address{}
-		err := c.db.QueryRow(`INSERT INTO addresses(
+		err := tx.QueryRow(`INSERT INTO addresses(
 		street, 
 		house_number, 
 		customer_id) VALUES($1, $2, $3) RETURNING 

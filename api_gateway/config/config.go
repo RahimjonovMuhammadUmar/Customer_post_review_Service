@@ -33,7 +33,7 @@ func Load() Config {
 	c := Config{}
 
 	c.Environment = cast.ToString(getOrReturnDefault("ENVIRONMENT", "develop"))
-	c.CustomerServiceHost = cast.ToString(getOrReturnDefault("CUSTOMER_SERVICE_HOST", "localhost"))
+	c.CustomerServiceHost = cast.ToString(getOrReturnDefault("CUSTOMER_SERVICE_HOST", "172.17.0.4"))
 	c.CustomerServicePort = cast.ToInt(getOrReturnDefault("CUSTOMER_SERVICE_PORT", 9000))
 
 	c.PostServiceHost = cast.ToString(getOrReturnDefault("POST_SERVICE_HOST", "localhost"))
