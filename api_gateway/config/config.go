@@ -33,19 +33,19 @@ func Load() Config {
 	c := Config{}
 
 	c.Environment = cast.ToString(getOrReturnDefault("ENVIRONMENT", "develop"))
-	c.CustomerServiceHost = cast.ToString(getOrReturnDefault("CUSTOMER_SERVICE_HOST", "172.17.0.4"))
+	c.CustomerServiceHost = cast.ToString(getOrReturnDefault("CUSTOMER_SERVICE_HOST", "customer_service"))
 	c.CustomerServicePort = cast.ToInt(getOrReturnDefault("CUSTOMER_SERVICE_PORT", 9000))
 
-	c.PostServiceHost = cast.ToString(getOrReturnDefault("POST_SERVICE_HOST", "localhost"))
+	c.PostServiceHost = cast.ToString(getOrReturnDefault("POST_SERVICE_HOST", "post_service"))
 	c.PostServicePort = cast.ToInt(getOrReturnDefault("POST_SERVICE_PORT", 9090))
 
-	c.ReviewServiceHost = cast.ToString(getOrReturnDefault("REVIEW_SERVICE_HOST", "localhost"))
+	c.ReviewServiceHost = cast.ToString(getOrReturnDefault("REVIEW_SERVICE_HOST", "review_service"))
 	c.ReviewServicePort = cast.ToInt(getOrReturnDefault("REVIEW_SERVICE_PORT", 9900))
 
-	c.PostgresHost = cast.ToString(getOrReturnDefault("POSTGRES_HOST", "localhost"))
+	c.PostgresHost = cast.ToString(getOrReturnDefault("POSTGRES_HOST", "customer_db"))
 	c.PostgresPort = cast.ToInt(getOrReturnDefault("POSTGRES_PORT", 5432))
-	c.PostgresUser = cast.ToString(getOrReturnDefault("POSTGRES_USER", "postgres"))
-	c.PostgresPassword = cast.ToString(getOrReturnDefault("POSTGRES_USER_PASSWORD", "123"))
+	c.PostgresUser = cast.ToString(getOrReturnDefault("POSTGRES_USER", "umar"))
+	c.PostgresPassword = cast.ToString(getOrReturnDefault("POSTGRES_USER_PASSWORD", "password"))
 	c.PostgresDB = cast.ToString(getOrReturnDefault("POSTGRES_DATABASE", "customerdb"))
 
 	c.Loglevel = cast.ToString(getOrReturnDefault("LOG_LEVEL", "debug"))

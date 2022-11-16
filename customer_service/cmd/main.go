@@ -35,7 +35,7 @@ func main() {
 	}
 
 	customerService := service.NewCustomerService(connDB, log, grpcClient)
-	lis, err := net.Listen("172.17.0.3", cfg.RPCPort)
+	lis, err := net.Listen("tcp", cfg.RPCPort)
 	if err != nil {
 		log.Fatal("error while listening", logger.Error(err))
 	}

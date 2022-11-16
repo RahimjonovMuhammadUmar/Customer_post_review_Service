@@ -4,4 +4,4 @@ COPY . /review_service
 WORKDIR /review_service
 RUN go build -o main cmd/main.go
 CMD ./main
-EXPOSE 9900/tcp
+EXPOSE 9900

@@ -1,0 +1,81 @@
+version: '3.8'
+
+services:
+  # customer_db:
+  #   container_name: customer_db
+  #   image: postgres
+  #   environment:
+  #     POSTGRES_USER: umar
+  #     POSTGRES_PASSWORD: password
+  #     POSTGRES_DB: customerdb
+  #   ports:
+  #     - "5435:5432"
+
+  # post_db:
+  #   container_name: post_db
+  #   image: postgres
+  #   environment:
+  #     POSTGRES_USER: umar
+  #     POSTGRES_PASSWORD: password
+  #     POSTGRES_DB: postdb
+  #   ports:
+  #     - "5436:5432"
+
+  # review_db:
+  #   container_name: review_db
+  #   image: postgres
+  #   environment:
+  #     POSTGRES_USER: umar
+  #     POSTGRES_PASSWORD: password
+  #     POSTGRES_DB: reviewdb
+  #   ports:
+  #     - "5437:5432"
+
+
+  redis:
+    container_name: redis
+    image: redis
+    ports:
+      - "6380:6379"
+  
+  customer_service:
+    container_name: customer_service
+    build: ./customer_service
+    # links:
+      # - customer_db
+    ports:
+      - "9000:9000"
+
+  post_service:
+    container_name: post_service
+    build: ./post_service
+    links: 
+      - customer_service
+      # - post_db
+      # - customer_db
+    ports:
+      - "9090:9090"
+  
+  review_service:
+    container_name: review_service
+    build: ./review_service
+    links:
+      - post_service
+      # - review_db
+      # - customer_db
+    ports:
+      - "9900:9900"
+
+  api_gateway:
+    container_name: api_gateway
+    build: ./api_gateway
+    links:
+      - redis
+      - customer_service
+      - post_service
+      - review_service
+      # - customer_db
+      # - post_db
+      # - review_db
+    ports:
+      - "8800:8800"
