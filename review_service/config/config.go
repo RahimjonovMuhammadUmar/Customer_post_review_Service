@@ -30,7 +30,7 @@ func Load() Config {
 
 	c.Environment = cast.ToString(getOrReturnDefault("ENVIRONMENT", "develop"))
 
-	c.PostgresHost = cast.ToString(getOrReturnDefault("POSTGRES_HOST", "127.0.0.1"))
+	c.PostgresHost = cast.ToString(getOrReturnDefault("POSTGRES_HOST", "localhost"))
 	c.PostgresPort = cast.ToInt(getOrReturnDefault("POSTGRES_PORT", 5432))
 	c.PostgresDatabase = cast.ToString(getOrReturnDefault("POSTGRES_DATABASE", "reviewdb"))
 	c.PostgresUser = cast.ToString(getOrReturnDefault("POSTGRES_USER", "umar"))
