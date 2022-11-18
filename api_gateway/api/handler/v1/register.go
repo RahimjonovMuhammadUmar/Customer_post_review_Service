@@ -192,18 +192,23 @@ func (h *handlerV1) VerifyRegistration(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{
 			"error": err.Error(),
 		})
-		h.log.Error("failed to send code to redis", l.Error(err))
+		h.log.Error("failed to get by email from redis", l.Error(err))
+		return
+	}
+	if storedData == nil {
+		c.JSON(http.StatusOK, gin.H{
+			"Info": "No sush email",
+		})
 		return
 	}
 	data := cast.ToString(storedData)
 	userInfo := models.CustomerDataToSave{}
-
 	err = json.Unmarshal([]byte(data), &userInfo)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{
 			"error": err.Error(),
 		})
-		h.log.Error("failed to send code to redis", l.Error(err))
+		h.log.Error("failed to unmarshiling info from redis", l.Error(err))
 		return
 	}
 	fmt.Println(userInfo.Code, code)

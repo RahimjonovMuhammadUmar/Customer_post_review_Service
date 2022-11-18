@@ -19,7 +19,7 @@ func NewRedisRepo(rds *redis.Pool) repo.InMemoryStorageI {
 	}
 }
 func (r *redisRepo) Set(key, value string) error {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(3))
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(10))
 	defer cancel()
 	conn := r.rds.Get()
 	_, err := conn.Do("SET", ctx, key, value, 0)

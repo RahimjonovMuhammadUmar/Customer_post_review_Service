@@ -143,8 +143,9 @@ func (c *customerRepo) GetCustomer(id int32) (*pbc.Customer, error) {
 		&customerData.PhoneNumber,
 		&customerData.RefreshToken,
 	)
-	fmt.Println(err.Error(), customerData)
-	if err.Error() == "sql: no rows in result set" {
+
+
+	if err == sql.ErrNoRows {
 		return &pbc.Customer{}, status.Error(200, "There is no such customer")
 	}
 	if err != nil {
@@ -213,7 +214,7 @@ func (c *customerRepo) CheckField(field, value string) (*pbc.Exists, error) {
 		Exists: true}, nil
 }
 func (c *customerRepo) SearchCustomer(field, value, orderBy, ascOrDesc string, limit, page int32) (*pbc.PossibleCustomers, error) {
-	query := fmt.Sprintf("SELECT id, first_name, last_name, bio, email, phone_number FROM customers WHERE %s ~ '%s'", field, value)
+	query := fmt.Sprintf("SELECT id, first_name, last_name, bio, email, phone_number FROM customers WHERE %s ~ '%s' AND deleted_at IS NULL", field, value)
 	if orderBy != "" {
 		query += " ORDER BY " + orderBy
 	}

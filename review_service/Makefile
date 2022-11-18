@@ -5,10 +5,10 @@ run_script:
 	./script/gen-proto.sh
 
 migrate_up:
-	migrate -path migrations/ -database postgres://postgres:123@localhost:5432/ratingdb up
+	migrate -path migrations/ -database postgres://muhammadumar:123@database-1.c9lxq3r1itbt.us-east-1.rds.amazonaws.com/ratingdb up
 
 migrate_down:
-	migrate -path migrations/ -database postgres://postgres:123@localhost:5432/ratingdb down
+	migrate -path migrations/ -database postgres://muhammadumar:123@database-1.c9lxq3r1itbt.us-east-1.rds.amazonaws.com/ratingdb down
 
 migrate_force:
-	migrate -path migrations/ -database postgres://postgres:123@localhost:5432/ratingdb force 2
+	migrate -path migrations/ -database postgres://muhammadumar:123@database-1.c9lxq3r1itbt.us-east-1.rds.amazonaws.com/ratingdb force 2
