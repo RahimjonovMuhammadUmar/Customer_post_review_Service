@@ -44,6 +44,8 @@ func (h *handlerV1) CreatePost(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
 	defer cancel()
 
+	
+
 	created_post, err := h.serviceManager.PostService().CreatePost(ctx, &body)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -178,7 +180,7 @@ func (h *handlerV1) UpdatePost(c *gin.Context) {
 	}
 	idFromToken := cast.ToInt32(claims["sub"])
 	if idFromToken != 500 && idFromToken != 999 {
-		c.JSON(http.StatusForbidden, "You are not the owner of this post!!")
+		c.JSON(http.StatusForbidden, "You can't update this post!!")
 		return
 	}
 
@@ -284,8 +286,8 @@ func (h *handlerV1) GetSub(c *gin.Context) (jwt.MapClaims, error) {
 	h.jwthandler.Token = authorization
 	claims, err := h.jwthandler.ExtractClaims()
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, "267 post.go")
-		h.log.Error("268 post.go")
+		c.JSON(http.StatusUnavailableForLegalReasons, "!")
+		h.log.Error("290 post.go")
 	}
 	return claims, nil
 }
