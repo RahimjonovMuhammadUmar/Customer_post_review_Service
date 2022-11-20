@@ -9,6 +9,8 @@ import (
 	"exam/api_gateway/pkg/logger"
 	"exam/api_gateway/services"
 	"exam/api_gateway/storage/repo"
+	"github.com/gin-contrib/cors"
+
 
 	"github.com/casbin/casbin/v2"
 	"github.com/gin-gonic/gin"
@@ -21,9 +23,8 @@ type Option struct {
 	Logger         logger.Logger
 	ServiceManager services.IServiceManager
 	Redis          repo.InMemoryStorageI
-	CasbinEnforcer        *casbin.Enforcer
+	CasbinEnforcer *casbin.Enforcer
 }
-
 
 // New ...
 // @title           exam api
@@ -55,6 +56,15 @@ func New(option Option) *gin.Engine {
 		SignInKey: option.Conf.SignInKey,
 		Log:       option.Logger,
 	}
+
+	corConfig := cors.DefaultConfig()
+	corConfig.AllowAllOrigins = true
+	corConfig.AllowCredentials = true
+	corConfig.AllowHeaders = []string{"*"}
+	corConfig.AllowBrowserExtensions = true
+	corConfig.AllowMethods = []string{"*"}
+	
+	router.Use(cors.New(corConfig))
 	router.Use(middleware.NewAuth(option.CasbinEnforcer, jwtHandler, config.Load()))
 	api := router.Group("/v1")
 
