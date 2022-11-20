@@ -59,14 +59,14 @@ func New(option Option) *gin.Engine {
 		Log:       option.Logger,
 	}
 
-	corConfig := cors.DefaultConfig()
-	corConfig.AllowAllOrigins = true
-	corConfig.AllowCredentials = true
-	corConfig.AllowHeaders = []string{"*"}
-	corConfig.AllowBrowserExtensions = true
-	corConfig.AllowMethods = []string{"*"}
+	router.Use(cors.New(cors.Config{
+		AllowAllOrigins:  true,
+		AllowHeaders:     []string{"*"},
+		AllowMethods:     []string{"*"},
+		AllowCredentials: true,
+		AllowOrigins:     []string{},
+	}))
 	
-	router.Use(cors.New(corConfig))
 	router.Use(middleware.NewAuth(option.CasbinEnforcer, jwtHandler, config.Load()))
 	api := router.Group("/v1")
 
