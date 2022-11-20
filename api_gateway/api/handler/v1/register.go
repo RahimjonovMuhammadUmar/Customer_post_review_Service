@@ -123,17 +123,17 @@ func (h *handlerV1) RegisterCustomer(c *gin.Context) {
 	_, cancel = context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
 	fmt.Println(customerData.Code)
 	defer cancel()
-	// res, err := EmailVerification("Verification code", fmt.Sprint(customerData.Code), email)
-	// if err != nil {
-	// 	fmt.Println("error is here ->", err)
-	// 	h.log.Error("error while sending verification code to new user", l.Error(err))
-	// 	c.JSON(http.StatusInternalServerError, gin.H{
-	// 		"error": "something went wrong, please try again",
-	// 	})
-	// 	return
-	// }
+	res, err := EmailVerification("Verification code", fmt.Sprint(customerData.Code), email)
+	if err != nil {
+		fmt.Println("error is here ->", err)
+		h.log.Error("error while sending verification code to new user", l.Error(err))
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "something went wrong, please try again",
+		})
+		return
+	}
 
-	c.JSON(http.StatusOK, "Done")
+	c.JSON(http.StatusOK, res)
 
 }
 func EmailVerification(subject, code, email string) (string, error) {
