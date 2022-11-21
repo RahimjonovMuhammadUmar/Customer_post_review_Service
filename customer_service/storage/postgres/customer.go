@@ -52,11 +52,7 @@ func (c *customerRepo) CreateCustomer(req *pbc.CustomerRequest) (*pbc.CustomerWi
 		tx.Rollback()
 		return &pbc.CustomerWithoutPost{}, err
 	}
-	// err = tx.Commit()
-	// if err != nil {
-	// 	fmt.Println("Error while commiting", err)
-	// 	tx.Rollback()
-	// }
+
 	addresses := []*pbc.Address{}
 	for _, address := range req.Addresses {
 		address_ := &pbc.Address{}
@@ -143,7 +139,6 @@ func (c *customerRepo) GetCustomer(id int32) (*pbc.Customer, error) {
 		&customerData.PhoneNumber,
 		&customerData.RefreshToken,
 	)
-
 
 	if err == sql.ErrNoRows {
 		return &pbc.Customer{}, status.Error(200, "There is no such customer")
