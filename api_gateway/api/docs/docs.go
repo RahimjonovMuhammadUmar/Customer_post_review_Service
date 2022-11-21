@@ -1224,11 +1224,11 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "",
+	Host:             "54.248.199.11:8800",
 	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "exam api",
-	Description:      "This is exam server api server",
+	Title:            "Api's of all service",
+	Description:      "This web app is running on AWS EC2 instance",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 }

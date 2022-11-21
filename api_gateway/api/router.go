@@ -27,7 +27,7 @@ type Option struct {
 }
 
 // New ...
-// @title           Apis you need
+// @title           Api's of all service
 // @version         1.0
 // @description     This web app is running on AWS EC2 instance
 // @termsOfService  2 term exam

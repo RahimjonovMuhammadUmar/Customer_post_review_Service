@@ -1,8 +1,8 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "This is exam server api server",
-        "title": "exam api",
+        "description": "This web app is running on AWS EC2 instance",
+        "title": "Api's of all service",
         "termsOfService": "2 term exam",
         "contact": {
             "name": "Muhammad Umar",
@@ -11,6 +11,7 @@
         },
         "version": "1.0"
     },
+    "host": "54.248.199.11:8800",
     "paths": {
         "/v1/admin/login/{username}/{password}": {
             "get": {

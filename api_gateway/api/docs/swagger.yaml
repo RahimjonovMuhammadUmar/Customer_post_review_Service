@@ -254,14 +254,15 @@ definitions:
       review:
         type: integer
     type: object
+host: 54.248.199.11:8800
 info:
   contact:
     email: rahimzanovmuhammadumar@gmail.com
     name: Muhammad Umar
     url: https://t.me/muhammad_ummar
-  description: This is exam server api server
+  description: This web app is running on AWS EC2 instance
   termsOfService: 2 term exam
-  title: exam api
+  title: Api's of all service
   version: "1.0"
 paths:
   /v1/admin/login/{username}/{password}:
