@@ -27,9 +27,9 @@ type Option struct {
 }
 
 // New ...
-// @title           exam api
+// @title           Apis you need
 // @version         1.0
-// @description     This is exam server api server
+// @description     This web app is running on AWS EC2 instance
 // @termsOfService  2 term exam
 
 // @contact.name   Muhammad Umar
