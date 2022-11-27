@@ -356,6 +356,9 @@ func (p *postRepo) GetPostInfoOnly(id int32) (*pbp.PostInfoOnly, error) {
 		&postInfo.Description,
 		&postInfo.CustomerId,
 	)
+	if err == sql.ErrNoRows {
+		return &pbp.PostInfoOnly{}, nil
+	}
 	if err != nil {
 		fmt.Println("error while selecting only post info", err)
 		return &pbp.PostInfoOnly{}, err

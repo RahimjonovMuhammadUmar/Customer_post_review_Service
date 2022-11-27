@@ -8,6 +8,7 @@ import (
 	pbc "exam/review_service/genproto/customer"
 	pbp "exam/review_service/genproto/post"
 	pbr "exam/review_service/genproto/review"
+	kafkaconsumer "exam/review_service/kafka_consumer"
 	l "exam/review_service/pkg/logger"
 	grpcClient "exam/review_service/service/grpc_client"
 	"exam/review_service/storage"
@@ -22,14 +23,16 @@ type ReviewService struct {
 	storage storage.IStorage
 	logger  l.Logger
 	client  grpcClient.GrpcClientI
+	kafkaConsumer kafkaconsumer.KafkaConI
 }
 
 // NewReviewService ...
-func NewReviewService(db *sqlx.DB, log l.Logger, client grpcClient.GrpcClientI) *ReviewService {
+func NewReviewService(db *sqlx.DB, log l.Logger, client grpcClient.GrpcClientI, kafkaCon kafkaconsumer.KafkaConI) *ReviewService {
 	return &ReviewService{
 		storage: storage.NewStoragePg(db),
 		logger:  log,
 		client:  client,
+		kafkaConsumer: kafkaCon,
 	}
 }
 

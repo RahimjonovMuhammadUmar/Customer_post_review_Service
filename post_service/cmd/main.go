@@ -1,14 +1,15 @@
 package main
 
 import (
-	"net"
 	"exam/post_service/config"
 	pbp "exam/post_service/genproto/post"
+	kafkaproducer "exam/post_service/kafka_producer"
 	"exam/post_service/pkg/db"
 	"exam/post_service/pkg/logger"
 	"exam/post_service/service"
+	"net"
 
-	 "exam/post_service/service/grpc_client"
+	grpcClient "exam/post_service/service/grpc_client"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -35,7 +36,13 @@ func main() {
 		log.Fatal("error while grpcClient, err := grpcClient.New(cfg)", logger.Error(err))
 	}
 
-	postService := service.NewPostService(connDB, log, grpcClient)
+	kafkaC, close, err := kafkaproducer.NewKafka(cfg)
+	if err != nil {
+		log.Fatal("Error while connecting to kafka", logger.Error(err))
+	}
+	defer close()
+
+	postService := service.NewPostService(connDB, log, grpcClient, kafkaC)
 	lis, err := net.Listen("tcp", cfg.RPCPort)
 	if err != nil {
 		log.Fatal("error while listening", logger.Error(err))

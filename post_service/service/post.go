@@ -6,6 +6,7 @@ import (
 	pbc "exam/post_service/genproto/customer"
 	pbp "exam/post_service/genproto/post"
 	pbr "exam/post_service/genproto/review"
+	kafkaproducer "exam/post_service/kafka_producer"
 	l "exam/post_service/pkg/logger"
 	grpcClient "exam/post_service/service/grpc_client"
 	"exam/post_service/storage"
@@ -21,14 +22,16 @@ type PostService struct {
 	storage storage.IStorage
 	logger  l.Logger
 	client  grpcClient.GrpcClientI
+	kafkaC  kafkaproducer.KafkaI
 }
 
 // NewPostService ...
-func NewPostService(db *sqlx.DB, log l.Logger, client grpcClient.GrpcClientI) *PostService {
+func NewPostService(db *sqlx.DB, log l.Logger, client grpcClient.GrpcClientI, kafkaC kafkaproducer.KafkaI) *PostService {
 	return &PostService{
 		storage: storage.NewStoragePg(db),
 		logger:  log,
 		client:  client,
+		kafkaC:  kafkaC,
 	}
 }
 
@@ -168,7 +171,6 @@ func (p *PostService) DeletePost(ctx context.Context, req *pbp.Id) (*pbp.IsDelet
 		PostDeleted: true,
 	}, nil
 }
-
 func (p *PostService) GetAllPostsWithCustomer(ctx context.Context, req *pbp.Empty) (*pbp.AllPosts, error) {
 	allPosts, err := p.storage.Post().GetAllPostsWithCustomer(req)
 	if err != nil {
@@ -208,7 +210,6 @@ func (p *PostService) GetAllPostsWithCustomer(ctx context.Context, req *pbp.Empt
 	fmt.Println(allPosts)
 	return allPosts, nil
 }
-
 func (p *PostService) GetPostsOfCustomer(ctx context.Context, req *pbp.Id) (*pbp.Posts, error) {
 	exists, err := p.client.Customer().CheckIfCustomerExists(ctx, &pbc.CustomerId{
 		Id: req.Id,
@@ -249,7 +250,6 @@ func (p *PostService) GetPostsOfCustomer(ctx context.Context, req *pbp.Id) (*pbp
 	}
 	return posts, nil
 }
-
 func (p *PostService) DeletePostByCustomerId(ctx context.Context, req *pbp.Id) (*pbp.IsDeleted, error) {
 	exists, err := p.client.Customer().CheckIfCustomerExists(ctx, &pbc.CustomerId{
 		Id: req.Id,
@@ -290,7 +290,6 @@ func (p *PostService) DeletePostByCustomerId(ctx context.Context, req *pbp.Id) (
 		PostDeleted: true,
 	}, nil
 }
-
 func (p *PostService) GetPostsByPage(ctx context.Context, req *pbp.LimitPage) (*pbp.PostsByPage, error) {
 	posts, err := p.storage.Post().GetPostsByPage(req.Page, req.Limit)
 	if err != nil {
@@ -299,12 +298,18 @@ func (p *PostService) GetPostsByPage(ctx context.Context, req *pbp.LimitPage) (*
 	}
 	return posts, nil
 }
-
-func (p *PostService) GetPostInfoOnly(ctx context.Context, req *pbp.Id) (*pbp.PostInfoOnly, error){
+func (p *PostService) GetPostInfoOnly(ctx context.Context, req *pbp.Id) (*pbp.PostInfoOnly, error) {
 	postInfo, err := p.storage.Post().GetPostInfoOnly(req.Id)
 	if err != nil {
 		fmt.Println("Error while sending id to get only post", err)
 		return &pbp.PostInfoOnly{}, err
 	}
+	err = p.kafkaC.Funcs().SendId(int(req.Id))
+	if err != nil {
+		fmt.Println("error while producing to kafka", err)
+		return &pbp.PostInfoOnly{}, err
+	}
 	return postInfo, nil
 }
+
+// func (p *PostService) SendToReviewKafka(ctx context.Context, req *pbp.)
