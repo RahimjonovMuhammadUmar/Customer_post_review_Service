@@ -312,4 +312,3 @@ func (p *PostService) GetPostInfoOnly(ctx context.Context, req *pbp.Id) (*pbp.Po
 	return postInfo, nil
 }
 
-// func (p *PostService) SendToReviewKafka(ctx context.Context, req *pbp.)
