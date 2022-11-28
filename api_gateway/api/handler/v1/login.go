@@ -66,7 +66,7 @@ func (h *handlerV1) Login(c *gin.Context) {
 	AccesToken, RefreshToken, err := h.jwthandler.GenerateAuthJWT()
 	accessToken := AccesToken
 	refreshToken := RefreshToken
-	
+
 	if err != nil {
 		h.log.Error("error occured while generating tokens")
 		c.JSON(http.StatusInternalServerError, gin.H{

@@ -121,38 +121,6 @@ const docTemplate = `{
                         }
                     }
                 }
-            },
-            "post": {
-                "description": "this api creates new customer",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "customer"
-                ],
-                "summary": "create customer api",
-                "parameters": [
-                    {
-                        "description": "Customer",
-                        "name": "customer",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/customer.CustomerRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "type": "json"
-                        }
-                    }
-                }
             }
         },
         "/v1/customer/search": {
@@ -836,46 +804,6 @@ const docTemplate = `{
                 }
             }
         },
-        "customer.AddressRequest": {
-            "type": "object",
-            "properties": {
-                "house_number": {
-                    "type": "integer"
-                },
-                "street": {
-                    "type": "string"
-                }
-            }
-        },
-        "customer.CustomerRequest": {
-            "type": "object",
-            "properties": {
-                "addresses": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/customer.AddressRequest"
-                    }
-                },
-                "bio": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "first_name": {
-                    "type": "string"
-                },
-                "last_name": {
-                    "type": "string"
-                },
-                "phone_number": {
-                    "type": "string"
-                },
-                "token": {
-                    "type": "string"
-                }
-            }
-        },
         "customer.CustomerWithoutPost": {
             "type": "object",
             "properties": {
@@ -1224,10 +1152,10 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "54.248.199.11:8800",
+	Host:             "18.183.99.103:8800",
 	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "Api's of all service",
+	Title:            "Api's of all services",
 	Description:      "This web app is running on AWS EC2 instance",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,

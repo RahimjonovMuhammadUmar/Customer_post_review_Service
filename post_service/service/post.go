@@ -55,6 +55,12 @@ func (p *PostService) CreatePost(ctx context.Context, req *pbp.PostRequest) (*pb
 		return &pbp.PostWithoutReview{}, err
 	}
 
+	err = p.kafkaC.Funcs().SendPost(newPost)
+	if err != nil {
+		fmt.Println("Error while sending newPost to kafka", err)
+		return &pbp.PostWithoutReview{}, err
+	}
+
 	return newPost, nil
 }
 func (p *PostService) GetPostWithCustomerInfo(ctx context.Context, req *pbp.Ids) (*pbp.PostWithCustomerInfo, error) {
@@ -304,11 +310,10 @@ func (p *PostService) GetPostInfoOnly(ctx context.Context, req *pbp.Id) (*pbp.Po
 		fmt.Println("Error while sending id to get only post", err)
 		return &pbp.PostInfoOnly{}, err
 	}
-	err = p.kafkaC.Funcs().SendId(int(req.Id))
-	if err != nil {
-		fmt.Println("error while producing to kafka", err)
-		return &pbp.PostInfoOnly{}, err
-	}
+	// err = p.kafkaC.Funcs().SendId(int(req.Id))
+	// if err != nil {
+	// 	fmt.Println("error while producing to kafka", err)
+	// 	return &pbp.PostInfoOnly{}, err
+	// }
 	return postInfo, nil
 }
-

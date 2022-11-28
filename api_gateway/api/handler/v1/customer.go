@@ -13,45 +13,41 @@ import (
 	"google.golang.org/protobuf/encoding/protojson"
 )
 
-// Create creates customer
-// @Summary create customer api
-// @Description this api creates new customer
-// @Tags customer
-// @Accept json
-// @Produce json
-// @Param customer body customer.CustomerRequest true "Customer"
-// @Success 201 {json} customer.CustomerWithoutPost
-// @Router /v1/customer [post]
-func (h *handlerV1) CreateCustomer(c *gin.Context) {
-	var (
-		body        pbc.CustomerRequest
-		jspbMarshal protojson.MarshalOptions
-	)
-
-	jspbMarshal.UseProtoNames = true
-
-	err := c.ShouldBindJSON(&body)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
-		h.log.Error("failed to bind json", l.Error(err))
-		return
-	}
-
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
-	defer cancel()
-
-	response, err := h.serviceManager.CustomerService().CreateCustomer(ctx, &body)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
-		h.log.Error("error while declaring reponse api/hanlder/v1/customer.go", l.Error(err))
-		return
-	}
-	c.JSON(http.StatusCreated, response)
-}
+// // Create creates customer
+// // @Summary create customer api
+// // @Description this api creates new customer
+// // @Tags customer
+// // @Accept json
+// // @Produce json
+// // @Param customer body customer.CustomerRequest true "Customer"
+// // @Success 201 {json} customer.CustomerWithoutPost
+// // @Router /v1/customer [post]
+// func (h *handlerV1) CreateCustomer(c *gin.Context) {
+// 	var (
+// 		body        pbc.CustomerRequest
+// 		jspbMarshal protojson.MarshalOptions
+// 	)
+// 	jspbMarshal.UseProtoNames = true
+// 	err := c.ShouldBindJSON(&body)
+// 	if err != nil {
+// 		c.JSON(http.StatusBadRequest, gin.H{
+// 			"error": err.Error(),
+// 		})
+// 		h.log.Error("failed to bind json", l.Error(err))
+// 		return
+// 	}
+// 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
+// 	defer cancel()
+// 	response, err := h.serviceManager.CustomerService().CreateCustomer(ctx, &body)
+// 	if err != nil {
+// 		c.JSON(http.StatusBadRequest, gin.H{
+// 			"error": err.Error(),
+// 		})
+// 		h.log.Error("error while declaring reponse api/hanlder/v1/customer.go", l.Error(err))
+// 		return
+// 	}
+// 	c.JSON(http.StatusCreated, response)
+// }
 
 // Get finds customer
 // @Summary get customer api

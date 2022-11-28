@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // Login admin
@@ -37,7 +38,8 @@ func (h *handlerV1) AdminLogin(c *gin.Context) {
 		return
 	}
 	password := c.Param("password")
-	if password != admin.Password {
+
+	if err = bcrypt.CompareHashAndPassword([]byte(password), []byte(admin.Password)); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Incorrect password",
 		})

@@ -9,8 +9,8 @@ import (
 	"exam/api_gateway/pkg/logger"
 	"exam/api_gateway/services"
 	"exam/api_gateway/storage/repo"
-	"github.com/gin-contrib/cors"
 
+	"github.com/gin-contrib/cors"
 
 	"github.com/casbin/casbin/v2"
 	"github.com/gin-gonic/gin"
@@ -36,7 +36,7 @@ type Option struct {
 // @contact.url    https://t.me/muhammad_ummar
 // @contact.email  rahimzanovmuhammadumar@gmail.com
 
-// @host      54.248.199.11:8800
+// @host      18.183.99.103:8800
 
 // @securityDefinitions.apikey BearerAuth
 // @in header
@@ -66,12 +66,12 @@ func New(option Option) *gin.Engine {
 		AllowCredentials: true,
 		AllowOrigins:     []string{},
 	}))
-	
+
 	router.Use(middleware.NewAuth(option.CasbinEnforcer, jwtHandler, config.Load()))
 	api := router.Group("/v1")
 
 	//customer
-	api.POST("/customer", handlerV1.CreateCustomer)
+	// api.POST("/customer", handlerV1.CreateCustomer)
 	api.GET("/customer/:id", handlerV1.GetCustomer)
 	api.PUT("/customer", handlerV1.UpdateCustomer)
 	api.DELETE("/customer/:id", handlerV1.DeleteCustomer)

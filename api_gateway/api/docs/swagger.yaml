@@ -8,32 +8,6 @@ definitions:
       street:
         type: string
     type: object
-  customer.AddressRequest:
-    properties:
-      house_number:
-        type: integer
-      street:
-        type: string
-    type: object
-  customer.CustomerRequest:
-    properties:
-      addresses:
-        items:
-          $ref: '#/definitions/customer.AddressRequest'
-        type: array
-      bio:
-        type: string
-      email:
-        type: string
-      first_name:
-        type: string
-      last_name:
-        type: string
-      phone_number:
-        type: string
-      token:
-        type: string
-    type: object
   customer.CustomerWithoutPost:
     properties:
       access_token:
@@ -254,7 +228,7 @@ definitions:
       review:
         type: integer
     type: object
-host: 54.248.199.11:8800
+host: 18.183.99.103:8800
 info:
   contact:
     email: rahimzanovmuhammadumar@gmail.com
@@ -262,7 +236,7 @@ info:
     url: https://t.me/muhammad_ummar
   description: This web app is running on AWS EC2 instance
   termsOfService: 2 term exam
-  title: Api's of all service
+  title: Api's of all services
   version: "1.0"
 paths:
   /v1/admin/login/{username}/{password}:
@@ -308,27 +282,6 @@ paths:
       tags:
       - Admin
   /v1/customer:
-    post:
-      consumes:
-      - application/json
-      description: this api creates new customer
-      parameters:
-      - description: Customer
-        in: body
-        name: customer
-        required: true
-        schema:
-          $ref: '#/definitions/customer.CustomerRequest'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Created
-          schema:
-            type: json
-      summary: create customer api
-      tags:
-      - customer
     put:
       consumes:
       - application/json

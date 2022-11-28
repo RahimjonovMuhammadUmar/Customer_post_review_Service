@@ -38,6 +38,7 @@ services:
       - KAFKA_PORT=9092
     links: 
       - customer_service
+      - kafka
     ports:
       - "9090:9090"
   
@@ -60,6 +61,7 @@ services:
       - KAFKA_PORT=9092
     links:
       - post_service
+      - kafka
     ports:
       - "9900:9900"
 
@@ -77,6 +79,7 @@ services:
       - customer_service
       - post_service
       - review_service
+      - kafka
     ports:
       - "8800:8800"
 
@@ -91,7 +94,7 @@ services:
     image: provectuslabs/kafka-ui:latest
     ports: 
       - 8080:8080
-    depends_on:
+    links:
       - zookeeper
       - kafka
     environment:

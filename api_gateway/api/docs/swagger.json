@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
         "description": "This web app is running on AWS EC2 instance",
-        "title": "Api's of all service",
+        "title": "Api's of all services",
         "termsOfService": "2 term exam",
         "contact": {
             "name": "Muhammad Umar",
@@ -11,7 +11,7 @@
         },
         "version": "1.0"
     },
-    "host": "54.248.199.11:8800",
+    "host": "18.183.99.103:8800",
     "paths": {
         "/v1/admin/login/{username}/{password}": {
             "get": {
@@ -108,38 +108,6 @@
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "type": "json"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "description": "this api creates new customer",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "customer"
-                ],
-                "summary": "create customer api",
-                "parameters": [
-                    {
-                        "description": "Customer",
-                        "name": "customer",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/customer.CustomerRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
                         "schema": {
                             "type": "json"
                         }
@@ -824,46 +792,6 @@
                     "type": "integer"
                 },
                 "street": {
-                    "type": "string"
-                }
-            }
-        },
-        "customer.AddressRequest": {
-            "type": "object",
-            "properties": {
-                "house_number": {
-                    "type": "integer"
-                },
-                "street": {
-                    "type": "string"
-                }
-            }
-        },
-        "customer.CustomerRequest": {
-            "type": "object",
-            "properties": {
-                "addresses": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/customer.AddressRequest"
-                    }
-                },
-                "bio": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "first_name": {
-                    "type": "string"
-                },
-                "last_name": {
-                    "type": "string"
-                },
-                "phone_number": {
-                    "type": "string"
-                },
-                "token": {
                     "type": "string"
                 }
             }
