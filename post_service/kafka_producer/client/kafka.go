@@ -15,7 +15,7 @@ type KafkaConn struct {
 }
 
 func NewKafkaConnection(cfg config.Config) (*KafkaConn, error) {
-	conn, err := kafka.DialLeader(context.Background(), "tcp", "localhost:29092", "ids", 0)
+	conn, err := kafka.DialLeader(context.Background(), "tcp", cfg.KafkaHost+":"+cfg.KafkaPort, "ids", 0)
 	if err != nil {
 		fmt.Println("error while DialLeader", err)
 		return &KafkaConn{}, err

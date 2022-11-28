@@ -7,18 +7,20 @@ import (
 )
 
 type Config struct {
-	Environment       string // develop, staging, production
-	PostgresHost      string
-	PostgresPort      int
-	PostgresDatabase  string
-	PostgresUser      string
-	PostgresPassword  string
-	Loglevel          string
-	RPCPort           string
-	ReviewServiceHost string
-	ReviewServicePort int
-	CustomerServiceHost  string
-	CustomerServicePort  int
+	Environment         string // develop, staging, production
+	PostgresHost        string
+	PostgresPort        int
+	PostgresDatabase    string
+	PostgresUser        string
+	PostgresPassword    string
+	Loglevel            string
+	RPCPort             string
+	ReviewServiceHost   string
+	ReviewServicePort   int
+	CustomerServiceHost string
+	CustomerServicePort int
+	KafkaHost           string
+	KafkaPort           string
 }
 
 // Load loads environmen vars and inflates Config
@@ -26,18 +28,22 @@ func Load() Config {
 	c := Config{}
 
 	c.Environment = cast.ToString(getOrReturnDefault("ENVIRONMENT", "develop"))
-	
+
 	c.PostgresHost = cast.ToString(getOrReturnDefault("POSTGRES_HOST", "localhost"))
 	c.PostgresPort = cast.ToInt(getOrReturnDefault("POSTGRES_PORT", 5432))
 	c.PostgresDatabase = cast.ToString(getOrReturnDefault("POSTGRES_DATABASE", "postdb"))
 	c.PostgresUser = cast.ToString(getOrReturnDefault("POSTGRES_USER", "postgres"))
 	c.PostgresPassword = cast.ToString(getOrReturnDefault("POSTGRES_PASSWORD", "123"))
-	
+
 	c.CustomerServiceHost = cast.ToString(getOrReturnDefault("CUSTOMER_SERVICE_HOST", "localhost"))
 	c.CustomerServicePort = cast.ToInt(getOrReturnDefault("CUSTOMER_SERVICE_PORT", 9000))
-	
+
 	c.ReviewServiceHost = cast.ToString(getOrReturnDefault("REVIEW_SERVICE_HOST", "localhost"))
 	c.ReviewServicePort = cast.ToInt(getOrReturnDefault("REVIEW_SERVICE_PORT", 9900))
+
+	c.KafkaHost = cast.ToString(getOrReturnDefault("KAFKA_HOST", "localhost"))
+	c.KafkaPort = cast.ToString(getOrReturnDefault("KAFKA_PORT", "9092"))
+
 
 	c.Loglevel = cast.ToString(getOrReturnDefault("LOG_LEVEL", "debug"))
 

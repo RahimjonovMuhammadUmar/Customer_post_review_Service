@@ -34,6 +34,8 @@ services:
       - REVIEW_SERVICE_HOST=review_service
       - LOG_LEVEL=develop
       - ENVIRONMENT=develop
+      - KAFKA_HOST=kafka
+      - KAFKA_PORT=9092
     links: 
       - customer_service
     ports:
@@ -54,6 +56,8 @@ services:
       - CUSTOMER_SERVICE_HOST=customer_service
       - LOG_LEVEL=develop
       - ENVIRONMENT=develop
+      - KAFKA_HOST=kafka
+      - KAFKA_PORT=9092
     links:
       - post_service
     ports:

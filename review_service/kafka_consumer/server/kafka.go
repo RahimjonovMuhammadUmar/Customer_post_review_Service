@@ -16,7 +16,7 @@ type KafkaConnConsumer struct {
 
 func NewKafkaConsumer(cfg config.Config) (*KafkaConnConsumer, error) {
 	reader := kafka.NewReader(kafka.ReaderConfig{
-		Brokers:   []string{"kafka:9092", "localhost:9092", "kafka:29092", "localhost:29092"},
+		Brokers:   []string{"kafka:29092", "kafka:9092"},
 		Topic:     "ids",
 		Partition: 0,
 		MinBytes:  1e3,  //10KB
