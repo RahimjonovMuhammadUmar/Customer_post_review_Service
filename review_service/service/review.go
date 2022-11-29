@@ -5,9 +5,9 @@ import (
 	"database/sql"
 	"fmt"
 
-	pbc "exam/review_service/genproto/customer"
 	pbp "exam/review_service/genproto/post"
 	pbr "exam/review_service/genproto/review"
+
 	// kafkaconsumer "exam/review_service/kafka_consumer"
 	l "exam/review_service/pkg/logger"
 	grpcClient "exam/review_service/service/grpc_client"
@@ -37,18 +37,18 @@ func NewReviewService(db *sqlx.DB, log l.Logger, client grpcClient.GrpcClientI /
 }
 
 func (s *ReviewService) CreateReview(ctx context.Context, req *pbr.ReviewRequest) (*pbr.Review, error) {
-	exists, err := s.client.Customer().CheckIfCustomerExists(ctx, &pbc.CustomerId{
-		Id: req.CustomerId,
-	})
-	if err != nil {
-		s.logger.Error("error -> exists, err := p.client.Customer().CheckIfCustomerExists(ctx, &pbc.CustomerId{", l.Any("error checking customer by id post/service/grpc_client/customer.go", err))
-		return &pbr.Review{}, err
-	}
-	if !exists.Exists {
-		s.logger.Info("There is no such customer")
+	// exists, err := s.client.Customer().CheckIfCustomerExists(ctx, &pbc.CustomerId{
+	// 	Id: req.CustomerId,
+	// })
+	// if err != nil {
+	// 	s.logger.Error("error -> exists, err := p.client.Customer().CheckIfCustomerExists(ctx, &pbc.CustomerId{", l.Any("error checking customer by id post/service/grpc_client/customer.go", err))
+	// 	return &pbr.Review{}, err
+	// }
+	// if !exists.Exists {
+	// 	s.logger.Info("There is no such customer")
 
-		return &pbr.Review{}, status.Error(codes.NotFound, "There is no such customer")
-	}
+	// 	return &pbr.Review{}, status.Error(codes.NotFound, "There is no such customer")
+	// }
 
 	exist, err := s.client.Post().DoesPostExist(ctx, &pbp.Id{
 		Id: req.PostId,

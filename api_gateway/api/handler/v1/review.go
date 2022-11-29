@@ -17,6 +17,7 @@ import (
 // @Tags review
 // @Accept json
 // @Produce json
+// @Security BearerAuth
 // @Param review body review.ReviewRequest true "Review"
 // @Success 201 {json} review.Review
 // @Router /v1/review [post]
@@ -39,6 +40,7 @@ func (h *handlerV1) CreateReview(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
 	defer cancel()
 
+	body.CustomerId = int32(h.GetSub(c))
 	createdReview, err := h.serviceManager.ReviewService().CreateReview(ctx, &body)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -128,6 +130,7 @@ func (h *handlerV1) GetReview(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, review)
 }
+
 // @Summary delete review by cust api
 // @Description this api deletes review by customer
 // @Tags review
