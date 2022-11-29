@@ -49,6 +49,7 @@ func (h *handlerV1) Login(c *gin.Context) {
 		return
 	}
 	password := c.Param("password")
+	fmt.Println("| res ", res," res |")
 	fmt.Printf("Password: %s\nc.Param: %s\n res.PhoneNumber: %s", password, c.Param("password"), res.PhoneNumber)
 	if password == "" || res.PhoneNumber == "" {
 		c.JSON(http.StatusOK, "No password")
