@@ -48,6 +48,10 @@ func (h *handlerV1) Login(c *gin.Context) {
 		return
 	}
 	password := c.Param("password")
+	if password == "" || res.PhoneNumber == "" {
+		c.JSON(http.StatusNoContent, "Insert password")
+		return
+	}
 	err = bcrypt.CompareHashAndPassword([]byte(res.PhoneNumber), []byte(password))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, models.Error{
