@@ -29,7 +29,7 @@ func NewAuth(enforce *casbin.Enforcer, jwtHandler token.JWTHandler, cfg config.C
 
 	return func(c *gin.Context) {
 		allow, err := a.CheckPermission(c.Request)
-		fmt.Printf("\n\n\n\n\n\n\n\n\n\n")
+		fmt.Printf("\n\n\n\n\n\n\n\n\n\n allow = ")
 
 		fmt.Println(allow)
 		if err != nil {
@@ -76,7 +76,6 @@ func (a *JwtRoleAuth) GetRole(r *http.Request) (string, error) {
 	} else {
 		role = "unknown"
 	}
-	fmt.Println(role)
 	return role, nil
 }
 
@@ -88,7 +87,7 @@ func (a *JwtRoleAuth) CheckPermission(r *http.Request) (bool, error) {
 	}
 	method := r.Method
 	path := r.URL.Path
-	fmt.Println(user, path, method)
+	fmt.Println("user =", user, "path =", path, "method =", method)
 	fmt.Printf("\n\n\n\n\n\n\n\n\n\n")
 	allowed, err := a.enforcer.Enforce(user, path, method)
 	if err != nil {
