@@ -2,7 +2,6 @@ package v1
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -52,7 +51,6 @@ func (h *handlerV1) Login(c *gin.Context) {
 		h.log.Error("Error while getting customer by email", logger.Any("post", err))
 		return
 	}
-	fmt.Println("\n\n\n\n| res ", res, " res |")
 	password := c.Param("password")
 	// if password == "" || res.PhoneNumber == "" {
 	// 	c.JSON(http.StatusOK, "No password")

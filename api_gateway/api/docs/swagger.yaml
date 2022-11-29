@@ -671,6 +671,8 @@ paths:
           description: Created
           schema:
             type: json
+      security:
+      - BearerAuth: []
       summary: create review api
       tags:
       - review

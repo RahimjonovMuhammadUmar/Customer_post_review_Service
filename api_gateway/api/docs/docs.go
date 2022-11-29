@@ -667,6 +667,11 @@ const docTemplate = `{
         },
         "/v1/review": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "this api creates new review",
                 "consumes": [
                     "application/json"
