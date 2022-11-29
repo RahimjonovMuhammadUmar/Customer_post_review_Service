@@ -2,6 +2,7 @@ package v1
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -48,8 +49,9 @@ func (h *handlerV1) Login(c *gin.Context) {
 		return
 	}
 	password := c.Param("password")
+	fmt.Println(password,c.Param("password"), res.PhoneNumber )
 	if password == "" || res.PhoneNumber == "" {
-		c.JSON(http.StatusNoContent, "Insert password")
+		c.JSON(http.StatusOK, "No password")
 		return
 	}
 	err = bcrypt.CompareHashAndPassword([]byte(res.PhoneNumber), []byte(password))
