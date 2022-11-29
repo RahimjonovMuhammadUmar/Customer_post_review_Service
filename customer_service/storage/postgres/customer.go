@@ -264,7 +264,7 @@ func (c *customerRepo) GetCustomerForLogin(email string) (*pbc.CustomerWithoutPo
 		&res.RefreshToken,
 	)
 	if err == sql.ErrNoRows {
-		return &pbc.CustomerWithoutPost{}, nil
+		return &pbc.CustomerWithoutPost{}, err
 	}
 	// res.Addresses, err = r.GetAddress(&pb.Id{Id: res.Id})
 	return res, err

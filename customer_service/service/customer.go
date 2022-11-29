@@ -156,12 +156,14 @@ func (c *CustomerService) SearchCustomer(ctx context.Context, req *pbc.InfoForSe
 
 func (c *CustomerService) GetCustomerForLogin(ctx context.Context, req *pbc.Email) (*pbc.CustomerWithoutPost, error) {
 	res, err := c.storage.Customer().GetCustomerForLogin(req.Email)
-	if err != nil {
+	
+
+	if err != nil && err != sql.ErrNoRows{
 		fmt.Println("error while sending to db to get by login", err)
 		return &pbc.CustomerWithoutPost{}, err
 	}
 
-	return res, nil
+	return res, err
 }
 
 func (c *CustomerService) IsAdmin(ctx context.Context, req *pbc.Admin) (*pbc.Admin, error) {

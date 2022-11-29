@@ -2,6 +2,7 @@ package v1
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -40,6 +41,10 @@ func (h *handlerV1) Login(c *gin.Context) {
 	res, err := h.serviceManager.CustomerService().GetCustomerForLogin(ctx, &pbc.Email{
 		Email: email,
 	})
+	if err == sql.ErrNoRows {
+		c.JSON(http.StatusOK, "No customer with such email")
+		return
+	}
 	if err != nil {
 		c.JSON(http.StatusNotFound, models.Error{
 			Error:       err,
@@ -48,13 +53,12 @@ func (h *handlerV1) Login(c *gin.Context) {
 		h.log.Error("Error while getting customer by email", logger.Any("post", err))
 		return
 	}
-	password := c.Param("password")
 	fmt.Println("| res ", res," res |")
-	fmt.Printf("Password: %s\nc.Param: %s\n res.PhoneNumber: %s", password, c.Param("password"), res.PhoneNumber)
-	if password == "" || res.PhoneNumber == "" {
-		c.JSON(http.StatusOK, "No password")
-		return
-	}
+	password := c.Param("password")
+	// if password == "" || res.PhoneNumber == "" {
+	// 	c.JSON(http.StatusOK, "No password")
+	// 	return
+	// }
 	err = bcrypt.CompareHashAndPassword([]byte(res.PhoneNumber), []byte(password))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, models.Error{
