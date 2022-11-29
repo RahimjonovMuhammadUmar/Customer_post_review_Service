@@ -8,7 +8,6 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cast"
 	"google.golang.org/protobuf/encoding/protojson"
@@ -43,9 +42,7 @@ func (h *handlerV1) CreatePost(c *gin.Context) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
 	defer cancel()
-
-	
-
+	body.CustomerId = int32(h.GetSub(c))
 	created_post, err := h.serviceManager.PostService().CreatePost(ctx, &body)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -163,7 +160,6 @@ func (h *handlerV1) UpdatePost(c *gin.Context) {
 		h.log.Error("failed parse string to int", l.Error(err))
 		return
 	}
-	claims, _ := h.GetSub(c)
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
 	defer cancel()
@@ -178,7 +174,8 @@ func (h *handlerV1) UpdatePost(c *gin.Context) {
 		h.log.Error("error getting post by id to compare ids of customer for updating", l.Error(err))
 		return
 	}
-	idFromToken := cast.ToInt32(claims["sub"])
+	idFromToken := int32(h.GetSub(c))
+
 	if idFromToken != 500 && idFromToken != 999 {
 		c.JSON(http.StatusForbidden, "You can't update this post!!")
 		return
@@ -277,7 +274,7 @@ func (h *handlerV1) DeletePostByCustomerId(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-func (h *handlerV1) GetSub(c *gin.Context) (jwt.MapClaims, error) {
+func (h *handlerV1) GetSub(c *gin.Context) int {
 	authorization := c.GetHeader("Authorization")
 	if c.Request.Header.Get("Authorization") == "" {
 		c.JSON(http.StatusUnauthorized, "not authorized")
@@ -289,5 +286,5 @@ func (h *handlerV1) GetSub(c *gin.Context) (jwt.MapClaims, error) {
 		c.JSON(http.StatusUnavailableForLegalReasons, "!")
 		h.log.Error("290 post.go")
 	}
-	return claims, nil
+	return cast.ToInt(claims["sub"])
 }

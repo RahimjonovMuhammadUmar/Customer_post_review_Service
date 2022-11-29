@@ -6,6 +6,7 @@ import (
 	pbc "exam/post_service/genproto/customer"
 	pbp "exam/post_service/genproto/post"
 	pbr "exam/post_service/genproto/review"
+
 	// kafkaproducer "exam/post_service/kafka_producer"
 	l "exam/post_service/pkg/logger"
 	grpcClient "exam/post_service/service/grpc_client"
@@ -26,7 +27,7 @@ type PostService struct {
 }
 
 // NewPostService ...
-func NewPostService(db *sqlx.DB, log l.Logger, client grpcClient.GrpcClientI, /*kafkaC kafkaproducer.KafkaI*/ ) *PostService {
+func NewPostService(db *sqlx.DB, log l.Logger, client grpcClient.GrpcClientI /*kafkaC kafkaproducer.KafkaI*/) *PostService {
 	return &PostService{
 		storage: storage.NewStoragePg(db),
 		logger:  log,
@@ -36,18 +37,19 @@ func NewPostService(db *sqlx.DB, log l.Logger, client grpcClient.GrpcClientI, /*
 }
 
 func (p *PostService) CreatePost(ctx context.Context, req *pbp.PostRequest) (*pbp.PostWithoutReview, error) {
-	exists, err := p.client.Customer().CheckIfCustomerExists(ctx, &pbc.CustomerId{
-		Id: req.CustomerId,
-	})
-	if err != nil {
-		p.logger.Error("error -> exists, err := p.client.Customer().CheckIfCustomerExists(ctx, &pbc.CustomerId{", l.Any("error checking customer by id post/service/grpc_client/customer.go", err))
-		return &pbp.PostWithoutReview{}, err
-	}
-	if !exists.Exists {
-		p.logger.Info("There is no such customer")
+	// exists, err := p.client.Customer().CheckIfCustomerExists(ctx, &pbc.CustomerId{
+	// 	Id: req.CustomerId,
+	// })
+	// fmt.Println(req)
+	// if err != nil {
+	// 	p.logger.Error("error -> exists, err := p.client.Customer().CheckIfCustomerExists(ctx, &pbc.CustomerId{", l.Any("error checking customer by id post/service/grpc_client/customer.go", err))
+	// 	return &pbp.PostWithoutReview{}, err
+	// }
+	// if !exists.Exists {
+	// 	p.logger.Info("There is no such customer")
 
-		return &pbp.PostWithoutReview{}, status.Error(codes.NotFound, "There is no such customer")
-	}
+	// 	return &pbp.PostWithoutReview{}, status.Error(codes.NotFound, "There is no such customer")
+	// }
 
 	newPost, err := p.storage.Post().CreatePost(req)
 	if err != nil {
