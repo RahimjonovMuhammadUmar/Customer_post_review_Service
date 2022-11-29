@@ -2,6 +2,8 @@ package v1
 
 import (
 	"context"
+	"exam/api_gateway/api/token"
+	"exam/api_gateway/config"
 	pbp "exam/api_gateway/genproto/post"
 	l "exam/api_gateway/pkg/logger"
 	"net/http"
@@ -147,7 +149,9 @@ func (h *handlerV1) GetPostsOfCustomer(c *gin.Context) {
 // @Success      200  {object}  post.PostWithoutReview
 // @Router       /v1/post [put]
 func (h *handlerV1) UpdatePost(c *gin.Context) {
-	claims, err := h.jwthandler.ExtractClaims()
+	tempToke := token.JWTHandler{}
+	cfg := config.Config{}
+	claims, err := token.ExtractClaims(tempToke.Token, []byte(cfg.SignInKey))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
@@ -155,8 +159,8 @@ func (h *handlerV1) UpdatePost(c *gin.Context) {
 		h.log.Error("failed to extract claims while updating post", l.Error(err))
 		return
 	}
-	
-	roleFromToken := cast.ToString(claims["sub"]) 
+
+	roleFromToken := cast.ToString(claims["role"])
 	if roleFromToken != "admin" && roleFromToken != "moderator" {
 		c.JSON(http.StatusForbidden, "You can't update this post!!")
 		return
