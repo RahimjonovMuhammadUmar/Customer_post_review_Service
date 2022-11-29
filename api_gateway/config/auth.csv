@@ -1,19 +1,19 @@
-p, unauthorized, /v1/swagger/*                             , GET
-p, unauthorized, /v1/register                              , POST
-p, unauthorized, /v1/register/{code}/{email}               , GET
-p, unauthorized, /v1/register/{code}/{email}               , POST
-p, unauthorized, /v1/login/{email}/{password}              , GET
-p, unauthorized, /v1/admin/login/{username}/{password}     , GET
-p, unauthorized, /v1/moderator/login/{username}/{password} , GET
-p, authorized  , /v1/login/{email}/{password}              , GET
-p, authorized  , /v1/swagger/*                             , GET
-p, authorized  , /v1/customer                              , POST
-p, authorized  , /v1/post                                  , POST
-p, authorized  , /v1/review                                , POST
-p, authorized  , /v1/review                                , GET
-p, authorized  , /v1/post/{id}                             , GET
-p, authorized  , /v1/customer/{id}                         , GET
-p, authorized  , /v1/post                                  , PUT
-g, moderator   , authorized                                    
-p, moderator   , v1/*                                      , PUT
-p, moderator   , /v1/post                                  , PUT
+p,unauthorized,/v1/swagger/*,GET
+p,unauthorized,/v1/register,POST
+p,unauthorized,/v1/register/{code}/{email},GET
+p,unauthorized,/v1/register/{code}/{email},POST
+p,unauthorized,/v1/login/{email}/{password},GET
+p,unauthorized,/v1/admin/login/{username}/{password},GET
+p,unauthorized,/v1/moderator/login/{username}/{password},GET
+p,authorized,/v1/login/{email}/{password},GET
+p,authorized,/v1/swagger/*,GET
+p,authorized,/v1/customer,POST
+p,authorized,/v1/post,POST
+p,authorized,/v1/review,POST
+p,authorized,/v1/review,GET
+p,authorized,/v1/post/{id},GET
+p,authorized,/v1/customer/{id},GET
+p,authorized,/v1/post,PUT
+g,moderator,authorized
+p,moderator,v1/*,PUT
+p,moderator,/v1/post,PUT
