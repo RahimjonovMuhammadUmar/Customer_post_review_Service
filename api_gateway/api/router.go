@@ -36,7 +36,7 @@ type Option struct {
 // @contact.url    https://t.me/muhammad_ummar
 // @contact.email  rahimzanovmuhammadumar@gmail.com
 
-// @host      18.183.99.103:8800
+// @host      54.95.64.84:8800
 
 // @securityDefinitions.apikey BearerAuth
 // @in header

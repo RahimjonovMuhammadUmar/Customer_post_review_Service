@@ -11,7 +11,7 @@
         },
         "version": "1.0"
     },
-    "host": "18.183.99.103:8800",
+    "host": "54.95.64.84:8800",
     "paths": {
         "/v1/admin/login/{username}/{password}": {
             "get": {
