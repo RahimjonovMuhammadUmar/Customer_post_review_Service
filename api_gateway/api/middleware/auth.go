@@ -29,9 +29,7 @@ func NewAuth(enforce *casbin.Enforcer, jwtHandler token.JWTHandler, cfg config.C
 
 	return func(c *gin.Context) {
 		allow, err := a.CheckPermission(c.Request)
-		fmt.Printf("\n\n\n\n\n\n\n\n\n\n allow = ")
-
-		fmt.Println(allow)
+		fmt.Printf("allow = %v\nC.request = %v\n", allow, c.Request)
 		if err != nil {
 			v, _ := err.(*jwtg.ValidationError)
 			if v.Errors == jwtg.ValidationErrorExpired {
