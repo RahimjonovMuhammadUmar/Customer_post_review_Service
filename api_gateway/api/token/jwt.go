@@ -1,6 +1,7 @@
 package token
 
 import (
+	"exam/api_gateway/config"
 	"exam/api_gateway/pkg/logger"
 	"fmt"
 	"time"
@@ -65,8 +66,9 @@ func (jwtHandler *JWTHandler) GenerateAuthJWT() (access, refresh string, err err
 
 // ExtractClaims ...
 func (jwtHandler *JWTHandler) ExtractClaims() (jwt.MapClaims, error) {
+	c := config.Load()
 	token, err := jwt.Parse(jwtHandler.Token, func(t *jwt.Token) (interface{}, error) {
-		return []byte("UmarSecret"), nil
+		return []byte(c.SignInKey), nil
 	})
 	if err != nil {
 		fmt.Println("error while parsing SignInKey token.go 72")
