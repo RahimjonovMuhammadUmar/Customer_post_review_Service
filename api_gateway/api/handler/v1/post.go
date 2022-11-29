@@ -147,12 +147,26 @@ func (h *handlerV1) GetPostsOfCustomer(c *gin.Context) {
 // @Success      200  {object}  post.PostWithoutReview
 // @Router       /v1/post [put]
 func (h *handlerV1) UpdatePost(c *gin.Context) {
+	claims, err := h.jwthandler.ExtractClaims()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		h.log.Error("failed to extract claims while updating post", l.Error(err))
+		return
+	}
+	
+	roleFromToken := cast.ToString(claims["sub"]) 
+	if roleFromToken != "admin" && roleFromToken != "moderator" {
+		c.JSON(http.StatusForbidden, "You can't update this post!!")
+		return
+	}
 	var (
 		jspbMarshal protojson.MarshalOptions
 		body        pbp.PostWithoutReview
 	)
 	jspbMarshal.UseProtoNames = true
-	err := c.ShouldBindJSON(&body)
+	err = c.ShouldBindJSON(&body)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
@@ -172,12 +186,6 @@ func (h *handlerV1) UpdatePost(c *gin.Context) {
 			"error": err.Error(),
 		})
 		h.log.Error("error getting post by id to compare ids of customer for updating", l.Error(err))
-		return
-	}
-	idFromToken := int32(h.GetSub(c))
-
-	if idFromToken != 500 && idFromToken != 999 {
-		c.JSON(http.StatusForbidden, "You can't update this post!!")
 		return
 	}
 
