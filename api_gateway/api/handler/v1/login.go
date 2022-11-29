@@ -41,6 +41,7 @@ func (h *handlerV1) Login(c *gin.Context) {
 	res, err := h.serviceManager.CustomerService().GetCustomerForLogin(ctx, &pbc.Email{
 		Email: email,
 	})
+	fmt.Println(err)
 	if err == sql.ErrNoRows {
 		c.JSON(http.StatusOK, "No customer with such email")
 		return
