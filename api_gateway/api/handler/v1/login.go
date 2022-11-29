@@ -2,7 +2,6 @@ package v1
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -41,11 +40,12 @@ func (h *handlerV1) Login(c *gin.Context) {
 	res, err := h.serviceManager.CustomerService().GetCustomerForLogin(ctx, &pbc.Email{
 		Email: email,
 	})
-	fmt.Println(err)
-	if err == sql.ErrNoRows {
+
+	if err.Error() == "rpc error: code = Unknown desc = sql: no rows in result set" {
 		c.JSON(http.StatusOK, "No customer with such email")
 		return
 	}
+	
 	if err != nil {
 		c.JSON(http.StatusNotFound, models.Error{
 			Error:       err,
@@ -54,7 +54,7 @@ func (h *handlerV1) Login(c *gin.Context) {
 		h.log.Error("Error while getting customer by email", logger.Any("post", err))
 		return
 	}
-	fmt.Println("| res ", res," res |")
+	fmt.Println("| res ", res, " res |")
 	password := c.Param("password")
 	// if password == "" || res.PhoneNumber == "" {
 	// 	c.JSON(http.StatusOK, "No password")
