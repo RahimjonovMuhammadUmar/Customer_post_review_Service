@@ -234,7 +234,7 @@ func (h *handlerV1) VerifyRegistration(c *gin.Context) {
 	}
 	// Generating refresh and jwt tokens
 	h.jwthandler.Iss = "user"
-	h.jwthandler.Sub = customerRequest.Bio
+	// h.jwthandler.Sub = customerRequest.Bio
 	h.jwthandler.Role = "authorized"
 	h.jwthandler.Aud = []string{"exam-app"}
 	h.jwthandler.SignInKey = "UmarSecret"

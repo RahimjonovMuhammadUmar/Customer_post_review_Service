@@ -41,12 +41,10 @@ func (h *handlerV1) Login(c *gin.Context) {
 		Email: email,
 	})
 
-	if err.Error() == "rpc error: code = Unknown desc = sql: no rows in result set" {
+	if err != nil && err.Error() == "rpc error: code = Unknown desc = sql: no rows in result set" {
 		c.JSON(http.StatusOK, "No customer with such email")
 		return
-	}
-	
-	if err != nil {
+	} else if err != nil {
 		c.JSON(http.StatusNotFound, models.Error{
 			Error:       err,
 			Description: "Couln't find matching information, Have you registered before?",
@@ -54,7 +52,7 @@ func (h *handlerV1) Login(c *gin.Context) {
 		h.log.Error("Error while getting customer by email", logger.Any("post", err))
 		return
 	}
-	fmt.Println("| res ", res, " res |")
+	fmt.Println("\n\n\n\n| res ", res, " res |")
 	password := c.Param("password")
 	// if password == "" || res.PhoneNumber == "" {
 	// 	c.JSON(http.StatusOK, "No password")
