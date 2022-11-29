@@ -3,7 +3,7 @@ package main
 import (
 	"exam/review_service/config"
 	pbr "exam/review_service/genproto/review"
-	kafkaconsumer "exam/review_service/kafka_consumer"
+	// kafkaconsumer "exam/review_service/kafka_consumer"
 	"exam/review_service/pkg/db"
 	"exam/review_service/pkg/logger"
 	"exam/review_service/service"
@@ -36,19 +36,19 @@ func main() {
 		log.Fatal("error while grpcClient, err := grpcClient.New(cfg)", logger.Error(err))
 	}
 
-	kafCons, closeKafka, err := kafkaconsumer.NewKafkaReader(cfg)
-	if err != nil {
-		log.Fatal("Error while connecting to kafka")
-	}
-	defer closeKafka()
+	// kafCons, closeKafka, err := kafkaconsumer.NewKafkaReader(cfg)
+	// if err != nil {
+	// 	log.Fatal("Error while connecting to kafka")
+	// }
+	// defer closeKafka()
 
-	reviewService := service.NewReviewService(connDB, log, grpcClient, kafCons)
+	reviewService := service.NewReviewService(connDB, log, grpcClient /*, kafCons*/)
 	lis, err := net.Listen("tcp", cfg.RPCPort)
 	if err != nil {
 		log.Fatal("error while listening", logger.Error(err))
 	}
 
-	go kafCons.Reads().ViewIds()
+	// go kafCons.Reads().ViewIds()
 
 	s := grpc.NewServer()
 	reflection.Register(s)
