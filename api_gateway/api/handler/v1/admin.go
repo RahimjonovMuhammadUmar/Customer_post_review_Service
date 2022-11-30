@@ -5,6 +5,7 @@ import (
 	"exam/api_gateway/api/handler/models"
 	pbc "exam/api_gateway/genproto/customer"
 	l "exam/api_gateway/pkg/logger"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -38,7 +39,7 @@ func (h *handlerV1) AdminLogin(c *gin.Context) {
 		return
 	}
 	password := c.Param("password")
-
+	fmt.Println(password, admin.Password)
 	if err = bcrypt.CompareHashAndPassword([]byte(password), []byte(admin.Password)); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Incorrect password",
