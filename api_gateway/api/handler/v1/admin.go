@@ -40,7 +40,7 @@ func (h *handlerV1) AdminLogin(c *gin.Context) {
 	}
 	password := c.Param("password")
 	fmt.Println(password, admin.Password)
-	if err = bcrypt.CompareHashAndPassword([]byte(password), []byte(admin.Password)); err != nil {
+	if err = bcrypt.CompareHashAndPassword([]byte(admin.Password), []byte(password)); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Incorrect password",
 		})
