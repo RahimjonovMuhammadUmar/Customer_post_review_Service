@@ -2,6 +2,7 @@ package v1
 
 import (
 	"context"
+	"database/sql"
 	pbr "exam/api_gateway/genproto/review"
 	l "exam/api_gateway/pkg/logger"
 	"net/http"
@@ -121,11 +122,17 @@ func (h *handlerV1) GetReview(c *gin.Context) {
 	review, err := h.serviceManager.ReviewService().GetReview(ctx, &pbr.ReviewId{
 		Id: int32(review_id),
 	})
+	if err != sql.ErrNoRows {
+		c.JSON(http.StatusOK, gin.H{
+			"Info":"No such review",
+		})
+		return
+	}
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
-		h.log.Error("failed to send id to GetCustomer", l.Error(err))
+		h.log.Error("failed to get review", l.Error(err))
 		return
 	}
 	c.JSON(http.StatusOK, review)

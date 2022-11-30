@@ -135,7 +135,7 @@ func (r reviewRepo) GetReview(req *pbr.ReviewId) (*pbr.Review, error) {
 		&review.Review,
 	)
 	if err == sql.ErrNoRows {
-		return &pbr.Review{}, nil
+		return &pbr.Review{}, err
 	}
 
 	if err != nil {
