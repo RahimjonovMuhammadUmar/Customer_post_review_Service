@@ -1,6 +1,7 @@
 package postgres
 
 import (
+	"database/sql"
 	pbr "exam/review_service/genproto/review"
 	"fmt"
 
@@ -132,7 +133,11 @@ func (r reviewRepo) GetReview(req *pbr.ReviewId) (*pbr.Review, error) {
 		&review.Name,
 		&review.Description,
 		&review.Review,
-	)	
+	)
+	if err == sql.ErrNoRows {
+		return &pbr.Review{}, nil
+	}
+
 	if err != nil {
 		fmt.Println("Error while selecting from ratings by id", err)
 		return &pbr.Review{}, err
@@ -145,7 +150,7 @@ func (r reviewRepo) DeleteReviewByCustomerId(req *pbr.CustomerId) (*pbr.Empty, e
 	if err != nil {
 		fmt.Println("error while deleting from ratings", err)
 		return &pbr.Empty{}, err
-	} 
-		
+	}
+
 	return &pbr.Empty{}, nil
 }

@@ -115,9 +115,9 @@ func (s *ReviewService) DeleteReview(ctx context.Context, req *pbr.ReviewId) (*p
 
 func (s *ReviewService) GetReview(ctx context.Context, req *pbr.ReviewId) (*pbr.Review, error) {
 	review, err := s.storage.Review().GetReview(req)
-	if err == sql.ErrNoRows {
-		return &pbr.Review{}, nil
-	}
+	// if err == sql.ErrNoRows {
+	// 	return &pbr.Review{}, nil
+	// }
 
 	if err != nil {
 		fmt.Println("error service/review.go 98", err)
