@@ -122,7 +122,7 @@ func (h *handlerV1) GetReview(c *gin.Context) {
 	review, err := h.serviceManager.ReviewService().GetReview(ctx, &pbr.ReviewId{
 		Id: int32(review_id),
 	})
-	if err != sql.ErrNoRows {
+	if err == sql.ErrNoRows {
 		c.JSON(http.StatusOK, gin.H{
 			"Info":"No such review",
 		})
