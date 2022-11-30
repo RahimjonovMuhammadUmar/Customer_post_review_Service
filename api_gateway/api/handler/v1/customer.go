@@ -4,6 +4,7 @@ import (
 	"context"
 	pbc "exam/api_gateway/genproto/customer"
 	l "exam/api_gateway/pkg/logger"
+	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -210,7 +211,8 @@ func (h *handlerV1) SearchCustomer(c *gin.Context) {
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
 	defer cancel()
-
+	fmt.Println(orderType[0])
+	fmt.Println(orderType[1])
 	possible_customers, err := h.serviceManager.CustomerService().SearchCustomer(ctx, &pbc.InfoForSearch{
 		Field:     fieldWithValues[0],
 		Value:     fieldWithValues[1],

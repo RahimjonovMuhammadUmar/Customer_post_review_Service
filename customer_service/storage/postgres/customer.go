@@ -210,13 +210,15 @@ func (c *customerRepo) CheckField(field, value string) (*pbc.Exists, error) {
 }
 func (c *customerRepo) SearchCustomer(field, value, orderBy, ascOrDesc string, limit, page int32) (*pbc.PossibleCustomers, error) {
 	query := fmt.Sprintf("SELECT id, first_name, last_name, bio, email, phone_number FROM customers WHERE %s ~ '%s' AND deleted_at IS NULL", field, value)
+	fmt.Println(orderBy)
 	if orderBy != "" {
 		query += " ORDER BY " + orderBy
 	}
 	if ascOrDesc != "" {
 		query = query + " " + ascOrDesc
 	}
-	fmt.Printf("%s + LIMIT %d OFFSET %d", query, limit, ((page - 1) * 10))
+
+	fmt.Printf("%s LIMIT %d OFFSET %d", query, limit, ((page - 1) * 10))
 	rows, err := c.db.Query(query+" LIMIT $1 OFFSET $2", limit, ((page - 1) * 10))
 	if err != nil {
 		fmt.Println("error while searching by customer", err)
