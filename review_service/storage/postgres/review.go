@@ -128,13 +128,15 @@ func (r reviewRepo) GetReview(req *pbr.ReviewId) (*pbr.Review, error) {
 	id, 
 	name, 
 	description, 
-	rating FROM ratings WHERE id = $1 AND deleted_at IS NULL`, req.Id).Scan(
+	rating, post_id, customer_id FROM ratings WHERE id = $1 AND deleted_at IS NULL`, req.Id).Scan(
 		&review.Id,
 		&review.Name,
 		&review.Description,
 		&review.Review,
+		&review.PostId,
+		&review.CustomerId,
 	)
-	
+
 	if err == sql.ErrNoRows {
 		return &pbr.Review{}, err
 	}
