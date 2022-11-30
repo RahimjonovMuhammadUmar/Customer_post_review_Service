@@ -116,7 +116,6 @@ func (s *ReviewService) DeleteReview(ctx context.Context, req *pbr.ReviewId) (*p
 func (s *ReviewService) GetReview(ctx context.Context, req *pbr.ReviewId) (*pbr.Review, error) {
 	review, err := s.storage.Review().GetReview(req)
 	if err == sql.ErrNoRows {
-		s.logger.Info("No such customer")
 		return &pbr.Review{}, nil
 	}
 
