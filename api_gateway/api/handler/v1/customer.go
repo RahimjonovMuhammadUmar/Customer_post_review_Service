@@ -217,7 +217,7 @@ func (h *handlerV1) SearchCustomer(c *gin.Context) {
 		Value:     fieldWithValues[1],
 		Limit:     int32(limit),
 		Page:      int32(page),
-		OrderBy:   orderType[1],
+		OrderBy:   orderType[0],
 		AscOrDesc: orderType[1],
 	})
 	if err != nil {
