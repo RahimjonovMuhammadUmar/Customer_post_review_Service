@@ -6,7 +6,6 @@ import (
 	"fmt"
 
 	"github.com/jmoiron/sqlx"
-	"google.golang.org/grpc/status"
 )
 
 type customerRepo struct {
@@ -141,7 +140,7 @@ func (c *customerRepo) GetCustomer(id int32) (*pbc.Customer, error) {
 	)
 
 	if err == sql.ErrNoRows {
-		return &pbc.Customer{}, status.Error(200, "There is no such customer")
+		return &pbc.Customer{}, err
 	}
 	if err != nil {
 		fmt.Println("error while selecting customer by id", err)

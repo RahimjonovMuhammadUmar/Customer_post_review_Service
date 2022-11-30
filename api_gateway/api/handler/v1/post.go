@@ -83,7 +83,7 @@ func (h *handlerV1) GetPostWithCustomerInfo(c *gin.Context) {
 	response, err := h.serviceManager.PostService().GetPostWithCustomerInfo(
 		ctx, &pbp.Ids{
 			Id: int32(id),
-			CustomerId: cast.ToInt32(h.GetSub(c)),
+			// CustomerId: cast.ToInt32(h.GetSub(c)),
 		})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{

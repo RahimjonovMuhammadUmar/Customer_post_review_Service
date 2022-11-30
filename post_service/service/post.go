@@ -66,19 +66,19 @@ func (p *PostService) CreatePost(ctx context.Context, req *pbp.PostRequest) (*pb
 	return newPost, nil
 }
 func (p *PostService) GetPostWithCustomerInfo(ctx context.Context, req *pbp.Ids) (*pbp.PostWithCustomerInfo, error) {
-	customer, err := p.client.Customer().GetCustomer(ctx, &pbc.CustomerId{
-		Id: req.CustomerId,
-	})
-	if err != nil {
-		p.logger.Error("error -> customer, err := p.client.Customer().IfCustomerExists(ctx, &pbc.CustomerId{", l.Any("", err))
-		return &pbp.PostWithCustomerInfo{}, err
-	}
 	post, err := p.storage.Post().GetPostWithCustomerInfo(req.Id)
 	if err != nil && err != sql.ErrNoRows {
 		p.logger.Error("error -> post, err := p.storage.Post().GetPost(req)", l.Any("error getting post by id post/service/post.go", err))
 		return &pbp.PostWithCustomerInfo{}, err
 	}
 
+	customer, err := p.client.Customer().GetCustomer(ctx, &pbc.CustomerId{
+		Id: post.CustomerId,
+	})
+	if err != nil {
+		p.logger.Error("error -> customer, err := p.client.Customer().IfCustomerExists(ctx, &pbc.CustomerId{", l.Any("", err))
+		return &pbp.PostWithCustomerInfo{}, err
+	}
 	post.Customer = &pbp.Customer{
 		Id:          customer.Id,
 		FirstName:   customer.FirstName,
