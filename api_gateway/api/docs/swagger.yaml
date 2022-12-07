@@ -228,7 +228,7 @@ definitions:
       review:
         type: integer
     type: object
-host: 54.95.64.84:8800
+host: localhost:8800
 info:
   contact:
     email: rahimzanovmuhammadumar@gmail.com
