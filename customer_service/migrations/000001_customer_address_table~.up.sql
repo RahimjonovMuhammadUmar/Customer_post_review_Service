@@ -18,3 +18,15 @@ CREATE TABLE "addresses"(
 );
 ALTER TABLE
     "addresses" ADD CONSTRAINT "addressses_customer_id_foreign" FOREIGN KEY("customer_id") REFERENCES "customers"("id");
+
+
+CREATE TABLE "admins" (
+    "username" TEXT NOT NULL,
+    "password" TEXT NOT NULL
+);
+
+
+CREATE TABLE "moderators" (
+    "username" TEXT NOT NULL,
+    "password" TEXT NOT NULL
+);

@@ -39,7 +39,7 @@ func main() {
 	if err != nil {
 		log.Fatal("error while listening", logger.Error(err))
 	}
-
+	
 	s := grpc.NewServer()
 	reflection.Register(s)
 	pbc.RegisterCustomerServiceServer(s, customerService)
