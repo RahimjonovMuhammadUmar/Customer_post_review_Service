@@ -1,11 +1,13 @@
 package postgres
 
 import (
+	"context"
 	"database/sql"
 	pbc "exam/customer_service/genproto/customer"
 	"fmt"
 
 	"github.com/jmoiron/sqlx"
+	"github.com/opentracing/opentracing-go"
 )
 
 type customerRepo struct {
@@ -120,7 +122,10 @@ func (c *customerRepo) CheckIfCustomerExists(id int32) (*pbc.Exists, error) {
 		Exists: true}, nil
 }
 
-func (c *customerRepo) GetCustomer(id int32) (*pbc.Customer, error) {
+func (c *customerRepo) GetCustomer(ctx context.Context, id int32) (*pbc.Customer, error) {
+	tracer, ctx := opentracing.StartSpanFromContext(ctx, "GetCustomer database")
+	defer tracer.Finish()
+
 	customerData := &pbc.Customer{}
 	err := c.db.QueryRow(`SELECT 
 	id, 
@@ -208,6 +213,7 @@ func (c *customerRepo) CheckField(field, value string) (*pbc.Exists, error) {
 		Exists: true}, nil
 }
 func (c *customerRepo) SearchCustomer(field, value, orderBy, ascOrDesc string, limit, page int32) (*pbc.PossibleCustomers, error) {
+
 	query := fmt.Sprintf("SELECT id, first_name, last_name, bio, email, phone_number FROM customers WHERE %s ~ '%s' AND deleted_at IS NULL", field, value)
 	fmt.Println(orderBy)
 	if orderBy != "" {

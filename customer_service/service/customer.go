@@ -12,8 +12,7 @@ import (
 	"exam/customer_service/storage"
 
 	"github.com/jmoiron/sqlx"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
+	"github.com/opentracing/opentracing-go"
 )
 
 // CustomerService ...
@@ -60,10 +59,13 @@ func (c *CustomerService) CheckIfCustomerExists(ctx context.Context, req *pbc.Cu
 	return &pbc.Exists{Exists: false}, nil
 }
 func (c *CustomerService) GetCustomer(ctx context.Context, req *pbc.CustomerId) (*pbc.Customer, error) {
-	customerData, err := c.storage.Customer().GetCustomer(req.Id)
+	trace, ctx := opentracing.StartSpanFromContext(ctx, "GetCustomer service")
+	defer trace.Finish()
+
+	customerData, err := c.storage.Customer().GetCustomer(ctx, req.Id)
 	if err == sql.ErrNoRows {
 		c.logger.Info("No such customer")
-		return &pbc.Customer{}, status.Error(codes.NotFound, "There is no such customer")
+		return &pbc.Customer{}, nil
 
 	}
 	if err != nil {

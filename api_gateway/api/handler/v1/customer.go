@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/opentracing/opentracing-go"
 	"google.golang.org/protobuf/encoding/protojson"
 )
 
@@ -61,6 +62,7 @@ import (
 // @Success 201 {json} customer.Customer
 // @Router /v1/customer/{id} [get]
 func (h *handlerV1) GetCustomer(c *gin.Context) {
+
 	customer_idStr := c.Param("id")
 	customer_id, err := strconv.ParseInt(customer_idStr, 10, 64)
 	if err != nil {
@@ -74,8 +76,11 @@ func (h *handlerV1) GetCustomer(c *gin.Context) {
 
 	jspbMarshal.UseProtoNames = true
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
-	defer cancel()
+	// ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
+	// defer cancel()
+
+	tracer, ctx := opentracing.StartSpanFromContext(c, "Customer api-gateway")
+	defer tracer.Finish()
 
 	customer, err := h.serviceManager.CustomerService().GetCustomer(ctx, &pbc.CustomerId{
 		Id: int32(customer_id),

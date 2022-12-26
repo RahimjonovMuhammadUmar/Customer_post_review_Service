@@ -1,6 +1,7 @@
 package repo
 
 import (
+	"context"
 	pbc "exam/customer_service/genproto/customer"
 )
 
@@ -9,7 +10,7 @@ type CustomerStorage interface {
 	CreateCustomer(*pbc.CustomerRequest) (*pbc.CustomerWithoutPost, error)
 	UpdateCustomer(*pbc.CustomerWithoutPost) (*pbc.CustomerWithoutPost, error)
 	CheckIfCustomerExists(id int32) (*pbc.Exists, error)
-	GetCustomer(id int32) (*pbc.Customer, error)
+	GetCustomer(ctx context.Context, id int32) (*pbc.Customer, error)
 	GetCustomerForLogin(email string) (*pbc.CustomerWithoutPost, error)
 	DeleteCustomer(id int32) (*pbc.CustomerDeleted, error)
 	CheckField(field, value string) (*pbc.Exists, error)
