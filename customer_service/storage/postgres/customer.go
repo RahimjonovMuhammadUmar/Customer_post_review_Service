@@ -213,7 +213,6 @@ func (c *customerRepo) CheckField(field, value string) (*pbc.Exists, error) {
 		Exists: true}, nil
 }
 func (c *customerRepo) SearchCustomer(field, value, orderBy, ascOrDesc string, limit, page int32) (*pbc.PossibleCustomers, error) {
-
 	query := fmt.Sprintf("SELECT id, first_name, last_name, bio, email, phone_number FROM customers WHERE %s ~ '%s' AND deleted_at IS NULL", field, value)
 	fmt.Println(orderBy)
 	if orderBy != "" {

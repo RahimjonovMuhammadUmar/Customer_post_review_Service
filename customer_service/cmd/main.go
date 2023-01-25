@@ -6,46 +6,15 @@ import (
 	"exam/customer_service/pkg/db"
 	"exam/customer_service/pkg/logger"
 	"exam/customer_service/service"
-	"log"
 	"net"
 
 	grpcClient "exam/customer_service/service/grpc_client"
 
-	"github.com/uber/jaeger-client-go"
-	jaegercfg "github.com/uber/jaeger-client-go/config"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
 
 func main() {
-
-	tracecfg := jaegercfg.Configuration{
-		Sampler: &jaegercfg.SamplerConfig{
-			Type:  jaeger.SamplerTypeConst,
-			Param: 10,
-		},
-		Reporter: &jaegercfg.ReporterConfig{
-			LogSpans:           true,
-			LocalAgentHostPort: "127.0.0.1:6831", // replace host
-		},
-	}
-
-	closer, err := tracecfg.InitGlobalTracer(
-		"customer-service",
-	)
-	if err != nil {
-		log.Printf("Could not initialize jaeger tracer: %s", err.Error())
-		return
-	}
-	defer closer.Close()
-
-	if err != nil {
-		log.Printf("Could not initialize jaeger tracer: %s", err.Error())
-		return
-	}
-
-
-	
 	cfg := config.Load()
 
 	log := logger.New(cfg.Loglevel, "customer_service")

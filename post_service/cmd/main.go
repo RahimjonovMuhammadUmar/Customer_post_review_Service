@@ -3,7 +3,7 @@ package main
 import (
 	"exam/post_service/config"
 	pbp "exam/post_service/genproto/post"
-	// kafkaproducer "exam/post_service/kafka_producer"
+	kafkaproducer "exam/post_service/kafka_producer"
 	"exam/post_service/pkg/db"
 	"exam/post_service/pkg/logger"
 	"exam/post_service/service"
@@ -36,13 +36,13 @@ func main() {
 		log.Fatal("error while grpcClient, err := grpcClient.New(cfg)", logger.Error(err))
 	}
 
-	// kafkaC, close, err := kafkaproducer.NewKafka(cfg)
-	// if err != nil {
-	// 	log.Fatal("Error while connecting to kafka", logger.Error(err))
-	// }
-	// defer close()
+	kafkaC, close, err := kafkaproducer.NewKafka(cfg)
+	if err != nil {
+		log.Fatal("Error while connecting to kafka", logger.Error(err))
+	}
+	defer close()
 
-	postService := service.NewPostService(connDB, log, grpcClient  /*, kafkaC*/)
+	postService := service.NewPostService(connDB, log, grpcClient, kafkaC)
 	lis, err := net.Listen("tcp", cfg.RPCPort)
 	if err != nil {
 		log.Fatal("error while listening", logger.Error(err))

@@ -7,7 +7,7 @@ import (
 	pbp "exam/post_service/genproto/post"
 	pbr "exam/post_service/genproto/review"
 
-	// kafkaproducer "exam/post_service/kafka_producer"
+	kafkaproducer "exam/post_service/kafka_producer"
 	l "exam/post_service/pkg/logger"
 	grpcClient "exam/post_service/service/grpc_client"
 	"exam/post_service/storage"
@@ -23,16 +23,16 @@ type PostService struct {
 	storage storage.IStorage
 	logger  l.Logger
 	client  grpcClient.GrpcClientI
-	// kafkaC  kafkaproducer.KafkaI
+	kafkaC  kafkaproducer.KafkaI
 }
 
 // NewPostService ...
-func NewPostService(db *sqlx.DB, log l.Logger, client grpcClient.GrpcClientI /*kafkaC kafkaproducer.KafkaI*/) *PostService {
+func NewPostService(db *sqlx.DB, log l.Logger, client grpcClient.GrpcClientI, kafkaC kafkaproducer.KafkaI) *PostService {
 	return &PostService{
 		storage: storage.NewStoragePg(db),
 		logger:  log,
 		client:  client,
-		// kafkaC:  kafkaC,
+		kafkaC:  kafkaC,
 	}
 }
 
@@ -57,11 +57,11 @@ func (p *PostService) CreatePost(ctx context.Context, req *pbp.PostRequest) (*pb
 		return &pbp.PostWithoutReview{}, err
 	}
 
-	// err = p.kafkaC.Funcs().SendPost(newPost)
-	// if err != nil {
-	// 	fmt.Println("Error while sending newPost to kafka", err)
-	// 	return &pbp.PostWithoutReview{}, err
-	// }
+	err = p.kafkaC.Funcs().SendPost(newPost)
+	if err != nil {
+		fmt.Println("Error while sending newPost to kafka", err)
+		return &pbp.PostWithoutReview{}, err
+	}
 
 	return newPost, nil
 }
