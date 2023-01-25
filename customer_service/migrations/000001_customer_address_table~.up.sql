@@ -8,6 +8,7 @@ CREATE TABLE "customers"(
     "updated_at" TIMESTAMP(0) WITH TIME zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     "deleted_at" TIMESTAMP(0) WITH TIME zone  NULL,
     "phone_number" TEXT NOT NULL
+    "refresh_token" TEXT NOT NULL
 );
 
 CREATE TABLE "addresses"(

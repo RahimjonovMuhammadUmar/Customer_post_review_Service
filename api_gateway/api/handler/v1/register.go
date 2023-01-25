@@ -259,8 +259,22 @@ func (h *handlerV1) VerifyRegistration(c *gin.Context) {
 		h.log.Error("error while declaring reponse api/hanlder/v1/customer.go", l.Error(err))
 		return
 	}
+	h.jwthandler.Iss = "user"
+	h.jwthandler.Sub = strconv.Itoa(int(response.Id))
+	h.jwthandler.Role = "authorized"
+	h.jwthandler.Aud = []string{"exam-app"}
+	h.jwthandler.SignInKey = "UmarSecret"
+	h.jwthandler.Log = h.log
+	accessToken, refreshToken, err = h.jwthandler.GenerateAuthJWT()
+	if err != nil {
+		c.JSON(http.StatusConflict, gin.H{
+			"Sorry": "Something went wrong",
+		})
+		h.log.Info("Error generating access token while creating user")
+		return
+	}
+
 	response.RefreshToken = refreshToken
 	response.AccessToken = accessToken
-
 	c.JSON(http.StatusOK, response)
 }
